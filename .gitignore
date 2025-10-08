@@ -24,3 +24,4 @@ dist-ssr
 *.sw?
 .GEMINI.md
 Design_project/
+.env.local
