@@ -1,22 +1,37 @@
-import { useQuery } from '@tanstack/react-query';
-import { getProducts } from '../api/productsApi';
+import { useQuery } from "@tanstack/react-query";
+import { getProducts } from "../api/productsApi";
+import ProductCard from "@/components/shared/ProductCard";
 
 const HomePage = () => {
-  const { data, isLoading, error } = useQuery({
-    queryKey: ['products'],
+  const {
+    data: products,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["products"],
     queryFn: getProducts,
   });
 
-  if (isLoading) return <p>Loading products...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-
-  // Log data to see if it comes from Supabase
-  console.log('Products from Supabase:', data);
+  if (isLoading)
+    return <p className="p-4 text-center">جاري تحميل المنتجات...</p>;
+  if (error)
+    return (
+      <p className="p-4 text-center text-red-500">حدث خطأ: {error.message}</p>
+    );
 
   return (
-    <div className="container mx-auto p-4">
-      <h1 className="text-3xl font-bold">Welcome to Exclusive</h1>
-      {/* We will map over the data to display products in the next step */}
+    <div className="bg-white">
+      <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
+        <h2 className="text-2xl font-bold tracking-tight text-gray-900">
+          أحدث المنتجات
+        </h2>
+
+        <div className="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+          {products?.map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
+        </div>
+      </div>
     </div>
   );
 };
