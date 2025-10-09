@@ -1,13 +1,17 @@
+import Header from "./components/layout/Header";
 import AppRoutes from "./routes";
-
+import { Outlet } from "react-router-dom";
+import Footer from "./components/layout/Footer";
 function App() {
   return (
     <>
-      <p></p>
+      <Header />
       <hr />
       <main>
         <AppRoutes />
+        <Outlet />
       </main>
+      <Footer />
     </>
   );
 }

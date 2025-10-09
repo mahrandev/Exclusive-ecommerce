@@ -4,21 +4,450 @@
 @custom-variant dark (&:is(.dark *));
 
 /* ========================================
+   Font Faces - Fixed Format
+   ======================================== */
+
+/* Cairo - Arabic */
+@font-face {
+  font-family: "Cairo";
+  src: url("./assets/fonts/Cairo/Cairo-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cairo";
+  src: url("./assets/fonts/Cairo/Cairo-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Cairo";
+  src: url("./assets/fonts/Cairo/Cairo-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Inter - English, German, French, Spanish */
+@font-face {
+  font-family: "Inter";
+  src: url("./assets/fonts/Inter/Inter-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("./assets/fonts/Inter/Inter-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Inter";
+  src: url("./assets/fonts/Inter/Inter-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Poppins - Alternative Latin */
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/fonts/Poppins/Poppins-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/fonts/Poppins/Poppins-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Poppins";
+  src: url("./assets/fonts/Poppins/Poppins-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Lato - Alternative Latin */
+@font-face {
+  font-family: "Lato";
+  src: url("./assets/fonts/Lato/Lato-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Lato";
+  src: url("./assets/fonts/Lato/Lato-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* Roboto - Alternative Latin & Cyrillic (Russian) */
+@font-face {
+  font-family: "Roboto";
+  src: url("./assets/fonts/Roboto/Roboto-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("./assets/fonts/Roboto/Roboto-Medium.ttf") format("truetype");
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "Roboto";
+  src: url("./assets/fonts/Roboto/Roboto-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+/* RTL Support */
+html[dir="rtl"] {
+  font-family: var(--font-cairo);
+}
+
+button {
+  cursor: pointer;
+}
+
+/* ========================================
    Theme Colors
    ======================================== */
 @theme {
+  /* Font Families */
+  --font-cairo: "Cairo", sans-serif;
+  --font-inter: "Inter", sans-serif;
+  --font-poppins: "Poppins", sans-serif;
+  --font-lato: "Lato", sans-serif;
+  --font-roboto: "Roboto", sans-serif;
+
   /* Primary Colors */
-  --color-primary-red: #DB4444;
+  --color-primary-red: #db4444;
   --color-primary-black: #000000;
-  --color-primary-white: #FFFFFF;
-  
+  --color-primary-white: #ffffff;
+
   /* Secondary Colors */
-  --color-secondary-gray: #F5F5F5;
-  --color-text-secondary: #7D8184;
-  
+  --color-secondary-gray: #f5f5f5;
+  --color-text-secondary: #7d8184;
+
   /* Accent Colors */
-  --color-accent-yellow: #FFAD33;
-  --color-state-green: #38CB89;
+  --color-accent-yellow: #ffad33;
+  --color-state-green: #38cb89;
+
+  /* Specific UI Colors from Color Guide */
+  --color-text-primary: #d37643;
+  --color-button-green: #47b486;
+  --color-hover-yellow: #e2b93b;
+  --color-hover-red: #eb5757;
+  --color-secondary-beige: #fefaf1;
+  --color-secondary-light: #f5f5f5;
+
+  /* ========================================
+     Complete Color Palette from Design
+     ======================================== */
+
+  /* Navy/Dark Blue Shades */
+  --color-navy-dark: #1b253c;
+  --color-navy-medium: #202c46;
+  --color-navy-slate: #2240a4;
+  --color-navy-bright: #2a4ec7;
+  --color-navy-purple: #2a00a2;
+
+  /* Slate Grays */
+  --color-slate-50: #f5f7fe;
+  --color-slate-100: #eaeffd;
+  --color-slate-200: #e2e8f0;
+  --color-slate-300: #adbef7;
+  --color-slate-400: #a0bce0;
+  --color-slate-500: #64748b;
+  --color-slate-600: #334155;
+
+  /* Neutral Grays */
+  --color-gray-50: #fcfcfc;
+  --color-gray-100: #fafafa;
+  --color-gray-150: #f7f7fc;
+  --color-gray-200: #f5f5f5;
+  --color-gray-250: #f4f4f6;
+  --color-gray-300: #eff0f6;
+  --color-gray-350: #e9eaec;
+  --color-gray-400: #ededed;
+  --color-gray-450: #d9dbe9;
+  --color-gray-500: #d1d4db;
+  --color-gray-600: #a0a3bd;
+  --color-gray-700: #9096a2;
+  --color-gray-750: #7d8184;
+  --color-gray-800: #6e7191;
+  --color-gray-850: #5b5b5b;
+  --color-gray-900: #4e4b66;
+  --color-gray-950: #4d566b;
+  --color-gray-dark: #4c5355;
+  --color-gray-darker: #504242;
+
+  /* Dark Shades */
+  --color-dark-primary: #14142b;
+  --color-dark-secondary: #363738;
+
+  /* Blue Scale */
+  --color-blue-light: #82e9ff;
+  --color-blue-300: #4ac2e8;
+  --color-blue-400: #5a7dee;
+  --color-blue-500: #315cea;
+  --color-blue-600: #2a4ec7;
+  --color-blue-700: #2240a4;
+  --color-blue-cyan: #1cc8ee;
+  --color-blue-teal: #0096b7;
+
+  /* Purple Scale */
+  --color-purple-50: #f8f5fe;
+  --color-purple-100: #f1ecfc;
+  --color-purple-200: #c9b2f3;
+  --color-purple-300: #bca4ff;
+  --color-purple-400: #9265e8;
+  --color-purple-500: #773fe2;
+  --color-purple-600: #6436bf;
+  --color-purple-700: #5f2eea;
+  --color-purple-bright: #7433ff;
+
+  /* Pink/Magenta Scale */
+  --color-pink-50: #fef6f8;
+  --color-pink-100: #fceef1;
+  --color-pink-150: #fce9ec;
+  --color-pink-200: #f9d2d9;
+  --color-pink-300: #f4bac8;
+  --color-pink-350: #f2a6b4;
+  --color-pink-400: #ff84b7;
+  --color-pink-500: #e9677f;
+  --color-pink-600: #e97591;
+  --color-pink-700: #e35275;
+  --color-pink-800: #df2648;
+  --color-pink-900: #ed2e7e;
+  --color-pink-dark: #c24764;
+  --color-pink-darker: #b71f3b;
+  --color-pink-magenta: #c30052;
+
+  /* Red/Rose Scale */
+  --color-red-50: #fff1f2;
+  --color-red-100: #ffe4e6;
+  --color-red-200: #fecdd3;
+  --color-red-300: #fda4af;
+  --color-red-400: #fb7185;
+  --color-red-500: #f43f5e;
+  --color-red-600: #e11d48;
+  --color-red-700: #be123c;
+  --color-red-800: #9f1239;
+  --color-red-850: #881337;
+  --color-red-coral: #e07575;
+
+  /* Green/Emerald Scale */
+  --color-green-50: #ecfdf5;
+  --color-green-100: #d1fae5;
+  --color-green-150: #f4fdf7;
+  --color-green-200: #e9faef;
+  --color-green-300: #a7f3d0;
+  --color-green-350: #a9ebbf;
+  --color-green-400: #6ee7b7;
+  --color-green-450: #52d880;
+  --color-green-500: #34d399;
+  --color-green-550: #34eab9;
+  --color-green-600: #27ce60;
+  --color-green-650: #21af52;
+  --color-green-700: #10b981;
+  --color-green-800: #00ba88;
+  --color-green-850: #059669;
+  --color-green-900: #047857;
+  --color-green-950: #065f46;
+  --color-green-dark: #064e3b;
+  --color-green-teal: #00966d;
+  --color-green-lime: #00ff66;
+  --color-green-turquoise: #50ddc3;
+
+  /* Yellow/Amber Scale */
+  --color-yellow-50: #fffbeb;
+  --color-yellow-100: #fefaf1;
+  --color-yellow-150: #fef3e6;
+  --color-yellow-200: #fef3c7;
+  --color-yellow-250: #fde7cd;
+  --color-yellow-300: #fde68a;
+  --color-yellow-350: #fccf9c;
+  --color-yellow-400: #fcd34d;
+  --color-yellow-450: #fab261;
+  --color-yellow-500: #fbbf24;
+  --color-yellow-550: #f4b740;
+  --color-yellow-600: #f59e0b;
+  --color-yellow-650: #f89118;
+  --color-yellow-700: #d97706;
+  --color-yellow-750: #c77414;
+  --color-yellow-800: #b45309;
+  --color-yellow-850: #946200;
+  --color-yellow-900: #92400e;
+  --color-yellow-950: #78350f;
+  --color-yellow-light: #ffd789;
+  --color-yellow-gradient: #fffa80;
+
+  /* Gradient Start/End Colors */
+  --color-gradient-pink-start: #eb0055;
+  --color-gradient-pink-end: #fffa80;
+  --color-gradient-purple-start: #7433ff;
+  --color-gradient-purple-end: #ffa3fd;
+  --color-gradient-blue-start: #624af2;
+  --color-gradient-blue-end: #50ddc3;
+
+  /* Neutral Colors */
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+  --color-neutral-950: #0a0a0a;
+
+  /* Blue Scale (Tailwind) */
+  --color-blue-50: #eff6ff;
+  --color-blue-100: #dbeafe;
+  --color-blue-200: #bfdbfe;
+  --color-blue-300: #93c5fd;
+  --color-blue-400: #60a5fa;
+  --color-blue-500: #3b82f6;
+  --color-blue-600: #2563eb;
+  --color-blue-700: #1d4ed8;
+  --color-blue-800: #1e40af;
+  --color-blue-900: #1e3a8a;
+
+  /* Purple Scale (Tailwind) */
+  --color-purple-50: #faf5ff;
+  --color-purple-100: #f3e8ff;
+  --color-purple-200: #e9d5ff;
+  --color-purple-300: #d8b4fe;
+  --color-purple-400: #c084fc;
+  --color-purple-500: #a855f7;
+  --color-purple-600: #9333ea;
+  --color-purple-700: #7e22ce;
+  --color-purple-800: #6b21a8;
+  --color-purple-900: #581c87;
+
+  /* Magenta/Pink Scale (Tailwind) */
+  --color-magenta-50: #fdf4ff;
+  --color-magenta-100: #fae8ff;
+  --color-magenta-200: #f5d0fe;
+  --color-magenta-300: #f0abfc;
+  --color-magenta-400: #e879f9;
+  --color-magenta-500: #d946ef;
+  --color-magenta-600: #c026d3;
+  --color-magenta-700: #a21caf;
+  --color-magenta-800: #86198f;
+  --color-magenta-900: #701a75;
+
+  /* Red Scale (Tailwind) */
+  --color-red-50: #fef2f2;
+  --color-red-100: #fee2e2;
+  --color-red-200: #fecaca;
+  --color-red-300: #fca5a5;
+  --color-red-400: #f87171;
+  --color-red-500: #ef4444;
+  --color-red-600: #dc2626;
+  --color-red-700: #b91c1c;
+  --color-red-800: #991b1b;
+  --color-red-900: #7f1d1d;
+
+  /* Green Scale (Tailwind) */
+  --color-green-50: #f0fdf4;
+  --color-green-100: #dcfce7;
+  --color-green-200: #bbf7d0;
+  --color-green-300: #86efac;
+  --color-green-400: #4ade80;
+  --color-green-500: #22c55e;
+  --color-green-600: #16a34a;
+  --color-green-700: #15803d;
+  --color-green-800: #166534;
+  --color-green-900: #14532d;
+
+  /* Yellow/Orange Scale (Tailwind) */
+  --color-yellow-50: #fffbeb;
+  --color-yellow-100: #fef3c7;
+  --color-yellow-200: #fde68a;
+  --color-yellow-300: #fcd34d;
+  --color-yellow-400: #fbbf24;
+  --color-yellow-500: #f59e0b;
+  --color-yellow-600: #d97706;
+  --color-yellow-700: #b45309;
+  --color-yellow-800: #92400e;
+  --color-yellow-900: #78350f;
+
+  /* Orange Scale (Tailwind) */
+  --color-orange-50: #fff7ed;
+  --color-orange-100: #ffedd5;
+  --color-orange-200: #fed7aa;
+  --color-orange-300: #fdba74;
+  --color-orange-400: #fb923c;
+  --color-orange-500: #f97316;
+  --color-orange-600: #ea580c;
+  --color-orange-700: #c2410c;
+  --color-orange-800: #9a3412;
+  --color-orange-900: #7c2d12;
+
+  /* Teal/Cyan Scale (Tailwind) */
+  --color-teal-50: #f0fdfa;
+  --color-teal-100: #ccfbf1;
+  --color-teal-200: #99f6e4;
+  --color-teal-300: #5eead4;
+  --color-teal-400: #2dd4bf;
+  --color-teal-500: #14b8a6;
+  --color-teal-600: #0d9488;
+  --color-teal-700: #0f766e;
+  --color-teal-800: #115e59;
+  --color-teal-900: #134e4a;
+
+  /* Grayscale Palette (من التصميم الثاني) */
+  --color-gray-title-active: #1c1c1e;
+  --color-gray-body: #4e4f54;
+  --color-gray-label: #878a92;
+  --color-gray-placeholder: #b0b3ba;
+  --color-gray-line: #d4d6dd;
+  --color-gray-input-bg: #e8e9ed;
+  --color-gray-background: #f7f7f8;
+  --color-gray-off-white: #fcfcfc;
+
+  /* Design System Colors (من التصميم الثاني) */
+  --color-primary: #6c5dd3;
+  --color-secondary: #0cc;
+  --color-error: #e3457a;
+  --color-success: #0fb;
+  --color-warning: #ffba33;
+
+  /* Gradient Colors (Tailwind) */
+  --color-gradient-primary-start: #7b68ee;
+  --color-gradient-primary-end: #9d7fee;
+  --color-gradient-secondary-start: #2dd4bf;
+  --color-gradient-secondary-end: #5eead4;
+  --color-gradient-accent-start: #f87171;
+  --color-gradient-accent-end: #fbbf24;
 }
 
 /* ========================================
@@ -30,7 +459,7 @@
   --radius-md: calc(var(--radius) - 2px);
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
-  
+
   /* Color Mappings */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -50,14 +479,14 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  
+
   /* Chart Colors */
   --color-chart-1: var(--chart-1);
   --color-chart-2: var(--chart-2);
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
-  
+
   /* Sidebar Colors */
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
@@ -70,104 +499,187 @@
 }
 
 /* ========================================
-   Light Theme (Default) - (Customized)
+   Light Theme (Default)
    ======================================== */
-   :root {
-    --background: 255 255 255;       /* لون الخلفية الأبيض */
-    --foreground: 0 0 0;           /* لون النص الأسود */
-    
-    --card: 255 255 255;             /* لون خلفية البطاقات (أبيض) */
-    --card-foreground: 0 0 0;      /* لون نص البطاقات (أسود) */
-  
-    --popover: 255 255 255;
-    --popover-foreground: 0 0 0;
-  
-    --primary: 219 68 68;            /* اللون الأحمر الأساسي للأزرار */
-    --primary-foreground: 255 255 255; /* لون النص فوق الأزرار الأساسية (أبيض) */
-  
-    --secondary: 245 245 245;      /* اللون الرمادي الفاتح للأزرار الثانوية */
-    --secondary-foreground: 0 0 0; /* لون النص فوق الأزرار الثانوية (أسود) */
-  
-    --muted: 245 245 245;
-    --muted-foreground: 125 129 132; /* text-secondary color */
-  
-    --accent: 245 245 245;
-    --accent-foreground: 0 0 0;
-  
-    --destructive: 219 68 68;        /* لون عمليات الحذف (الأحمر) */
-  
-    --border: 217 217 217;          /* لون الحدود الفاصلة */
-    --input: 217 217 217;           /* لون خلفية حقول الإدخال */
-    --ring: 219 68 68;             /* لون حلقة التركيز (focus ring) */
-  
-    --radius: 0.5rem;
+:root {
+  --background: 255 255 255;
+  --foreground: 0 0 0;
+
+  --card: 255 255 255;
+  --card-foreground: 0 0 0;
+
+  --popover: 255 255 255;
+  --popover-foreground: 0 0 0;
+
+  --primary: 219 68 68;
+  --primary-foreground: 255 255 255;
+
+  --secondary: 245 245 245;
+  --secondary-foreground: 0 0 0;
+
+  --muted: 245 245 245;
+  --muted-foreground: 125 129 132;
+
+  --accent: 245 245 245;
+  --accent-foreground: 0 0 0;
+
+  --destructive: 219 68 68;
+
+  --border: 217 217 217;
+  --input: 217 217 217;
+  --ring: 219 68 68;
+
+  --radius: 0.5rem;
+}
+
+/* ========================================
+   Dark Theme
+   ======================================== */
+.dark {
+  --background: oklch(0.145 0 0);
+  --foreground: oklch(0.985 0 0);
+
+  --card: oklch(0.205 0 0);
+  --card-foreground: oklch(0.985 0 0);
+
+  --popover: oklch(0.205 0 0);
+  --popover-foreground: oklch(0.985 0 0);
+
+  --primary: oklch(0.922 0 0);
+  --primary-foreground: oklch(0.205 0 0);
+
+  --secondary: oklch(0.269 0 0);
+  --secondary-foreground: oklch(0.985 0 0);
+
+  --muted: oklch(0.269 0 0);
+  --muted-foreground: oklch(0.708 0 0);
+
+  --accent: oklch(0.269 0 0);
+  --accent-foreground: oklch(0.985 0 0);
+
+  --destructive: oklch(0.704 0.191 22.216);
+  --border: oklch(1 0 0 / 10%);
+  --input: oklch(1 0 0 / 15%);
+  --ring: oklch(0.556 0 0);
+
+  --chart-1: oklch(0.488 0.243 264.376);
+  --chart-2: oklch(0.696 0.17 162.48);
+  --chart-3: oklch(0.769 0.188 70.08);
+  --chart-4: oklch(0.627 0.265 303.9);
+  --chart-5: oklch(0.645 0.246 16.439);
+
+  --sidebar: oklch(0.205 0 0);
+  --sidebar-foreground: oklch(0.985 0 0);
+  --sidebar-primary: oklch(0.488 0.243 264.376);
+  --sidebar-primary-foreground: oklch(0.985 0 0);
+  --sidebar-accent: oklch(0.269 0 0);
+  --sidebar-accent-foreground: oklch(0.985 0 0);
+  --sidebar-border: oklch(1 0 0 / 10%);
+  --sidebar-ring: oklch(0.556 0 0);
+}
+
+/* ========================================
+   Base Styles
+   ======================================== */
+@layer base {
+  * {
+    @apply border-border outline-ring/50;
   }
-  
-  /* ========================================
-     Dark Theme
-     ======================================== */
-  .dark {
-    /* Base Colors */
-    --background: oklch(0.145 0 0);
-    --foreground: oklch(0.985 0 0);
-    
-    /* Card */
-    --card: oklch(0.205 0 0);
-    --card-foreground: oklch(0.985 0 0);
-    
-    /* Popover */
-    --popover: oklch(0.205 0 0);
-    --popover-foreground: oklch(0.985 0 0);
-    
-    /* Primary */
-    --primary: oklch(0.922 0 0);
-    --primary-foreground: oklch(0.205 0 0);
-    
-    /* Secondary */
-    --secondary: oklch(0.269 0 0);
-    --secondary-foreground: oklch(0.985 0 0);
-    
-    /* Muted */
-    --muted: oklch(0.269 0 0);
-    --muted-foreground: oklch(0.708 0 0);
-    
-    /* Accent */
-    --accent: oklch(0.269 0 0);
-    --accent-foreground: oklch(0.985 0 0);
-    
-    /* States */
-    --destructive: oklch(0.704 0.191 22.216);
-    --border: oklch(1 0 0 / 10%);
-    --input: oklch(1 0 0 / 15%);
-    --ring: oklch(0.556 0 0);
-    
-    /* Charts */
-    --chart-1: oklch(0.488 0.243 264.376);
-    --chart-2: oklch(0.696 0.17 162.48);
-    --chart-3: oklch(0.769 0.188 70.08);
-    --chart-4: oklch(0.627 0.265 303.9);
-    --chart-5: oklch(0.645 0.246 16.439);
-    
-    /* Sidebar */
-    --sidebar: oklch(0.205 0 0);
-    --sidebar-foreground: oklch(0.985 0 0);
-    --sidebar-primary: oklch(0.488 0.243 264.376);
-    --sidebar-primary-foreground: oklch(0.985 0 0);
-    --sidebar-accent: oklch(0.269 0 0);
-    --sidebar-accent-foreground: oklch(0.985 0 0);
-    --sidebar-border: oklch(1 0 0 / 10%);
-    --sidebar-ring: oklch(0.556 0 0);
+
+  body {
+    @apply bg-background text-foreground;
   }
-  
-  /* ========================================
-     Base Styles
-     ======================================== */
-  @layer base {
-    * {
-      @apply border-border outline-ring/50;
-    }
-    
-    body {
-      @apply bg-background text-foreground;
-    }
+}
+
+/* ========================================
+   Custom Utility Classes
+   ======================================== */
+@layer utilities {
+  /* Gradient Backgrounds */
+  .bg-gradient-pink {
+    background: linear-gradient(114.44deg, #eb0055 0%, #fffa80 100%);
   }
+
+  .bg-gradient-purple {
+    background: linear-gradient(114.44deg, #7433ff 0%, #ffa3fd 100%);
+  }
+
+  .bg-gradient-blue {
+    background: linear-gradient(114.44deg, #624af2 0%, #50ddc3 100%);
+  }
+
+  .bg-gradient-primary {
+    background: linear-gradient(
+      135deg,
+      var(--color-gradient-primary-start),
+      var(--color-gradient-primary-end)
+    );
+  }
+
+  .bg-gradient-secondary {
+    background: linear-gradient(
+      135deg,
+      var(--color-gradient-secondary-start),
+      var(--color-gradient-secondary-end)
+    );
+  }
+
+  .bg-gradient-accent {
+    background: linear-gradient(
+      135deg,
+      var(--color-gradient-accent-start),
+      var(--color-gradient-accent-end)
+    );
+  }
+
+  /* Quick Access Classes */
+  .bg-navy {
+    background-color: #202c46;
+  }
+  .bg-navy-dark {
+    background-color: #1b253c;
+  }
+  .bg-purple-primary {
+    background-color: #5f2eea;
+  }
+  .bg-pink-primary {
+    background-color: #ed2e7e;
+  }
+  .bg-green-success {
+    background-color: #21af52;
+  }
+  .bg-cyan-light {
+    background-color: #82e9ff;
+  }
+  .bg-yellow-light {
+    background-color: #ffd789;
+  }
+
+  /* Text Colors */
+  .text-navy {
+    color: #202c46;
+  }
+  .text-purple-primary {
+    color: #5f2eea;
+  }
+  .text-pink-primary {
+    color: #ed2e7e;
+  }
+  .text-muted {
+    color: #7d8184;
+  }
+  .text-primary-orange {
+    color: #d37643;
+  }
+
+  /* Button Colors */
+  .bg-button-green {
+    background-color: #47b486;
+  }
+  .bg-hover-yellow {
+    background-color: #e2b93b;
+  }
+  .bg-hover-red {
+    background-color: #eb5757;
+  }
+}
