@@ -1,98 +1,93 @@
-import React from "react";
-import { ShoppingCart, Heart, Eye } from "lucide-react";
+import { Star, Heart, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
-// يمكنك تعويض هذا الدالة الخاصة برسم النجوم بعدد التقييم
-const renderStars = (count = 5) => (
-  <div className="flex items-center gap-0.5">
-    {[...Array(count)].map((_, i) => (
-      <svg key={i} width="16" height="16" fill="#facc15" viewBox="0 0 20 20">
-        <polygon points="10,1.5 12.59,7.03 18.53,7.73 14,12.19 15.18,18.09 10,15 4.82,18.09 6,12.19 1.47,7.73 7.41,7.03" />
-      </svg>
-    ))}
-  </div>
-);
-
 const ProductCard = ({ product }) => {
-  if (!product) return null;
-
-  // نسب الخصم
-  const discount = product.old_price
-    ? Math.round(
-        ((product.old_price - product.price) / product.old_price) * 100,
-      )
-    : 0;
-
-  // عدد النجوم والتقييم
-  const stars = Math.round(product.rating || 5);
-  const ratingCount = product.rating_count || 65;
+  console.log(product);
+  // بناءً على بنية الداتا الجديدة، نحسب نسبة الخصم إن وجدت
+  // const discountPercentage = product.oldPrice
+  //   ? ((product.oldPrice - product.price) / product.oldPrice) * 100
+  //   : 0;
 
   return (
-    <div className="relative overflow-hidden rounded-xl border border-purple-300 bg-white p-3 transition-shadow duration-200 hover:shadow-xl">
-      {/* علامة المنتج الجديد وزرين side buttons */}
-      <div className="absolute top-4 left-4 z-10">
-        {product.is_new && (
-          <span className="rounded-lg bg-green-400 px-3 py-1 text-xs font-bold text-white shadow">
-            NEW
+    // قمنا بإزالة الخلفية من العنصر الأب، سيتم تحديدها في الأبناء
+    <div className="group font-poppins w-full max-w-sm overflow-hidden rounded-lg">
+      {/* Container for Image and Hover Effects - له خلفية رمادية */}
+      <div className="bg-secondary-gray relative h-60 w-full overflow-hidden p-4">
+        {/* الصورة ستكون داخل padding */}
+        <img
+          className="h-full w-full object-contain transition-transform duration-500 ease-in-out group-hover:scale-110"
+          src={product.img} // تحديث: استخدام product.img
+          alt={product.title}
+        />
+
+        {/* Discount Badge */}
+
+        {/* Discount Badge - هذا هو الكود المسؤول عن الشارة */}
+        {product.discount && (
+          <span className="absolute top-3 left-3 rounded-md bg-red-500 px-2 py-1 text-xs font-semibold text-white">
+            {product.discount}
           </span>
         )}
-      </div>
-      <div className="absolute top-4 right-4 z-10 flex flex-col space-y-2">
-        <button className="flex items-center justify-center rounded-full border border-gray-200 bg-white p-2 shadow hover:bg-gray-100">
-          <Heart size={20} className="stroke-2 text-gray-600" />
-        </button>
-        <button className="flex items-center justify-center rounded-full border border-gray-200 bg-white p-2 shadow hover:bg-gray-100">
-          <Eye size={20} className="stroke-2 text-gray-600" />
-        </button>
-      </div>
-
-      {/* حاوية الصورة */}
-      <div className="mb-2 flex h-44 items-center justify-center pt-3">
-        <img
-          src={product.image_url}
-          alt={product.title}
-          className="max-h-full max-w-full object-contain"
-        />
-      </div>
-
-      {/* عرض الخصم كشارة */}
-      {discount > 0 && (
-        <div className="absolute top-20 left-4 z-10 rounded-md bg-primary-red px-2 py-1 text-xs font-semibold text-white">
-          -{discount}%
+        {/* Wishlist and Quick View Icons */}
+        <div className="absolute top-3 right-3 flex flex-col space-y-2 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+          <Button
+            variant="outline"
+            size="icon"
+            className="hover:bg-primary-red h-9 w-9 rounded-full border-none bg-white text-black shadow-sm transition-colors duration-300 hover:text-white"
+          >
+            <Heart className="h-4 w-4" />
+          </Button>
+          <Button
+            variant="outline"
+            size="icon"
+            className="hover:bg-primary-red h-9 w-9 rounded-full border-none bg-white text-black shadow-sm transition-colors duration-300 hover:text-white"
+          >
+            <Eye className="h-4 w-4" />
+          </Button>
         </div>
-      )}
 
-      {/* زر السلة */}
-      <div className="mb-3 w-full">
-        <Button
-          className="flex w-full items-center justify-center gap-2 rounded-xl bg-black py-2 font-semibold text-white transition hover:bg-gray-900"
-          onClick={(e) => {
-            e.preventDefault();
-            // TODO: أضف المنتج للسلة بواسطة zustand
-          }}
-        >
-          <ShoppingCart size={18} />
-          Add To Cart
-        </Button>
+        {/* Add to Cart Button (Visible on Hover) */}
+        <div className="absolute inset-x-0 bottom-0 translate-y-full transform transition-transform duration-300 ease-in-out group-hover:translate-y-0">
+          <Button className="w-full rounded-none bg-black text-white hover:bg-black/90">
+            Add To Cart
+          </Button>
+        </div>
       </div>
 
-      {/* معلومات المنتج */}
-      <div className="flex flex-col gap-1 px-1 pb-1">
-        <h3 className="text-md font-medium text-gray-900">{product.title}</h3>
-        <div className="mt-0.5 flex items-center gap-2">
-          <span className="text-lg font-bold text-red-500">
-            ${product.price}
-          </span>
+      {/* Product Details - له خلفية بيضاء */}
+      <div className="p-4">
+        <h3
+          className="mb-1 truncate text-[16px] font-medium"
+          title={product.title}
+        >
+          {product.title}
+        </h3>
+        <div className="flex items-center space-x-2">
+          <p className="text-md font-bold text-red-500">
+            ${product.price.toFixed(2)}
+          </p>
           {product.old_price && (
-            <span className="text-base text-gray-400 line-through">
-              ${product.old_price}
-            </span>
+            <p className="text-sm font-medium text-gray-600 line-through">
+              ${product.old_price.toFixed(2)}
+            </p>
           )}
         </div>
-        <div className="mt-1 flex items-center gap-1">
-          {renderStars(stars)}
-          <span className="ml-1 text-sm font-semibold text-gray-500">
-            ({ratingCount})
+        <div className="mt-2 flex items-center">
+          <div className="flex items-center">
+            {[...Array(5)].map((_, i) => (
+              <Star
+                key={i}
+                className={`h-4 w-4 transition-colors ${
+                  i < Math.round(product.rating)
+                    ? "fill-yellow-400 text-yellow-400"
+                    : "text-gray-300"
+                }`}
+              />
+            ))}
+          </div>
+          {/* تحديث: استخدام reviewsCount */}
+          <span className="ml-2 text-xs font-semibold text-gray-600">
+            ({product.reviews_count})
           </span>
         </div>
       </div>
