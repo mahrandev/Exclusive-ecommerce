@@ -13,7 +13,7 @@ const Footer = () => {
         {/* Logo Section - خارج الـ Grid */}
         <div className="mb-8">
           <NavLink to="/" className=" ">
-            <h2 className="text-primary-white hover:text-primary-red mb-4 text-2xl font-bold transition-colors">
+            <h2 className="text-primary-red mb-4 text-2xl font-bold uppercase transition-colors">
               Exclusive
             </h2>
           </NavLink>

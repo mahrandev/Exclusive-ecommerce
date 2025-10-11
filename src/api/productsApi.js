@@ -1,18 +1,26 @@
-// This file will handle all API calls related to products.
-import { supabase } from "../lib/supabaseClient";
+// الموجود حاليًا في الملف
+import { supabase } from "@/lib/supabaseClient";
 
 export const getProducts = async () => {
-  // We now fetch data from Supabase instead of a fake API
-  const { data, error } = await supabase
-    .from("products") // select the 'products' table
-    .select("*"); // select all columns
+  const { data, error } = await supabase.from("products").select();
 
   if (error) {
-    console.error("Error fetching products:", error);
     throw new Error(error.message);
   }
-
   return data;
 };
 
-// We will add more functions here later (getProductById, createProduct, etc.)
+// ========== أضف هذا الكود الجديد بالأسفل ==========
+
+export const getProductById = async (id) => {
+  const { data, error } = await supabase
+    .from("products")
+    .select()
+    .eq("id", id)
+    .single(); // .single() لجلب نتيجة واحدة فقط
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+};

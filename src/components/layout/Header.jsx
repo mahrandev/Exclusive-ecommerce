@@ -27,7 +27,7 @@ const Header = () => {
         <div className="flex items-center justify-between h-16 md:h-20">
           {/* Logo */}
           <div className="text-xl md:text-2xl font-bold">
-            <NavLink to="/" className="hover:text-primary-red transition-colors">
+            <NavLink to="/" className="text-primary-red transition-colors uppercase">
               Exclusive
             </NavLink>
           </div>
