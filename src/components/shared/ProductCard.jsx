@@ -66,9 +66,9 @@ const ProductCard = ({ product }) => {
           <p className="text-md font-bold text-red-500">
             ${product.price.toFixed(2)}
           </p>
-          {product.old_price && (
+          {product.oldPrice && (
             <p className="text-sm font-medium text-gray-600 line-through">
-              ${product.old_price.toFixed(2)}
+              ${product.oldPrice.toFixed(2)}
             </p>
           )}
         </div>
@@ -87,7 +87,7 @@ const ProductCard = ({ product }) => {
           </div>
           {/* تحديث: استخدام reviewsCount */}
           <span className="ml-2 text-xs font-semibold text-gray-600">
-            ({product.reviews_count})
+            ({product.reviewsCount})
           </span>
         </div>
       </div>

@@ -25,4 +25,5 @@ dist-ssr
 .GEMINI.md
 Design_project/
 .env.local
-*.csv
+*products.csv
+
