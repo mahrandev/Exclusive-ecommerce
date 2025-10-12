@@ -4,11 +4,19 @@ import { useQuery } from "@tanstack/react-query";
 import { getProductById } from "@/api/productsApi";
 import { Button } from "@/components/ui/button";
 import { Label } from "@/components/ui/label";
-import { Star, Heart, Truck, RefreshCw, ShoppingCart } from "lucide-react";
+import {
+  Star,
+  Heart,
+  Truck,
+  RefreshCw,
+  ShoppingCart,
+  Minus,
+  Plus,
+} from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import ProductDetailsSkeleton from "@/components/shared/ProductDetailsSkeleton";
 import { cn } from "@/lib/utils";
-import { toast } from "sonner"; // ✅ استخدام Sonner بدلاً من useToast
+import { toast } from "sonner";
 
 // Helper function لمعالجة JSON بشكل آمن
 const safeJsonParse = (data, fallback = []) => {
@@ -118,7 +126,6 @@ const ProductDetailsPage = () => {
   };
 
   const handleAddToCart = () => {
-    // ✅ التحقق من اختيار المقاس واللون
     if (!selectedSize) {
       toast.error("Please select a size", {
         description: "You need to select a size before adding to cart",
@@ -135,7 +142,6 @@ const ProductDetailsPage = () => {
       return;
     }
 
-    // Add to cart logic here
     console.log("Adding to cart:", {
       productId: product.id,
       quantity,
@@ -143,7 +149,6 @@ const ProductDetailsPage = () => {
       size: selectedSize,
     });
 
-    // ✅ رسالة نجاح مع تفاصيل
     toast.success("Added to cart!", {
       description: `${quantity} × ${product.title}`,
       action: {
@@ -156,7 +161,6 @@ const ProductDetailsPage = () => {
   const handleAddToWishlist = () => {
     setIsWishlisted(!isWishlisted);
 
-    // ✅ رسالة حسب الحالة
     if (!isWishlisted) {
       toast.success("Added to wishlist", {
         description: product.title,
@@ -177,7 +181,6 @@ const ProductDetailsPage = () => {
       return;
     }
 
-    // Navigate to checkout
     toast.loading("Redirecting to checkout...");
     console.log("Buy now:", {
       productId: product.id,
@@ -185,6 +188,14 @@ const ProductDetailsPage = () => {
       selectedColor,
       selectedSize,
     });
+  };
+
+  // Handle keyboard navigation for custom controls
+  const handleKeyDown = (e, action) => {
+    if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      action();
+    }
   };
 
   if (isLoading) {
@@ -213,24 +224,31 @@ const ProductDetailsPage = () => {
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-6 md:py-8">
-      {/* Breadcrumbs */}
+      {/* Breadcrumbs - Enhanced Accessibility */}
       <nav className="mb-4 md:mb-6" aria-label="Breadcrumb">
         <ol className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
           <li>
-            <Link to="/" className="hover:text-gray-900 hover:underline">
+            <Link
+              to="/"
+              className="transition-colors hover:text-gray-900 hover:underline"
+            >
               Home
             </Link>
           </li>
-          <li aria-hidden="true">/</li>
+          <li aria-hidden="true" className="text-gray-400">
+            /
+          </li>
           <li>
             <Link
               to={`/category/${product.category}`}
-              className="capitalize hover:text-gray-900 hover:underline"
+              className="capitalize transition-colors hover:text-gray-900 hover:underline"
             >
               {product.category}
             </Link>
           </li>
-          <li aria-hidden="true">/</li>
+          <li aria-hidden="true" className="text-gray-400">
+            /
+          </li>
           <li className="font-medium text-gray-900" aria-current="page">
             {product.title}
           </li>
@@ -238,11 +256,15 @@ const ProductDetailsPage = () => {
       </nav>
 
       <div className="grid grid-cols-1 items-start gap-6 md:gap-8 lg:grid-cols-5">
-        {/* Image Gallery */}
+        {/* Image Gallery - Enhanced Accessibility */}
         <div className="flex flex-col gap-4 md:flex-row-reverse lg:col-span-3">
           {/* Main Image */}
           <div className="flex-1">
-            <div className="flex aspect-square items-center justify-center overflow-hidden rounded-lg bg-gray-50 p-4 md:aspect-auto md:h-[500px] md:p-8">
+            <div
+              className="flex aspect-square items-center justify-center overflow-hidden rounded-lg bg-gray-50 p-4 md:aspect-auto md:h-[500px] md:p-8"
+              role="img"
+              aria-label={`Main image of ${product.title}`}
+            >
               <img
                 src={mainImage}
                 alt={product.title}
@@ -252,19 +274,24 @@ const ProductDetailsPage = () => {
             </div>
           </div>
 
-          {/* Thumbnails */}
-          <div className="flex gap-2 overflow-x-auto md:max-h-[500px] md:flex-col md:overflow-y-auto">
+          {/* Thumbnails - Enhanced with better focus states */}
+          <div
+            className="flex gap-2 overflow-x-auto md:max-h-[500px] md:flex-col md:overflow-y-auto"
+            role="list"
+          >
             {productData.images.map((imgUrl, index) => (
               <button
                 key={index}
+                role="listitem"
                 className={cn(
-                  "flex-shrink-0 rounded-lg border-2 bg-gray-50 p-2 transition-all hover:border-gray-400",
+                  "flex-shrink-0 rounded-lg border-2 bg-gray-50 p-2 transition-all hover:border-gray-400 focus:outline-none",
                   mainImage === imgUrl
-                    ? "border-red-500 ring-2 ring-red-500 ring-offset-2"
+                    ? "border-primary-red"
                     : "border-transparent",
                 )}
                 onClick={() => setSelectedImage(imgUrl)}
-                aria-label={`View image ${index + 1}`}
+                aria-label={`View image ${index + 1} of ${productData.images.length}`}
+                aria-pressed={mainImage === imgUrl}
               >
                 <img
                   src={imgUrl}
@@ -287,14 +314,15 @@ const ProductDetailsPage = () => {
           <div className="mb-4 flex flex-wrap items-center gap-3 text-sm md:gap-4">
             <div
               className="flex gap-1"
+              role="img"
               aria-label={`Rating: ${product.rating} out of 5 stars`}
             >
               {stars}
             </div>
-            <span className="text-gray-500">
+            <span className="text-gray-800">
               ({product.reviewsCount} Reviews)
             </span>
-            <span className="text-gray-300" aria-hidden="true">
+            <span className="text-gray-800" aria-hidden="true">
               |
             </span>
             <span
@@ -308,168 +336,229 @@ const ProductDetailsPage = () => {
           </div>
 
           {/* Price */}
-          <p className="mb-4 text-2xl font-bold md:text-3xl">
+          <p
+            className="mb-4 text-2xl font-bold md:text-3xl"
+            aria-label={`Price: ${product.price} dollars`}
+          >
             ${product.price.toFixed(2)}
           </p>
 
           {/* Description */}
-          <p className="mb-6 border-b pb-6 leading-relaxed text-gray-600">
+          <p className="mb-6 border-b pb-6 leading-relaxed text-gray-900">
             {product.description}
           </p>
 
-          {/* Colors */}
+          {/* Colors - Enhanced Accessibility & Design */}
           {productData.colors.length > 0 && (
-            <div className="border-b py-4 md:py-6">
-              <h3 className="mb-3 text-sm font-medium md:text-base">
+            <div className="flex items-center border-b py-4 md:py-6">
+              <h3
+                id="color-label"
+                className="text-md mr-4 font-medium md:text-base"
+              >
                 Colours:{" "}
-                <span className="font-normal text-gray-600">
-                  {selectedColor || "Select a color"}
-                </span>
               </h3>
-              <RadioGroup
-                value={selectedColor}
-                onValueChange={setSelectedColor}
+              <div
+                role="radiogroup"
+                aria-labelledby="color-label"
                 className="flex flex-wrap gap-3"
               >
                 {productData.colors.map((color) => (
-                  <Label
+                  <button
                     key={color.name}
-                    htmlFor={color.name}
+                    role="radio"
+                    aria-checked={selectedColor === color.name}
+                    aria-label={`Color: ${color.name}`}
+                    onClick={() => setSelectedColor(color.name)}
+                    onKeyDown={(e) =>
+                      handleKeyDown(e, () => setSelectedColor(color.name))
+                    }
                     className={cn(
-                      "relative h-8 w-8 cursor-pointer rounded-full border-2 border-white shadow-md ring-2 transition-all hover:scale-110",
+                      "focus:ring-primary-red relative h-8 w-8 cursor-pointer rounded-full border-2 border-white shadow-md ring-2 transition-all hover:scale-110 focus:ring-4 focus:ring-offset-2 focus:outline-none",
                       selectedColor === color.name
-                        ? "scale-110 ring-red-500"
+                        ? "ring-primary-red scale-110"
                         : "ring-gray-300",
                     )}
                     style={{ backgroundColor: color.value }}
                     title={color.name}
-                  >
-                    <RadioGroupItem
-                      value={color.name}
-                      id={color.name}
-                      className="sr-only"
-                    />
-                  </Label>
-                ))}
-              </RadioGroup>
-            </div>
-          )}
-
-          {/* Sizes */}
-          {productData.sizes.length > 0 && (
-            <div className="border-b py-4 md:py-6">
-              <h3 className="mb-4 text-sm font-medium md:text-base">Size:</h3>
-              <div className="flex flex-wrap gap-3">
-                {productData.sizes.map((size) => (
-                  <Button
-                    key={size.name}
-                    variant={
-                      selectedSize === size.name ? "destructive" : "outline"
-                    }
-                    onClick={() => setSelectedSize(size.name)}
-                    disabled={!size.available}
-                    className={cn(
-                      "h-10 min-w-[3rem] px-4 text-sm md:text-base",
-                      !size.available && "cursor-not-allowed opacity-40",
-                    )}
-                  >
-                    {size.name}
-                  </Button>
+                    tabIndex={0}
+                  ></button>
                 ))}
               </div>
             </div>
           )}
 
-          {/* Quantity and Actions */}
-          <div className="flex flex-col gap-3 py-4 md:flex-row md:gap-4 md:py-6">
-            {/* Quantity */}
-            <div className="flex w-full items-center rounded-md border md:w-auto">
-              <Button
-                variant="ghost"
-                onClick={() => handleQuantityChange(-1)}
-                className="h-11 px-3 hover:bg-gray-100"
-                aria-label="Decrease quantity"
+          {/* Sizes - FULLY REDESIGNED with Better States */}
+          {productData.sizes.length > 0 && (
+            <div className="flex items-center border-b py-4 md:py-6">
+              <h3
+                id="size-label"
+                className="text-md mr-4 font-medium md:text-base"
               >
-                -
-              </Button>
+                Size:{" "}
+              </h3>
+              <div
+                role="radiogroup"
+                aria-labelledby="size-label"
+                className="flex flex-wrap gap-3"
+              >
+                {productData.sizes.map((size) => (
+                  <button
+                    key={size.name}
+                    role="radio"
+                    aria-checked={selectedSize === size.name}
+                    aria-label={`Size: ${size.name}${!size.available ? " (unavailable)" : ""}`}
+                    onClick={() => size.available && setSelectedSize(size.name)}
+                    onKeyDown={(e) =>
+                      size.available &&
+                      handleKeyDown(e, () => setSelectedSize(size.name))
+                    }
+                    disabled={!size.available}
+                    className={cn(
+                      "h-10 min-w-[3rem] rounded-md border-2 px-4 text-sm font-medium transition-all focus:outline-none md:text-base",
+                      selectedSize === size.name
+                        ? "bg-primary-red border-primary-red scale-105 transform text-white shadow-md"
+                        : size.available
+                          ? "hover:border-primary-red hover:text-primary-red text-black-700 border-gray-300 bg-white hover:bg-red-50 hover:shadow-sm"
+                          : "cursor-not-allowed border-gray-200 bg-gray-100 text-gray-900 line-through opacity-50",
+                    )}
+                    tabIndex={size.available ? 0 : -1}
+                  >
+                    {size.name}
+                  </button>
+                ))}
+              </div>
+            </div>
+          )}
+
+          {/* Quantity and Actions - COMPLETELY REDESIGNED */}
+          <div className="flex flex-col gap-3 py-4 md:flex-row md:gap-4 md:py-6">
+            {/* Custom Quantity Selector - No Default Browser Spinners */}
+            <div className="flex w-full items-stretch overflow-hidden rounded-md border-2 border-gray-300 transition-colors md:w-auto">
+              <button
+                onClick={() => handleQuantityChange(-1)}
+                disabled={quantity <= 1}
+                className={cn(
+                  "focus:border-primary-red focus:bg-primary-red flex h-11 w-11 items-center justify-center bg-white transition-all focus:z-10 focus:text-white focus:outline-none",
+                  quantity <= 1
+                    ? "cursor-not-allowed text-gray-300"
+                    : "text-gray-700 hover:bg-gray-100 active:bg-gray-200",
+                )}
+                aria-label="Decrease quantity"
+                type="button"
+              >
+                <Minus size={18} strokeWidth={2.5} />
+              </button>
+
               <input
-                type="number"
+                type="text"
+                inputMode="numeric"
+                pattern="[0-9]*"
                 value={quantity}
                 onChange={(e) => {
-                  const val = parseInt(e.target.value) || 1;
-                  setQuantity(Math.max(1, val));
+                  const val = parseInt(e.target.value.replace(/\D/g, "")) || 1;
+                  setQuantity(Math.max(1, Math.min(val, product.stock)));
                 }}
-                className="w-16 border-x text-center focus:ring-2 focus:ring-red-500 focus:outline-none"
+                className="w-16 [appearance:textfield] border-none bg-white text-center font-semibold text-gray-900 focus:ring-0 focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 min="1"
-                aria-label="Quantity"
+                max={product.stock}
+                aria-label={`Quantity: ${quantity}`}
               />
-              <Button
-                variant="ghost"
+
+              <button
                 onClick={() => handleQuantityChange(1)}
-                className="h-11 px-3 hover:bg-gray-100"
+                disabled={quantity >= product.stock}
+                className={cn(
+                  "focus:bg-primary-red flex h-11 w-11 items-center justify-center bg-white transition-all focus:text-white focus:outline-none",
+                  quantity >= product.stock
+                    ? "cursor-not-allowed text-gray-300"
+                    : "text-gray-700 hover:bg-gray-100 active:bg-gray-200",
+                )}
                 aria-label="Increase quantity"
+                type="button"
               >
-                +
-              </Button>
+                <Plus size={18} strokeWidth={2.5} />
+              </button>
             </div>
 
-            {/* Buy Now */}
-            <Button
+            {/* Buy Now Button */}
+            <button
               onClick={handleBuyNow}
-              disabled={!product.inStock}
-              className="h-11 flex-1 bg-red-500 text-base hover:bg-red-600 md:text-lg"
+              disabled={!product.inStock || !selectedSize || !selectedColor}
+              className={cn(
+                "focus:ring-primary-red h-11 flex-1 rounded-md text-base font-medium transition-all focus:ring-2 focus:ring-offset-2 focus:outline-none md:text-lg",
+                !product.inStock || !selectedSize || !selectedColor
+                  ? "cursor-not-allowed bg-gray-300 text-gray-500"
+                  : "bg-primary-red text-white shadow-sm hover:bg-red-600 hover:shadow-md active:bg-red-700",
+              )}
+              aria-disabled={
+                !product.inStock || !selectedSize || !selectedColor
+              }
             >
               Buy Now
-            </Button>
+            </button>
 
-            {/* Wishlist */}
-            <Button
-              variant="outline"
+            {/* Wishlist Button */}
+            <button
               onClick={handleAddToWishlist}
               className={cn(
-                "h-11 px-3",
-                isWishlisted && "border-red-500 bg-red-50 text-red-500",
+                "flex h-11 w-11 items-center justify-center rounded-md border-2 transition-all focus:outline-none",
+                isWishlisted
+                  ? "border-primary-red text-primary-red bg-red-50 shadow-sm"
+                  : "hover:border-primary-red hover:text-primary-red border-gray-300 bg-white text-gray-700 hover:bg-red-50",
               )}
               aria-label={
                 isWishlisted ? "Remove from wishlist" : "Add to wishlist"
               }
+              aria-pressed={isWishlisted}
             >
-              <Heart className={isWishlisted ? "fill-current" : ""} />
-            </Button>
+              <Heart
+                className={cn(
+                  "transition-all",
+                  isWishlisted ? "scale-110 fill-current" : "",
+                )}
+                size={20}
+              />
+            </button>
           </div>
 
           {/* Add to Cart Button */}
-          <Button
+          <button
             onClick={handleAddToCart}
-            disabled={!product.inStock}
-            variant="outline"
-            className="mb-4 h-11 w-full border-red-500 text-red-500 hover:bg-red-50"
+            disabled={!product.inStock || !selectedSize || !selectedColor}
+            className={cn(
+              "mb-4 flex h-11 w-full items-center justify-center gap-2 rounded-md border-2 font-medium transition-all focus:outline-none",
+              !product.inStock || !selectedSize || !selectedColor
+                ? "cursor-not-allowed border-gray-300 bg-gray-100 text-gray-400"
+                : "border-primary-red text-primary-red bg-white shadow-sm hover:bg-red-50 hover:shadow active:bg-red-100",
+            )}
+            aria-disabled={!product.inStock || !selectedSize || !selectedColor}
           >
-            <ShoppingCart className="mr-2 h-5 w-5" />
+            <ShoppingCart size={20} />
             Add to Cart
-          </Button>
+          </button>
 
-          {/* Delivery Info */}
-          <div className="mt-4 overflow-hidden rounded-lg border">
-            <div className="flex items-start gap-4 border-b p-4">
-              <Truck className="mt-1 flex-shrink-0 text-gray-700" size={24} />
-              <div>
-                <h4 className="font-medium">Free Delivery</h4>
-                <p className="mt-1 text-xs text-gray-500 md:text-sm">
+          {/* Delivery Info - Enhanced Design */}
+          <div className="mt-4 overflow-hidden rounded-lg border-2 border-gray-200 shadow-sm">
+            <div className="flex items-start gap-4 border-b-2 border-gray-200 p-4 transition-colors hover:bg-gray-50">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
+                <Truck className="flex-shrink-0 text-gray-700" size={20} />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-gray-900">Free Delivery</h4>
+                <p className="mt-1 text-xs text-gray-600 md:text-sm">
                   Enter your postal code for Delivery Availability
                 </p>
               </div>
             </div>
-            <div className="flex items-start gap-4 p-4">
-              <RefreshCw
-                className="mt-1 flex-shrink-0 text-gray-700"
-                size={24}
-              />
-              <div>
-                <h4 className="font-medium">Return Delivery</h4>
-                <p className="mt-1 text-xs text-gray-500 md:text-sm">
+            <div className="flex items-start gap-4 p-4 transition-colors hover:bg-gray-50">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-gray-100">
+                <RefreshCw className="flex-shrink-0 text-gray-700" size={20} />
+              </div>
+              <div className="flex-1">
+                <h4 className="font-semibold text-gray-900">Return Delivery</h4>
+                <p className="mt-1 text-xs text-gray-600 md:text-sm">
                   Free 30 Days Delivery Returns.{" "}
-                  <button className="underline hover:text-gray-700">
+                  <button className="hover:text-primary-red focus:ring-primary-red underline transition-colors focus:rounded focus:ring-2 focus:outline-none">
                     Details
                   </button>
                 </p>

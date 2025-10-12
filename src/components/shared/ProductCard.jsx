@@ -7,7 +7,6 @@ const ProductCard = ({ product }) => {
 
   return (
     <Link to={`/product/${product.id}`}>
-      // قمنا بإزالة الخلفية من العنصر الأب، سيتم تحديدها في الأبناء
       <div className="group font-poppins w-full max-w-sm overflow-hidden rounded-lg">
         {/* Container for Image and Hover Effects - له خلفية رمادية */}
         <div className="bg-secondary-gray relative h-60 w-full overflow-hidden p-4">

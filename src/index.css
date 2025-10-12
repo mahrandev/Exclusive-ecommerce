@@ -7,6 +7,7 @@
    Font Faces - Fixed Format
    ======================================== */
 
+
 /* Cairo - Arabic */
 @font-face {
   font-family: "Cairo";
@@ -682,4 +683,36 @@ button {
   .bg-hover-red {
     background-color: #eb5757;
   }
+}
+
+/* Custom CSS to hide number input spinners */
+
+
+/* ========================================
+   Custom Quantity Input Styles
+   ======================================== */
+
+/* Hide number input spinners in Chrome, Safari, Edge */
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Hide number input spinners in Firefox */
+input[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}
+
+/* Remove default focus outline */
+input[type="number"]:focus {
+  outline: none;
+}
+
+/* Smooth transitions for interactive elements */
+button, input, a {
+  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+  transition-duration: 150ms;
 }
