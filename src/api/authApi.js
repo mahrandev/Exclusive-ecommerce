@@ -31,6 +31,11 @@ export const signUp = async ({ name, email, password }) => {
   // 4. معالجة الأخطاء: إذا حدث خطأ، قم بإيقاف التنفيذ وإظهاره
   if (error) {
     console.error("Error signing up:", error.message);
+    // ✨ التحقق من خطأ المستخدم المسجل مسبقًا
+    if (error.message.includes("User already registered")) {
+      throw new Error("هذا البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول.");
+    }
+    // رمي الأخطاء الأخرى كما هي
     throw new Error(error.message);
   }
 

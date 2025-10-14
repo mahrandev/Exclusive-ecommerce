@@ -2,6 +2,8 @@ import Header from "./components/layout/Header";
 import AppRoutes from "./routes";
 import { Outlet } from "react-router-dom";
 import Footer from "./components/layout/Footer";
+import { Toaster } from "@/components/ui/sonner";
+
 function App() {
   return (
     <>
@@ -12,6 +14,7 @@ function App() {
         <Outlet />
       </main>
       <Footer />
+      <Toaster />
     </>
   );
 }
