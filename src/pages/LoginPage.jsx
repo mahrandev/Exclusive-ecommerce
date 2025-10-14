@@ -1,48 +1,54 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
+import { toast } from "sonner";
+import { Eye, EyeOff } from "lucide-react";
+
 import { Button } from "@/components/ui/button";
 import { signIn } from "@/api/authApi";
-import { useState } from "react";
-import { useNavigate } from "react-router-dom";
-import { toast } from "sonner";
-
-// الصورة الجانبية (نفس الصورة للحفاظ على التناسق)
 import signUpImage from "@/assets/img/dl.beatsnoop 1.png";
 
+// 1. تعريف الـ Schema باستخدام Zod للتحقق
+const loginSchema = z.object({
+  email: z
+    .string()
+    .email({ message: "Invalid email address" })
+    .min(1, { message: "Email is required" }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters" }),
+});
+
 const LoginPage = () => {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
   const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
 
-  // ✨ 3. دالة لتحديث الـ state
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prevState) => ({
-      ...prevState,
-      [name]: value,
-    }));
-  };
+  // 2. إعداد react-hook-form مع Zod
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(loginSchema),
+  });
 
-  // ✨ 4. دالة التنفيذ عند الضغط على زر تسجيل الدخول
-  const handleSubmit = async (e) => {
-    e.preventDefault();
+  // 3. دالة التنفيذ عند إرسال الفورم
+  const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      const credentials = {
-        email: formData.email.trim(),
-        password: formData.password,
-      };
-      await signIn(credentials);
+      await signIn({ email: data.email, password: data.password });
       toast.success("Login successful!");
-      navigate("/"); // ✨ توجيه المستخدم للصفحة الرئيسية بعد النجاح
+      navigate("/");
     } catch (error) {
       toast.error(error.message);
     } finally {
       setIsLoading(false);
     }
   };
+
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
       {/* --- القسم الأيسر: الصورة --- */}
@@ -55,9 +61,9 @@ const LoginPage = () => {
       </div>
 
       {/* --- القسم الأيمن: الفورم --- */}
-
       <div className="flex items-center justify-center py-12">
-        <form onSubmit={handleSubmit}>
+        {/* 4. استخدام handleSubmit من react-hook-form */}
+        <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mx-auto grid w-[400px] gap-8">
             {/* عنوان الفورم */}
             <div className="grid gap-2">
@@ -68,45 +74,85 @@ const LoginPage = () => {
             </div>
 
             {/* حقول الإدخال */}
-            <div className="grid gap-8">
-              {/* حقل الإيميل */}
-              <div className="relative">
-                <input
-                  id="email"
-                  name="email"
-                  type="email"
-                  className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-base text-gray-900 focus:border-red-600 focus:ring-0 focus:outline-none dark:text-white dark:focus:border-red-500"
-                  placeholder=" " // مهم جداً لوجود مسافة فارغة
-                  required
-                  value={formData.email}
-                  onChange={handleChange}
-                />
-                <label
-                  htmlFor="email"
-                  className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-base text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-red-600 dark:text-gray-400"
-                >
-                  Email
-                </label>
+            <div className="grid gap-6">
+              {/* حقل الإيميل مع عرض الأخطاء */}
+              <div className="grid gap-2">
+                <div className="relative">
+                  <input
+                    id="email"
+                    type="email"
+                    className={`peer block w-full appearance-none border-0 border-b-2 bg-transparent px-0 py-2.5 text-base text-gray-900 focus:ring-0 focus:outline-none dark:text-white ${
+                      errors.email
+                        ? "border-red-500 focus:border-red-600"
+                        : "border-gray-300 focus:border-red-600 dark:focus:border-red-500"
+                    }`}
+                    placeholder=" "
+                    aria-invalid={errors.email ? "true" : "false"}
+                    {...register("email")}
+                  />
+                  <label
+                    htmlFor="email"
+                    className={`absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-base duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 ${
+                      errors.email
+                        ? "text-red-600"
+                        : "text-gray-500 peer-focus:text-red-600 dark:text-gray-400"
+                    }`}
+                  >
+                    Email
+                  </label>
+                </div>
+                {errors.email && (
+                  <p className="text-sm text-red-500" role="alert">
+                    {errors.email.message}
+                  </p>
+                )}
               </div>
 
-              {/* حقل كلمة المرور */}
-              <div className="relative">
-                <input
-                  id="password"
-                  name="password"
-                  type="password"
-                  className="peer block w-full appearance-none border-0 border-b-2 border-gray-300 bg-transparent px-0 py-2.5 text-base text-gray-900 focus:border-red-600 focus:ring-0 focus:outline-none dark:text-white dark:focus:border-red-500"
-                  placeholder=" "
-                  required
-                  value={formData.password}
-                  onChange={handleChange}
-                />
-                <label
-                  htmlFor="password"
-                  className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-base text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-red-600 dark:text-gray-400"
-                >
-                  Password
-                </label>
+              {/* حقل كلمة المرور مع أيقونة الإظهار/الإخفاء */}
+              <div className="grid gap-2">
+                <div className="relative">
+                  <input
+                    id="password"
+                    type={showPassword ? "text" : "password"}
+                    className={`peer block w-full appearance-none border-0 border-b-2 bg-transparent px-0 py-2.5 text-base text-gray-900 focus:ring-0 focus:outline-none dark:text-white ${
+                      errors.password
+                        ? "border-red-500 focus:border-red-600"
+                        : "border-gray-300 focus:border-red-600 dark:focus:border-red-500"
+                    }`}
+                    placeholder=" "
+                    aria-invalid={errors.password ? "true" : "false"}
+                    {...register("password")}
+                  />
+                  <label
+                    htmlFor="password"
+                    className={`absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-base duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 ${
+                      errors.password
+                        ? "text-red-600"
+                        : "text-gray-500 peer-focus:text-red-600 dark:text-gray-400"
+                    }`}
+                  >
+                    Password
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
+                  >
+                    {showPassword ? (
+                      <EyeOff className="h-5 w-5" />
+                    ) : (
+                      <Eye className="h-5 w-5" />
+                    )}
+                  </button>
+                </div>
+                {errors.password && (
+                  <p className="text-sm text-red-500" role="alert">
+                    {errors.password.message}
+                  </p>
+                )}
               </div>
 
               {/* الأزرار ورابط نسيان كلمة المرور */}
@@ -116,7 +162,7 @@ const LoginPage = () => {
                   className="bg-red-500 px-12 py-6 text-base font-medium text-white hover:bg-red-600"
                   disabled={isLoading}
                 >
-                  Log In
+                  {isLoading ? "Logging in..." : "Log In"}
                 </Button>
                 <Link
                   to="/forgot-password"

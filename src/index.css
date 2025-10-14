@@ -3,10 +3,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+
+
 /* ========================================
    Font Faces - Fixed Format
    ======================================== */
-
 
 /* Cairo - Arabic */
 @font-face {
@@ -687,7 +688,6 @@ button {
 
 /* Custom CSS to hide number input spinners */
 
-
 /* ========================================
    Custom Quantity Input Styles
    ======================================== */
@@ -711,8 +711,12 @@ input[type="number"]:focus {
 }
 
 /* Smooth transitions for interactive elements */
-button, input, a {
-  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform;
+button,
+input,
+a {
+  transition-property:
+    background-color, border-color, color, fill, stroke, opacity, box-shadow,
+    transform;
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 150ms;
 }

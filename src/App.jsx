@@ -6,7 +6,7 @@ function App() {
   return (
     <>
       <Header />
-      <hr />
+      <hr className="border-gray-200" />
       <main>
         <AppRoutes />
         <Outlet />
