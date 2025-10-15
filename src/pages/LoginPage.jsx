@@ -5,7 +5,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
-
+import useAuthStore from "@/store/authStore";
 import { Button } from "@/components/ui/button";
 import { signIn } from "@/api/authApi";
 import signUpImage from "@/assets/img/dl.beatsnoop 1.png";
@@ -25,6 +25,7 @@ const LoginPage = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
+  const login = useAuthStore((state) => state.login);
 
   // 2. إعداد react-hook-form مع Zod
   const {
@@ -36,12 +37,16 @@ const LoginPage = () => {
   });
 
   // 3. دالة التنفيذ عند إرسال الفورم
-  const onSubmit = async (data) => {
+  const onSubmit = async (formData) => {
     setIsLoading(true);
     try {
-      await signIn({ email: data.email, password: data.password });
+      const data = await signIn({
+        email: formData.email,
+        password: formData.password,
+      });
+      login(data);
       toast.success("Login successful!");
-      navigate("/");
+      navigate("/account");
     } catch (error) {
       toast.error(error.message);
     } finally {
