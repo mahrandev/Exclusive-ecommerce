@@ -10,14 +10,24 @@ export const getProducts = async () => {
   return data;
 };
 
-// ========== أضف هذا الكود الجديد بالأسفل ==========
-
 export const getProductById = async (id) => {
   const { data, error } = await supabase
     .from("products")
     .select()
     .eq("id", id)
     .single(); // .single() لجلب نتيجة واحدة فقط
+
+  if (error) {
+    throw new Error(error.message);
+  }
+  return data;
+};
+
+export const searchProductsByName = async (name) => {
+  const { data, error } = await supabase
+    .from('products')
+    .select('*')
+    .ilike('title', `%${name}%`);
 
   if (error) {
     throw new Error(error.message);

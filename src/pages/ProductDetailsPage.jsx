@@ -12,6 +12,8 @@ import {
 import ProductDetailsSkeleton from "@/components/shared/ProductDetailsSkeleton";
 import { cn } from "@/lib/utils";
 import { useProductDetails } from "@/hooks/useProductDetails";
+import { useEffect } from "react";
+import { addRecentlyViewed } from "@/utils/recentlyViewed";
 
 const ProductDetailsPage = () => {
   const {
@@ -36,6 +38,12 @@ const ProductDetailsPage = () => {
     handleKeyDown,
     stars,
   } = useProductDetails();
+
+  useEffect(() => {
+    if (product) {
+      addRecentlyViewed(product);
+    }
+  }, [product]);
 
   if (isLoading) {
     return <ProductDetailsSkeleton />;

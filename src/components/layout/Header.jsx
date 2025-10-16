@@ -1,13 +1,11 @@
-// src/components/layout/Header.jsx
-
 import { NavLink, useNavigate } from "react-router-dom";
-import { Search, Heart, ShoppingCart, Menu, X, User } from "lucide-react";
+import { Heart, ShoppingCart, Menu, X, User } from "lucide-react";
 import { useState } from "react";
 import useAuthStore from "@/store/authStore";
+import SearchComponent from "@/components/shared/SearchComponent"; // Import the new component
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const [isSearchOpen, setIsSearchOpen] = useState(false);
   const { isAuthenticated, user, logout } = useAuthStore();
   const navigate = useNavigate();
 
@@ -100,25 +98,11 @@ const Header = () => {
           {/* Right side actions */}
           <div className="flex items-center gap-3 md:gap-4">
             {/* Desktop Search */}
-            <div className="relative hidden md:block">
-              <input
-                type="text"
-                placeholder="What are you looking for?"
-                className="bg-secondary-gray px-4 py-2 rounded-md text-sm w-48 lg:w-60 focus:outline-none focus:ring-2 focus:ring-primary-red transition-all"
-              />
-              <Search
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-                size={20}
-              />
+            <div className="hidden md:block">
+              <SearchComponent onResultClick={() => setIsMobileMenuOpen(false)} />
             </div>
 
-            {/* Mobile Search Toggle */}
-            <button
-              className="md:hidden p-2 hover:bg-gray-100 rounded-full transition-colors"
-              onClick={() => setIsSearchOpen(!isSearchOpen)}
-            >
-              <Search size={20} />
-            </button>
+            {/* Mobile Search Toggle - This is now handled inside SearchComponent */}
 
             {/* Wishlist */}
             <NavLink
@@ -175,21 +159,9 @@ const Header = () => {
         </div>
 
         {/* Mobile Search Bar */}
-        {isSearchOpen && (
-          <div className="md:hidden pb-4 animate-in slide-in-from-top">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="What are you looking for?"
-                className="bg-secondary-gray px-4 py-2 rounded-md text-sm w-full focus:outline-none focus:ring-2 focus:ring-primary-red"
-              />
-              <Search
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500"
-                size={20}
-              />
-            </div>
-          </div>
-        )}
+        <div className="md:hidden pb-4">
+          <SearchComponent onResultClick={() => setIsMobileMenuOpen(false)} />
+        </div>
 
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (

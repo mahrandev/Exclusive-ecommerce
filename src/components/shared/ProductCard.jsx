@@ -4,20 +4,20 @@ import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import useAuthStore from "@/store/authStore";
 import useWishlistStore from "@/store/wishlistStore";
+import useCartStore from "@/store/cartStore"; // Import cart store
 import { addToWishlist, removeFromWishlist } from "@/api/wishlistApi";
 import { toast } from "sonner";
 
 const ProductCard = ({ product }) => {
   const navigate = useNavigate();
 
-  // 1. جلب البيانات الضرورية من الـ stores (مع الإصلاح)
   const { user, isAuthenticated } = useAuthStore((state) => state);
   const { wishlist, addToWishlistState, removeFromWishlistState } =
     useWishlistStore((state) => state);
+  const { addToCart } = useCartStore((state) => state); // Get addToCart action
 
   const isWishlisted = wishlist.some((item) => item.id === product.id);
 
-  // 3. استخدام useMutation للإضافة (مع إصلاح user.id)
   const { mutate: handleAddToWishlist, isPending: isAdding } = useMutation({
     mutationFn: () =>
       addToWishlist({ userId: user?.user?.id, productId: product.id }),
@@ -30,7 +30,6 @@ const ProductCard = ({ product }) => {
     },
   });
 
-  // 4. استخدام useMutation للحذف (مع إصلاح user.id)
   const { mutate: handleRemoveFromWishlist, isPending: isRemoving } =
     useMutation({
       mutationFn: () =>
@@ -44,8 +43,7 @@ const ProductCard = ({ product }) => {
       },
     });
 
-  // 5. الدالة الموحدة التي يتم استدعاؤها عند الضغط
-  const handleWishlistToggle = async (e) => {
+  const handleWishlistToggle = (e) => {
     e.preventDefault();
     e.stopPropagation();
 
@@ -55,7 +53,6 @@ const ProductCard = ({ product }) => {
       return;
     }
 
-    // التأكد من وجود هوية المستخدم قبل المتابعة
     if (!user?.user?.id) {
       toast.error("Could not verify user. Please log in again.");
       return;
@@ -66,6 +63,13 @@ const ProductCard = ({ product }) => {
     } else {
       handleAddToWishlist();
     }
+  };
+
+  const handleAddToCart = (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    addToCart(product);
+    toast.success(`${product.title} has been added to your cart.`);
   };
 
   return (
@@ -87,7 +91,7 @@ const ProductCard = ({ product }) => {
           <div className="absolute top-3 right-3 flex flex-col space-y-2">
             <Button
               onClick={handleWishlistToggle}
-              disabled={isAdding || isRemoving} // تعطيل الزر أثناء التحميل
+              disabled={isAdding || isRemoving}
               variant="outline"
               size="icon"
               className="h-9 w-9 rounded-full border-none bg-white text-black shadow-sm transition-colors duration-300 hover:text-white"
@@ -108,7 +112,10 @@ const ProductCard = ({ product }) => {
           </div>
 
           <div className="absolute inset-x-0 bottom-0 translate-y-full transform transition-transform duration-300 ease-in-out group-hover:translate-y-0">
-            <Button className="w-full rounded-none bg-black text-white hover:bg-black/90">
+            <Button
+              onClick={handleAddToCart}
+              className="w-full rounded-none bg-black text-white hover:bg-black/90"
+            >
               Add To Cart
             </Button>
           </div>
