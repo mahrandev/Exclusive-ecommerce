@@ -7,6 +7,7 @@ import ProductDetailsPage from "@/pages/ProductDetailsPage";
 import SignUpPage from "@/pages/SignUpPage";
 import AccountPage from "@/pages/AccountPage";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+import WishlistPage from "@/pages/WishlistPage"; // Import WishlistPage
 
 const AppRoutes = () => {
   return (
@@ -18,6 +19,15 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <CartPage />
+          </ProtectedRoute>
+        }
+      />
+      {/* Add the protected wishlist route */}
+      <Route
+        path="/wishlist"
+        element={
+          <ProtectedRoute>
+            <WishlistPage />
           </ProtectedRoute>
         }
       />
