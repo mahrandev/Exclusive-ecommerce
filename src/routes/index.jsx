@@ -8,6 +8,8 @@ import SignUpPage from "@/pages/SignUpPage";
 import AccountPage from "@/pages/AccountPage";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import WishlistPage from "@/pages/WishlistPage"; // Import WishlistPage
+import OrderConfirmationPage from "@/pages/OrderConfirmationPage";
+import CheckoutPage from "@/pages/Checkout";
 
 const AppRoutes = () => {
   return (
@@ -28,6 +30,22 @@ const AppRoutes = () => {
         element={
           <ProtectedRoute>
             <WishlistPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/checkout"
+        element={
+          <ProtectedRoute>
+            <CheckoutPage />
+          </ProtectedRoute>
+        }
+      />
+      <Route
+        path="/order-confirmation"
+        element={
+          <ProtectedRoute>
+            <OrderConfirmationPage />
           </ProtectedRoute>
         }
       />

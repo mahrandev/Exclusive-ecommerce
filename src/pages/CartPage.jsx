@@ -133,8 +133,11 @@ const CartPage = () => {
                 <span>${totalPrice.toFixed(2)}</span>
               </div>
             </div>
-            <Button className="w-full mt-6 bg-primary-red hover:bg-red-600">
-              Proceed to Checkout
+            <Button
+              asChild
+              className="w-full mt-6 bg-primary-red hover:bg-red-600"
+            >
+              <Link to="/checkout">Proceed to Checkout</Link>
             </Button>
           </div>
         </div>
