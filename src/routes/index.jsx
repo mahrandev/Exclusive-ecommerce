@@ -10,11 +10,13 @@ import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import WishlistPage from "@/pages/WishlistPage"; // Import WishlistPage
 import OrderConfirmationPage from "@/pages/OrderConfirmationPage";
 import CheckoutPage from "@/pages/Checkout";
+import AboutPage from "@/pages/AboutPage";
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
+      <Route path="/about" element={<AboutPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route
         path="/cart"
