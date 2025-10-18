@@ -11,12 +11,14 @@ import WishlistPage from "@/pages/WishlistPage"; // Import WishlistPage
 import OrderConfirmationPage from "@/pages/OrderConfirmationPage";
 import CheckoutPage from "@/pages/Checkout";
 import AboutPage from "@/pages/AboutPage";
+import ContactPage from "@/pages/ContactPage";
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route path="/" element={<HomePage />} />
       <Route path="/about" element={<AboutPage />} />
+      <Route path="/contact" element={<ContactPage />} />
       <Route path="/login" element={<LoginPage />} />
       <Route
         path="/cart"
