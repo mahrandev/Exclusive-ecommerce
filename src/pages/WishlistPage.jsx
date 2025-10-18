@@ -4,6 +4,7 @@ import useAuthStore from "@/store/authStore";
 import ProductCard from "@/components/shared/ProductCard";
 import ProductDetailsSkeleton from "@/components/shared/ProductDetailsSkeleton"; // A loading skeleton
 import { Link } from "react-router-dom";
+import EmptyWishlistImage from "@/assets/img/empty.svg"; // Import the image
 
 const WishlistPage = () => {
   const { user, isAuthenticated } = useAuthStore();
@@ -11,11 +12,10 @@ const WishlistPage = () => {
 
   useEffect(() => {
     // Fetch wishlist only if the user is authenticated
-    // FIX: Use the correct user ID from the nested user object
-    if (isAuthenticated && user?.user?.id) {
-      fetchWishlist(user.user.id);
+    if (isAuthenticated && user?.id) {
+      fetchWishlist(user.id);
     }
-  }, [isAuthenticated, user?.user?.id, fetchWishlist]);
+  }, [isAuthenticated, user?.id, fetchWishlist]);
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8 font-poppins">
@@ -30,7 +30,12 @@ const WishlistPage = () => {
           ))}
         </div>
       ) : wishlist.length === 0 ? (
-        <div className="text-center py-20">
+        <div className="text-center py-20 flex flex-col items-center">
+          <img
+            src={EmptyWishlistImage}
+            alt="Empty Wishlist"
+            className="w-64 h-64 mb-8"
+          />
           <p className="text-xl text-gray-500 mb-4">Your wishlist is empty.</p>
           <Link
             to="/"

@@ -20,7 +20,7 @@ const ProductCard = ({ product }) => {
 
   const { mutate: handleAddToWishlist, isPending: isAdding } = useMutation({
     mutationFn: () =>
-      addToWishlist({ userId: user?.user?.id, productId: product.id }),
+      addToWishlist({ userId: user?.id, productId: product.id }),
     onSuccess: () => {
       addToWishlistState(product);
       toast.success(`${product.title} has been added to your wishlist.`);
@@ -33,7 +33,7 @@ const ProductCard = ({ product }) => {
   const { mutate: handleRemoveFromWishlist, isPending: isRemoving } =
     useMutation({
       mutationFn: () =>
-        removeFromWishlist({ userId: user?.user?.id, productId: product.id }),
+        removeFromWishlist({ userId: user?.id, productId: product.id }),
       onSuccess: () => {
         removeFromWishlistState(product.id);
         toast.success(`${product.title} has been removed from your wishlist.`);
@@ -53,7 +53,7 @@ const ProductCard = ({ product }) => {
       return;
     }
 
-    if (!user?.user?.id) {
+    if (!user?.id) {
       toast.error("Could not verify user. Please log in again.");
       return;
     }

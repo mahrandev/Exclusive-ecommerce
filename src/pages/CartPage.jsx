@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Trash2, Plus, Minus } from "lucide-react";
 import { toast } from "sonner";
+import EmptyCartImage from "@/assets/img/empty.svg"; // Import the image
 
 const CartPage = () => {
   const {
@@ -24,12 +25,14 @@ const CartPage = () => {
 
   if (items.length === 0) {
     return (
-      <div className="container mx-auto max-w-4xl px-4 py-12 text-center">
-        <h1 className="text-3xl font-semibold mb-4">Your Cart is Empty</h1>
-        <p className="text-gray-600 mb-8">
-          Looks like you haven't added anything to your cart yet.
-        </p>
-        <Button asChild>
+      <div className="container mx-auto max-w-7xl px-4 py-8 font-poppins text-center flex flex-col items-center">
+        <img
+          src={EmptyCartImage}
+          alt="Empty Cart"
+          className="w-64 h-64 mb-8"
+        />
+        <p className="text-xl text-gray-600 mb-8"> Looks like you haven't added anything to your cart yet.</p>
+        <Button asChild className="bg-primary-red text-white hover:bg-red-600">
           <Link to="/">Continue Shopping</Link>
         </Button>
       </div>
