@@ -1,12 +1,14 @@
-// الموجود حاليًا في الملف
 import { supabase } from "@/lib/supabaseClient";
 
 export const getProducts = async ({ category } = {}) => {
   let query = supabase.from("products").select();
 
-  // If a category is provided and it's not "All", filter by it
   if (category && category !== "All") {
-    query = query.eq("category", category);
+    if (Array.isArray(category)) {
+      query = query.in("category", category);
+    } else {
+      query = query.eq("category", category);
+    }
   }
 
   const { data, error } = await query;
@@ -24,7 +26,6 @@ export const getCategories = async () => {
     throw new Error(error.message);
   }
 
-  // Use a Set to get unique category values
   const categories = [...new Set(data.map((product) => product.category))];
   return categories;
 };
@@ -34,7 +35,7 @@ export const getProductById = async (id) => {
     .from("products")
     .select()
     .eq("id", id)
-    .single(); // .single() لجلب نتيجة واحدة فقط
+    .single();
 
   if (error) {
     throw new Error(error.message);

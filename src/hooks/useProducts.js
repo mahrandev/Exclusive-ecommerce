@@ -7,7 +7,7 @@ export const useProducts = (category) => {
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["products", category], // Add category to the queryKey
+    queryKey: ["products", JSON.stringify(category)], // Use JSON.stringify for array stability
     queryFn: () => getProducts({ category }),
   });
 
