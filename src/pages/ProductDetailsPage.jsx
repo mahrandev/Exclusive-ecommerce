@@ -14,6 +14,7 @@ import { cn } from "@/lib/utils";
 import { useProductDetails } from "@/hooks/useProductDetails";
 import { useEffect } from "react";
 import { addRecentlyViewed } from "@/utils/recentlyViewed";
+import Breadcrumbs from "@/components/shared/Breadcrumbs";
 
 const ProductDetailsPage = () => {
   const {
@@ -69,38 +70,10 @@ const ProductDetailsPage = () => {
 
   const mainImage = selectedImage || productData.images[0];
 
+
   return (
     <div className="container mx-auto max-w-7xl px-4 py-6 md:py-8">
-      {/* Breadcrumbs - Enhanced Accessibility */}
-      <nav className="mb-4 md:mb-6" aria-label="Breadcrumb">
-        <ol className="flex flex-wrap items-center gap-2 text-sm text-gray-600">
-          <li>
-            <Link
-              to="/"
-              className="transition-colors hover:text-gray-900 hover:underline"
-            >
-              Home
-            </Link>
-          </li>
-          <li aria-hidden="true" className="text-gray-400">
-            /
-          </li>
-          <li>
-            <Link
-              to={`/category/${product.category}`}
-              className="capitalize transition-colors hover:text-gray-900 hover:underline"
-            >
-              {product.category}
-            </Link>
-          </li>
-          <li aria-hidden="true" className="text-gray-400">
-            /
-          </li>
-          <li className="font-medium text-gray-900" aria-current="page">
-            {product.title}
-          </li>
-        </ol>
-      </nav>
+      <Breadcrumbs />
 
       <div className="grid grid-cols-1 items-start gap-6 md:gap-8 lg:grid-cols-5">
         {/* Image Gallery - Enhanced Accessibility */}

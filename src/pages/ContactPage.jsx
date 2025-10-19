@@ -2,7 +2,7 @@
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Phone, Mail } from "lucide-react";
-import { Link } from "react-router-dom";
+import Breadcrumbs from "@/components/shared/Breadcrumbs";
 
 const ContactPage = () => {
   const handleSubmit = (e) => {
@@ -13,14 +13,7 @@ const ContactPage = () => {
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-12">
-      {/* Breadcrumbs */}
-      <div className="mb-12 text-sm text-gray-600 md:mb-16">
-        <Link to="/" className="transition-colors hover:text-gray-900">
-          Home
-        </Link>
-        <span className="mx-2">/</span>
-        <span className="text-gray-900">Contact</span>
-      </div>
+      <Breadcrumbs />
 
       <div className="grid gap-6 md:grid-cols-[360px_1fr] md:gap-8 lg:grid-cols-[400px_1fr] lg:gap-12">
         {/* Left Column - Contact Info */}

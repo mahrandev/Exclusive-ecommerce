@@ -3,6 +3,7 @@ import { Heart, ShoppingCart, Menu, X, User } from "lucide-react";
 import { useState } from "react";
 import useAuthStore from "@/store/authStore";
 import SearchComponent from "@/components/shared/SearchComponent"; // Import the new component
+import UserMenu from "@/components/shared/UserMenu";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
@@ -122,23 +123,7 @@ const Header = () => {
 
             {/* User Actions */}
             {isAuthenticated ? (
-              <div className="flex items-center gap-2">
-                <NavLink
-                  to="/account"
-                  className="flex items-center gap-2 p-2 hover:bg-gray-100 rounded-full transition-colors"
-                >
-                  <User size={20} className="md:w-6 md:h-6" />
-                  <span className="hidden lg:inline text-sm font-medium">
-                    {userName}
-                  </span>
-                </NavLink>
-                <button
-                  onClick={handleLogout}
-                  className="hidden md:inline-block bg-red-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-red-600 transition-colors"
-                >
-                  Logout
-                </button>
-              </div>
+              <UserMenu />
             ) : (
               <NavLink
                 to="/login"
@@ -200,23 +185,7 @@ const Header = () => {
               >
                 About
               </NavLink>
-              {isAuthenticated ? (
-                <>
-                  <NavLink
-                    to="/account"
-                    className="py-2 px-4 rounded-md hover:bg-gray-100 transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    My Account
-                  </NavLink>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left bg-red-500 text-white px-4 py-2 rounded-md font-medium hover:bg-red-600 transition-colors"
-                  >
-                    Logout
-                  </button>
-                </>
-              ) : (
+              {!isAuthenticated && (
                 <>
                   <NavLink
                     to="/login"

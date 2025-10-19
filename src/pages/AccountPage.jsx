@@ -1,16 +1,12 @@
 import { NavLink } from "react-router-dom";
+import Breadcrumbs from "@/components/shared/Breadcrumbs";
 
 const AccountPage = () => {
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8 md:py-16">
       {/* Breadcrumb & Welcome */}
       <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
-        <p className="text-sm text-gray-500">
-          <NavLink to="/" className="hover:text-black">
-            Home
-          </NavLink>{" "}
-          / <span>My Account</span>
-        </p>
+        <Breadcrumbs containerClassName="text-sm text-gray-500" />
         <p className="text-sm">
           Welcome!{" "}
           <span className="font-medium text-red-500">Md Rimel</span>

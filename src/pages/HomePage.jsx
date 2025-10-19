@@ -1,90 +1,116 @@
-import { useState } from "react";
-import { useCategories } from "@/hooks/useCategories";
-import { useProducts } from "@/hooks/useProducts";
-import CategorySidebar from "@/components/home/CategorySidebar";
+import { Link } from "react-router-dom";
+import { useHomePageLogic } from "@/hooks/useHomePageLogic";
 import ProductCard from "@/components/shared/ProductCard";
 import ProductCardSkeleton from "@/components/shared/ProductCardSkeleton";
 import { Button } from "@/components/ui/button";
 import {
   ChevronLeft,
   ChevronRight,
-  Shirt,
-  User,
-  Smartphone,
-  Home,
-  Glasses,
-  Bike,
-  Laptop,
-  ShoppingBasket,
-  Heart,
-  Gamepad2,
+  Apple,
+  ArrowRight,
+  Truck,
+  Headphones,
+  ShieldCheck,
 } from "lucide-react";
 import jbi from "@/assets/img/jbl-outdoor-speaker.avif";
 import iphone from "@/assets/img/iphone.avif";
-import { categoryMapping } from "@/data/categoryMapping.js";
-
-const iconMapping = {
-  "Woman's Fashion": Shirt,
-  "Men's Fashion": User,
-  Mobiles: Smartphone,
-  "Home & Lifestyle": Home,
-  Glasses: Glasses,
-  "Sports & Outdoor": Bike,
-  "Laptops & Computers": Laptop,
-  "Groceries & Pets": ShoppingBasket,
-  "Health & Beauty": Heart,
-  Gaming: Gamepad2,
-};
 
 const HomePage = () => {
-  const [selectedCategory, setSelectedCategory] = useState("All");
-
-  const { categories, error: categoriesError } = useCategories();
   const {
+    selectedCategory,
     products,
-    isLoading: isLoadingProducts,
-    error: productsError,
-  } = useProducts(selectedCategory);
-
-  if (categoriesError) {
-    console.error("Failed to load categories:", categoriesError.message);
-  }
-
-  const mainCategories = Object.keys(categoryMapping);
+    isLoadingProducts,
+    productsError,
+    iconMapping,
+    sidebarCategories,
+    mainCategories,
+    handleCategorySelect,
+    categoryMapping,
+    categorySlider,
+    flashSalesSlider,
+    exploreProductsSlider,
+  } = useHomePageLogic();
 
   return (
     <div className="bg-white">
       {/* Hero Section with Sidebar */}
       <div className="border-b border-gray-200">
-        <div className="mx-auto max-w-7xl px-4 py-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col gap-8 md:flex-row">
-            {/* Categories Sidebar */}
-            <CategorySidebar
-              selectedCategory={selectedCategory}
-              onSelectCategory={setSelectedCategory}
-            />
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="flex gap-8 py-10">
+            {/* Categories Sidebar - Enhanced */}
+            <aside className="hidden w-56 border-r pr-8 md:block">
+              <nav className="space-y-3">
+                {sidebarCategories.map((category) => {
+                  const Icon = iconMapping[category];
+                  const hasSubmenu =
+                    category === "Woman's Fashion" ||
+                    category === "Men's Fashion";
 
-            {/* Hero Banner */}
-            <div className="flex min-h-[300px] flex-1 items-center justify-between rounded-lg bg-black p-8 text-white md:p-12">
-              <div className="max-w-md">
-                <div className="mb-4 flex items-center gap-4">
-                  <span className="text-sm">iPhone 14 Series</span>
+                  return (
+                    <button
+                      key={category}
+                      onClick={() => {
+                        if (categoryMapping[category]) {
+                          handleCategorySelect(categoryMapping[category]);
+                        }
+                      }}
+                      className="group flex w-full items-center justify-between text-left text-base text-gray-800 transition-colors hover:text-black"
+                    >
+                      <span>{category}</span>
+                      {hasSubmenu && (
+                        <ChevronRight className="h-4 w-4 opacity-0 transition-opacity group-hover:opacity-100" />
+                      )}
+                    </button>
+                  );
+                })}
+              </nav>
+            </aside>
+
+            {/* Hero Banner - Redesigned to match the image */}
+            <div className="relative min-h-[344px] flex-1 overflow-hidden rounded bg-black">
+              <div className="grid h-full grid-cols-1 items-center lg:grid-cols-2">
+                {/* Left Content */}
+                <div className="z-10 flex flex-col justify-center px-12 py-10 text-white lg:px-16">
+                  {/* iPhone Icon and Series */}
+                  <div className="mb-5 flex items-center gap-6">
+                    <Apple className="h-10 w-10" fill="white" />
+                    <span className="text-base font-normal">
+                      iPhone 14 Series
+                    </span>
+                  </div>
+
+                  {/* Main Headline */}
+                  <h2 className="mb-6 text-4xl leading-tight font-semibold tracking-tight lg:text-5xl">
+                    Up to 10%
+                    <br />
+                    off Voucher
+                  </h2>
+
+                  {/* Shop Now Link */}
+                  <button className="flex w-fit items-center gap-2 border-b border-white pb-1 text-base font-medium transition-all hover:gap-3">
+                    Shop Now
+                    <ArrowRight className="h-5 w-5" />
+                  </button>
                 </div>
-                <h2 className="mb-4 text-3xl font-bold md:text-5xl">
-                  Up to 10% off Voucher
-                </h2>
-                <Button
-                  variant="link"
-                  className="h-auto p-0 text-white underline underline-offset-4"
-                >
-                  Shop Now →
-                </Button>
+
+                {/* Right Content - iPhone Image */}
+                <div className="relative flex h-full items-center justify-center p-8 lg:p-12">
+                  <img
+                    src={iphone}
+                    alt="iPhone 14"
+                    className="h-auto w-full max-w-md object-contain drop-shadow-2xl"
+                  />
+                </div>
               </div>
-              <img
-                src={iphone}
-                alt="iPhone"
-                className="h-full object-contain"
-              />
+
+              {/* Carousel Dots */}
+              <div className="absolute bottom-3 left-1/2 z-20 flex -translate-x-1/2 gap-3">
+                <div className="h-3 w-3 rounded-full bg-white/40"></div>
+                <div className="h-3 w-3 rounded-full bg-white/40"></div>
+                <div className="h-3 w-3 rounded-full bg-red-500"></div>
+                <div className="h-3 w-3 rounded-full bg-white/40"></div>
+                <div className="h-3 w-3 rounded-full bg-white/40"></div>
+              </div>
             </div>
           </div>
         </div>
@@ -92,51 +118,81 @@ const HomePage = () => {
 
       {/* Flash Sales Section */}
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
-        <div className="mb-8">
+        <div className="mb-10">
           {/* Section Header */}
-          <div className="mb-4 flex items-center gap-3">
+          <div className="mb-6 flex items-center gap-4">
             <div className="h-10 w-5 rounded bg-red-500"></div>
             <h3 className="text-base font-semibold text-red-500">Today's</h3>
           </div>
 
           {/* Section Title with Timer */}
-          <div className="flex items-end justify-between">
-            <div className="flex items-center gap-16">
+          <div className="flex flex-col gap-6 md:flex-row md:items-end md:justify-between">
+            <div className="flex flex-col gap-8 md:flex-row md:items-end md:gap-20">
               <h2 className="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">
                 Flash Sales
               </h2>
 
               {/* Countdown Timer */}
-              <div className="hidden items-center gap-4 md:flex">
+              <div className="flex items-center gap-3 md:gap-4">
                 <div className="text-center">
-                  <div className="text-xs font-medium">Days</div>
-                  <div className="text-3xl font-bold">03</div>
+                  <div className="text-xs font-medium text-gray-900">Days</div>
+                  <div className="text-2xl font-bold text-gray-900 md:text-3xl">
+                    03
+                  </div>
                 </div>
-                <span className="text-2xl font-bold text-red-500">:</span>
+                <span className="text-xl font-bold text-red-500 md:text-2xl">
+                  :
+                </span>
                 <div className="text-center">
-                  <div className="text-xs font-medium">Hours</div>
-                  <div className="text-3xl font-bold">23</div>
+                  <div className="text-xs font-medium text-gray-900">Hours</div>
+                  <div className="text-2xl font-bold text-gray-900 md:text-3xl">
+                    23
+                  </div>
                 </div>
-                <span className="text-2xl font-bold text-red-500">:</span>
+                <span className="text-xl font-bold text-red-500 md:text-2xl">
+                  :
+                </span>
                 <div className="text-center">
-                  <div className="text-xs font-medium">Minutes</div>
-                  <div className="text-3xl font-bold">19</div>
+                  <div className="text-xs font-medium text-gray-900">
+                    Minutes
+                  </div>
+                  <div className="text-2xl font-bold text-gray-900 md:text-3xl">
+                    19
+                  </div>
                 </div>
-                <span className="text-2xl font-bold text-red-500">:</span>
+                <span className="text-xl font-bold text-red-500 md:text-2xl">
+                  :
+                </span>
                 <div className="text-center">
-                  <div className="text-xs font-medium">Seconds</div>
-                  <div className="text-3xl font-bold">56</div>
+                  <div className="text-xs font-medium text-gray-900">
+                    Seconds
+                  </div>
+                  <div className="text-2xl font-bold text-gray-900 md:text-3xl">
+                    56
+                  </div>
                 </div>
               </div>
             </div>
 
             {/* Navigation Arrows */}
             <div className="flex gap-2">
-              <Button variant="outline" size="icon" className="rounded-full">
-                <ChevronLeft className="h-4 w-4" />
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-12 w-12 rounded-full disabled:opacity-50"
+                onClick={flashSalesSlider.handlePrev}
+                disabled={!flashSalesSlider.hasPrev}
+              >
+                <ChevronLeft className="h-5 w-5" />
               </Button>
-              <Button variant="outline" size="icon" className="rounded-full">
-                <ChevronRight className="h-4 w-4" />
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-12 w-12 rounded-full disabled:opacity-50"
+                onClick={flashSalesSlider.handleNext}
+                disabled={!flashSalesSlider.hasNext}
+              >
+                <ChevronRight className="h-5 w-5" />
               </Button>
             </div>
           </div>
@@ -154,28 +210,37 @@ const HomePage = () => {
         ) : products && products.length > 0 ? (
           <>
             <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-              {products.slice(0, 4).map((product) => (
-                <ProductCard key={product.id} product={product} />
-              ))}
+              {products
+                .slice(
+                  flashSalesSlider.currentIndex,
+                  flashSalesSlider.currentIndex + 4
+                )
+                .map((product) => (
+                  <ProductCard key={product.id} product={product} />
+                ))}
             </div>
 
             {/* View All Button */}
             <div className="mt-12 text-center">
-              <Button className="bg-red-500 px-12 py-6 text-white hover:bg-red-600">
-                View All Products
-              </Button>
+              <Link to="/products">
+                <Button className="rounded bg-red-500 px-12 py-4 text-white hover:bg-red-600">
+                  View All Products
+                </Button>
+              </Link>
             </div>
           </>
         ) : (
-          <div>No products found.</div>
+          <div className="py-8 text-center text-gray-500">
+            No products found.
+          </div>
         )}
       </section>
 
       {/* Browse By Category Section */}
       <section className="mx-auto max-w-7xl border-t border-gray-200 px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
-        <div className="mb-8">
+        <div className="mb-10">
           {/* Section Header */}
-          <div className="mb-4 flex items-center gap-3">
+          <div className="mb-6 flex items-center gap-4">
             <div className="h-10 w-5 rounded bg-red-500"></div>
             <h3 className="text-base font-semibold text-red-500">Categories</h3>
           </div>
@@ -188,51 +253,66 @@ const HomePage = () => {
 
             {/* Navigation Arrows */}
             <div className="flex gap-2">
-              <Button variant="outline" size="icon" className="rounded-full">
-                <ChevronLeft className="h-4 w-4" />
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-12 w-12 rounded-full disabled:opacity-50"
+                onClick={categorySlider.handlePrev}
+                disabled={!categorySlider.hasPrev}
+              >
+                <ChevronLeft className="h-5 w-5" />
               </Button>
-              <Button variant="outline" size="icon" className="rounded-full">
-                <ChevronRight className="h-4 w-4" />
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-12 w-12 rounded-full disabled:opacity-50"
+                onClick={categorySlider.handleNext}
+                disabled={!categorySlider.hasNext}
+              >
+                <ChevronRight className="h-5 w-5" />
               </Button>
             </div>
           </div>
         </div>
 
-        {/* Category Icons Grid */}
-        <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6">
-          {mainCategories.map((category, index) => {
-            const Icon = iconMapping[category];
-            const isSelected =
-              JSON.stringify(selectedCategory) ===
-              JSON.stringify(categoryMapping[category]);
+        {/* Category Slider */}
+        <div className="grid grid-cols-6 gap-6">
+          {mainCategories
+            .slice(
+              categorySlider.currentIndex,
+              categorySlider.currentIndex + 6
+            )
+            .map((category, index) => {
+              const Icon = iconMapping[category];
+              const isSelected =
+                JSON.stringify(selectedCategory) ===
+                JSON.stringify(categoryMapping[category]);
 
-            return (
-              <button
-                key={index}
-                onClick={() => setSelectedCategory(categoryMapping[category])}
-                className={`flex flex-col items-center justify-center rounded-lg border-2 p-6 transition-all hover:border-red-500 hover:bg-red-500 hover:text-white ${
-                  isSelected
-                    ? "border-red-500 bg-red-500 text-white"
-                    : "border-gray-300 bg-white"
-                }`}
-              >
-                <div className="mb-3 text-4xl">
-                  <Icon size={48} />
-                </div>
-                <span className="text-sm font-medium capitalize">
-                  {category}
-                </span>
-              </button>
-            );
-          })}
+              return (
+                <Link
+                  key={index}
+                  to={`/products/${encodeURIComponent(category)}`}
+                  className={`flex flex-col items-center justify-center rounded border-2 p-6 transition-all hover:border-red-500 hover:bg-red-500 hover:text-white ${
+                    isSelected
+                      ? "border-red-500 bg-red-500 text-white"
+                      : "border-gray-300 bg-white text-gray-900"
+                  }`}
+                >
+                  <div className="mb-3">
+                    {Icon && <Icon size={56} strokeWidth={1.5} />}
+                  </div>
+                  <span className="text-base font-normal">{category}</span>
+                </Link>
+              );
+            })}
         </div>
       </section>
 
       {/* Best Selling Products Section */}
       <section className="mx-auto max-w-7xl border-t border-gray-200 px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
-        <div className="mb-8">
+        <div className="mb-10">
           {/* Section Header */}
-          <div className="mb-4 flex items-center gap-3">
+          <div className="mb-6 flex items-center gap-4">
             <div className="h-10 w-5 rounded bg-red-500"></div>
             <h3 className="text-base font-semibold text-red-500">This Month</h3>
           </div>
@@ -243,9 +323,11 @@ const HomePage = () => {
               Best Selling Products
             </h2>
 
-            <Button className="bg-red-500 px-12 text-white hover:bg-red-600">
-              View All
-            </Button>
+            <Link to="/products">
+              <Button className="rounded bg-red-500 px-12 py-4 text-white hover:bg-red-600">
+                View All
+              </Button>
+            </Link>
           </div>
         </div>
 
@@ -267,49 +349,47 @@ const HomePage = () => {
 
       {/* Featured Banner Section */}
       <section className="mx-auto max-w-7xl px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
-        <div className="flex min-h-[400px] items-center justify-between rounded-lg bg-black p-12 text-white">
+        <div className="flex min-h-[400px] items-center justify-between rounded bg-black p-8 text-white md:p-12">
           <div className="max-w-md">
-            <span className="mb-4 inline-block text-sm font-semibold text-green-500">
+            <span className="mb-4 inline-block text-sm font-semibold text-green-400">
               Categories
             </span>
-            <h2 className="mb-6 text-4xl font-bold md:text-6xl">
+            <h2 className="mb-6 text-3xl leading-tight font-bold md:text-5xl lg:text-6xl">
               Enhance Your Music Experience
             </h2>
-            <div className="mb-8 flex gap-4">
-              <div className="flex h-16 w-16 flex-col items-center justify-center rounded-full bg-white text-black">
-                <span className="text-xs font-semibold">23</span>
-                <span className="text-[10px]">Hours</span>
+            <div className="mb-8 flex gap-3 md:gap-4">
+              <div className="flex h-14 w-14 flex-col items-center justify-center rounded-full bg-white text-black md:h-16 md:w-16">
+                <span className="text-xs font-semibold md:text-sm">23</span>
+                <span className="text-[9px] md:text-[10px]">Hours</span>
               </div>
-              <div className="flex h-16 w-16 flex-col items-center justify-center rounded-full bg-white text-black">
-                <span className="text-xs font-semibold">05</span>
-                <span className="text-[10px]">Days</span>
+              <div className="flex h-14 w-14 flex-col items-center justify-center rounded-full bg-white text-black md:h-16 md:w-16">
+                <span className="text-xs font-semibold md:text-sm">05</span>
+                <span className="text-[9px] md:text-[10px]">Days</span>
               </div>
-              <div className="flex h-16 w-16 flex-col items-center justify-center rounded-full bg-white text-black">
-                <span className="text-xs font-semibold">59</span>
-                <span className="text-[10px]">Minutes</span>
+              <div className="flex h-14 w-14 flex-col items-center justify-center rounded-full bg-white text-black md:h-16 md:w-16">
+                <span className="text-xs font-semibold md:text-sm">59</span>
+                <span className="text-[9px] md:text-[10px]">Minutes</span>
               </div>
-              <div className="flex h-16 w-16 flex-col items-center justify-center rounded-full bg-white text-black">
-                <span className="text-xs font-semibold">35</span>
-                <span className="text-[10px]">Seconds</span>
+              <div className="flex h-14 w-14 flex-col items-center justify-center rounded-full bg-white text-black md:h-16 md:w-16">
+                <span className="text-xs font-semibold md:text-sm">35</span>
+                <span className="text-[9px] md:text-[10px]">Seconds</span>
               </div>
             </div>
-            <Button className="bg-green-500 px-12 text-white hover:bg-green-600">
+            <Button className="rounded bg-green-500 px-12 py-4 text-white hover:bg-green-600">
               Buy Now!
             </Button>
           </div>
           <div className="hidden lg:block">
-            {/* Placeholder for product image */}
-            <img src={jbi} alt="" />
-            {/* <div className="h-64 w-64 rounded-full bg-gray-800"></div> */}
+            <img src={jbi} alt="JBL Speaker" className="max-w-md" />
           </div>
         </div>
       </section>
 
       {/* Explore Our Products Section */}
       <section className="mx-auto max-w-7xl border-t border-gray-200 px-4 py-12 sm:px-6 sm:py-16 lg:px-8">
-        <div className="mb-8">
+        <div className="mb-10">
           {/* Section Header */}
-          <div className="mb-4 flex items-center gap-3">
+          <div className="mb-6 flex items-center gap-4">
             <div className="h-10 w-5 rounded bg-red-500"></div>
             <h3 className="text-base font-semibold text-red-500">
               Our Products
@@ -324,11 +404,23 @@ const HomePage = () => {
 
             {/* Navigation Arrows */}
             <div className="flex gap-2">
-              <Button variant="outline" size="icon" className="rounded-full">
-                <ChevronLeft className="h-4 w-4" />
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-12 w-12 rounded-full disabled:opacity-50"
+                onClick={exploreProductsSlider.handlePrev}
+                disabled={!exploreProductsSlider.hasPrev}
+              >
+                <ChevronLeft className="h-5 w-5" />
               </Button>
-              <Button variant="outline" size="icon" className="rounded-full">
-                <ChevronRight className="h-4 w-4" />
+              <Button
+                variant="outline"
+                size="icon"
+                className="h-12 w-12 rounded-full disabled:opacity-50"
+                onClick={exploreProductsSlider.handleNext}
+                disabled={!exploreProductsSlider.hasNext}
+              >
+                <ChevronRight className="h-5 w-5" />
               </Button>
             </div>
           </div>
@@ -337,17 +429,24 @@ const HomePage = () => {
         {/* Products Grid */}
         {products && products.length > 0 && (
           <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-            {products.slice(0, 8).map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+            {products
+              .slice(
+                exploreProductsSlider.currentIndex,
+                exploreProductsSlider.currentIndex + 4
+              )
+              .map((product) => (
+                <ProductCard key={product.id} product={product} />
+              ))}
           </div>
         )}
 
         {/* View All Button */}
         <div className="mt-12 text-center">
-          <Button className="bg-red-500 px-12 py-6 text-white hover:bg-red-600">
-            View All Products
-          </Button>
+          <Link to="/products">
+            <Button className="rounded bg-red-500 px-12 py-4 text-white hover:bg-red-600">
+              View All Products
+            </Button>
+          </Link>
         </div>
       </section>
 
@@ -356,24 +455,14 @@ const HomePage = () => {
         <div className="grid grid-cols-1 gap-12 md:grid-cols-3">
           {/* Free Delivery */}
           <div className="flex flex-col items-center text-center">
-            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-200 p-1">
-              <div className="flex h-full w-full items-center justify-center rounded-full border-8 border-gray-500 bg-black text-white">
-                <svg
-                  className="h-10 w-10"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4"
-                  />
-                </svg>
+            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-200">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full border-8 border-gray-400 bg-black text-white">
+                <Truck size={40} />
               </div>
             </div>
-            <h3 className="mb-2 text-xl font-bold">FREE AND FAST DELIVERY</h3>
+            <h3 className="mb-2 text-xl font-bold uppercase">
+              FREE AND FAST DELIVERY
+            </h3>
             <p className="text-sm text-gray-600">
               Free delivery for all orders over $140
             </p>
@@ -381,24 +470,14 @@ const HomePage = () => {
 
           {/* 24/7 Customer Service */}
           <div className="flex flex-col items-center text-center">
-            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-200 p-1">
-              <div className="flex h-full w-full items-center justify-center rounded-full border-8 border-gray-500 bg-black text-white">
-                <svg
-                  className="h-10 w-10"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M18.364 5.636l-3.536 3.536m0 5.656l3.536 3.536M9.172 9.172L5.636 5.636m3.536 9.192l-3.536 3.536M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-5 0a4 4 0 11-8 0 4 4 0 018 0z"
-                  />
-                </svg>
+            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-200">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full border-8 border-gray-400 bg-black text-white">
+                <Headphones size={40} />
               </div>
             </div>
-            <h3 className="mb-2 text-xl font-bold">24/7 CUSTOMER SERVICE</h3>
+            <h3 className="mb-2 text-xl font-bold uppercase">
+              24/7 CUSTOMER SERVICE
+            </h3>
             <p className="text-sm text-gray-600">
               Friendly 24/7 customer support
             </p>
@@ -406,24 +485,14 @@ const HomePage = () => {
 
           {/* Money Back Guarantee */}
           <div className="flex flex-col items-center text-center">
-            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-200 p-1">
-              <div className="flex h-full w-full items-center justify-center rounded-full border-8 border-gray-500 bg-black text-white">
-                <svg
-                  className="h-10 w-10"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"
-                  />
-                </svg>
+            <div className="mb-6 flex h-20 w-20 items-center justify-center rounded-full bg-gray-200">
+              <div className="flex h-16 w-16 items-center justify-center rounded-full border-8 border-gray-400 bg-black text-white">
+                <ShieldCheck size={40} />
               </div>
             </div>
-            <h3 className="mb-2 text-xl font-bold">MONEY BACK GUARANTEE</h3>
+            <h3 className="mb-2 text-xl font-bold uppercase">
+              MONEY BACK GUARANTEE
+            </h3>
             <p className="text-sm text-gray-600">
               We return money within 30 days
             </p>

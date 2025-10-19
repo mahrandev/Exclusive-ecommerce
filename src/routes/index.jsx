@@ -12,6 +12,8 @@ import OrderConfirmationPage from "@/pages/OrderConfirmationPage";
 import CheckoutPage from "@/pages/Checkout";
 import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
+import CategoryPage from "@/pages/CategoryPage";
+import AllProductsPage from "@/pages/AllProductsPage";
 
 const AppRoutes = () => {
   return (
@@ -55,6 +57,8 @@ const AppRoutes = () => {
       />
       <Route path="/product/:id" element={<ProductDetailsPage />} />
       <Route path="/signup" element={<SignUpPage />} />
+      <Route path="/products" element={<AllProductsPage />} />
+      <Route path="/products/:categoryName" element={<CategoryPage />} />
       <Route
         path="/account"
         element={

@@ -3,17 +3,12 @@ import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import notfound from "@/assets/img/notfound.svg";
 
+import Breadcrumbs from "@/components/shared/Breadcrumbs";
+
 const NotFoundPage = () => {
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-12">
-      {/* Breadcrumbs */}
-      <div className="mb-12 text-sm text-gray-600 md:mb-16">
-        <Link to="/" className="transition-colors hover:text-gray-900">
-          Home
-        </Link>
-        <span className="mx-2">/</span>
-        <span className="text-gray-900">404 Error</span>
-      </div>
+      <Breadcrumbs />
 
       {/* Main Content */}
       <div className="flex flex-col items-center justify-center py-12 text-center md:py-16">

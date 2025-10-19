@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import EmptyCartImage from "@/assets/img/empty.svg";
+import Breadcrumbs from "@/components/shared/Breadcrumbs";
 
 const CartPage = () => {
   const {
@@ -39,14 +40,10 @@ const CartPage = () => {
     );
   }
 
+
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8 font-poppins">
-      {/* Breadcrumb */}
-      <nav className="mb-8 text-sm text-gray-600">
-        <Link to="/" className="hover:text-gray-900">Home</Link>
-        <span className="mx-2">/</span>
-        <span className="text-gray-900">Cart</span>
-      </nav>
+      <Breadcrumbs />
 
       {/* Cart Table */}
       <div className="mb-6">

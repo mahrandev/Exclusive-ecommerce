@@ -4,6 +4,7 @@ import useAuthStore from "@/store/authStore";
 import ProductCard from "@/components/shared/ProductCard";
 import ProductDetailsSkeleton from "@/components/shared/ProductDetailsSkeleton"; // A loading skeleton
 import { Link } from "react-router-dom";
+import Breadcrumbs from "@/components/shared/Breadcrumbs";
 import EmptyWishlistImage from "@/assets/img/empty.svg"; // Import the image
 
 const WishlistPage = () => {
@@ -19,6 +20,7 @@ const WishlistPage = () => {
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8 font-poppins">
+      <Breadcrumbs />
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-medium">My Wishlist ({wishlist.length})</h1>
       </div>
