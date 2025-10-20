@@ -5,29 +5,29 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
+import { useTranslation } from "react-i18next";
 import useAuthStore from "@/store/authStore";
 import { Button } from "@/components/ui/button";
 import { signIn } from "@/api/authApi";
 import signUpImage from "@/assets/img/dl.beatsnoop 1.png";
 
-// 1. تعريف الـ Schema باستخدام Zod للتحقق
-const loginSchema = z.object({
-  email: z
-    .string()
-    .email({ message: "Invalid email address" })
-    .min(1, { message: "Email is required" }),
-  password: z
-    .string()
-    .min(6, { message: "Password must be at least 6 characters" }),
-});
-
 const LoginPage = () => {
+  const { t } = useTranslation();
+  const loginSchema = z.object({
+    email: z
+      .string()
+      .email({ message: t("auth.invalidEmail") })
+      .min(1, { message: t("auth.emailRequired") }),
+    password: z
+      .string()
+      .min(6, { message: t("auth.passwordMinLength", { length: 6 }) }),
+  });
+
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate();
   const login = useAuthStore((state) => state.login);
 
-  // 2. إعداد react-hook-form مع Zod
   const {
     register,
     handleSubmit,
@@ -36,7 +36,6 @@ const LoginPage = () => {
     resolver: zodResolver(loginSchema),
   });
 
-  // 3. دالة التنفيذ عند إرسال الفورم
   const onSubmit = async (formData) => {
     setIsLoading(true);
     try {
@@ -45,7 +44,7 @@ const LoginPage = () => {
         password: formData.password,
       });
       login(data);
-      toast.success("Login successful!");
+      toast.success(t("auth.loginSuccess"));
       navigate("/account");
     } catch (error) {
       toast.error(error.message);
@@ -56,7 +55,6 @@ const LoginPage = () => {
 
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
-      {/* --- القسم الأيسر: الصورة --- */}
       <div className="hidden items-center justify-start p-10 pl-0 lg:flex">
         <img
           src={signUpImage}
@@ -65,22 +63,17 @@ const LoginPage = () => {
         />
       </div>
 
-      {/* --- القسم الأيمن: الفورم --- */}
       <div className="flex items-center justify-center py-12">
-        {/* 4. استخدام handleSubmit من react-hook-form */}
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mx-auto grid w-[400px] gap-8">
-            {/* عنوان الفورم */}
             <div className="grid gap-2">
               <h1 className="font-inter text-4xl font-bold tracking-tight">
-                Log in to Exclusive
+                {t("auth.loginTitle")}
               </h1>
-              <p className="text-muted-foreground">Enter your details below</p>
+              <p className="text-muted-foreground">{t("auth.enterDetails")}</p>
             </div>
 
-            {/* حقول الإدخال */}
             <div className="grid gap-6">
-              {/* حقل الإيميل مع عرض الأخطاء */}
               <div className="grid gap-2">
                 <div className="relative">
                   <input
@@ -103,7 +96,7 @@ const LoginPage = () => {
                         : "text-gray-500 peer-focus:text-red-600 dark:text-gray-400"
                     }`}
                   >
-                    Email
+                    {t("auth.email")}
                   </label>
                 </div>
                 {errors.email && (
@@ -113,7 +106,6 @@ const LoginPage = () => {
                 )}
               </div>
 
-              {/* حقل كلمة المرور مع أيقونة الإظهار/الإخفاء */}
               <div className="grid gap-2">
                 <div className="relative">
                   <input
@@ -136,14 +128,16 @@ const LoginPage = () => {
                         : "text-gray-500 peer-focus:text-red-600 dark:text-gray-400"
                     }`}
                   >
-                    Password
+                    {t("auth.password")}
                   </label>
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
                     aria-label={
-                      showPassword ? "Hide password" : "Show password"
+                      showPassword
+                        ? t("auth.hidePassword")
+                        : t("auth.showPassword")
                     }
                   >
                     {showPassword ? (
@@ -160,32 +154,30 @@ const LoginPage = () => {
                 )}
               </div>
 
-              {/* الأزرار ورابط نسيان كلمة المرور */}
               <div className="flex items-center justify-between">
                 <Button
                   type="submit"
                   className="bg-red-500 px-12 py-6 text-base font-medium text-white hover:bg-red-600"
                   disabled={isLoading}
                 >
-                  {isLoading ? "Logging in..." : "Log In"}
+                  {isLoading ? t("auth.loggingIn") : t("auth.login")}
                 </Button>
                 <Link
                   to="/forgot-password"
                   className="text-sm font-medium text-red-500 hover:underline"
                 >
-                  Forgot Password?
+                  {t("auth.forgotPassword")}
                 </Link>
               </div>
             </div>
 
-            {/* رابط إنشاء حساب جديد */}
             <div className="text-center text-base">
-              Don't have an account?{" "}
+              {t("auth.noAccount")}{" "}
               <Link
                 to="/signup"
                 className="font-medium text-gray-500 underline hover:text-gray-700"
               >
-                Sign up
+                {t("auth.signup")}
               </Link>
             </div>
           </div>

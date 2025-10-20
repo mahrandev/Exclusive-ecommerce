@@ -5,34 +5,13 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
 import { Eye, EyeOff } from "lucide-react";
+import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
 import { signUp } from "@/api/authApi";
 import IconGoogle from "@/assets/img/Icon-Google.svg";
 import signUpImage from "@/assets/img/dl.beatsnoop 1.png";
 
-// 1. Zod Schema for validation
-const signUpSchema = z
-  .object({
-    name: z.string().min(3, { message: "Name must be at least 3 characters" }),
-    email: z.string().email({ message: "Invalid email address" }),
-    password: z
-      .string()
-      .min(8, { message: "Password must be at least 8 characters" })
-      .regex(/[a-z]/, { message: "Password must contain a lowercase letter" })
-      .regex(/[A-Z]/, { message: "Password must contain an uppercase letter" })
-      .regex(/[0-9]/, { message: "Password must contain a number" })
-      .regex(/[^a-zA-Z0-9]/, {
-        message: "Password must contain a special character",
-      }),
-    confirmPassword: z.string(),
-  })
-  .refine((data) => data.password === data.confirmPassword, {
-    message: "Passwords do not match",
-    path: ["confirmPassword"], // path of error
-  });
-
-// Password strength utility
 const getPasswordStrength = (password) => {
   let score = 0;
   if (password.length >= 8) score++;
@@ -43,10 +22,31 @@ const getPasswordStrength = (password) => {
 };
 
 const SignUpPage = () => {
+  const { t } = useTranslation();
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+
+  const signUpSchema = z
+    .object({
+      name: z.string().min(3, { message: t("auth.nameMinLength", { length: 3 }) }),
+      email: z.string().email({ message: t("auth.invalidEmail") }),
+      password: z
+        .string()
+        .min(8, { message: t("auth.passwordMinLength", { length: 8 }) })
+        .regex(/[a-z]/, { message: t("auth.passwordLowercase") })
+        .regex(/[A-Z]/, { message: t("auth.passwordUppercase") })
+        .regex(/[0-9]/, { message: t("auth.passwordNumber") })
+        .regex(/[^a-zA-Z0-9]/, {
+          message: t("auth.passwordSpecial"),
+        }),
+      confirmPassword: z.string(),
+    })
+    .refine((data) => data.password === data.confirmPassword, {
+      message: t("auth.passwordsNotMatch"),
+      path: ["confirmPassword"],
+    });
 
   const {
     register,
@@ -65,8 +65,8 @@ const SignUpPage = () => {
     setIsLoading(true);
     try {
       await signUp({ name: data.name, email: data.email, password: data.password });
-      toast.success("Account created successfully!", {
-        description: "Please check your email to verify your account.",
+      toast.success(t("auth.signupSuccess"), {
+        description: t("auth.checkEmail"),
       });
       navigate("/login");
     } catch (error) {
@@ -91,15 +91,14 @@ const SignUpPage = () => {
           <div className="mx-auto grid w-[400px] gap-6">
             <div className="grid gap-2">
               <h1 className="font-inter text-4xl font-bold tracking-tight">
-                Create an account
+                {t("auth.signupTitle")}
               </h1>
               <p className="text-base text-stone-500">
-                Enter your details below to get started
+                {t("auth.enterDetails")}
               </p>
             </div>
 
             <div className="grid gap-4">
-              {/* Name Field */}
               <div className="grid gap-1">
                 <div className="relative">
                   <input
@@ -117,7 +116,7 @@ const SignUpPage = () => {
                     htmlFor="name"
                     className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-base text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-red-600 dark:text-gray-400"
                   >
-                    Name
+                    {t("auth.name")}
                   </label>
                 </div>
                 {errors.name && (
@@ -125,7 +124,6 @@ const SignUpPage = () => {
                 )}
               </div>
 
-              {/* Email Field */}
               <div className="grid gap-1">
                 <div className="relative">
                   <input
@@ -143,7 +141,7 @@ const SignUpPage = () => {
                     htmlFor="email"
                     className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-base text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-red-600 dark:text-gray-400"
                   >
-                    Email
+                    {t("auth.email")}
                   </label>
                 </div>
                 {errors.email && (
@@ -151,7 +149,6 @@ const SignUpPage = () => {
                 )}
               </div>
 
-              {/* Password Field */}
               <div className="grid gap-1">
                 <div className="relative">
                   <input
@@ -169,7 +166,7 @@ const SignUpPage = () => {
                     htmlFor="password"
                     className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-base text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-red-600 dark:text-gray-400"
                   >
-                    Password
+                    {t("auth.password")}
                   </label>
                   <button
                     type="button"
@@ -186,7 +183,6 @@ const SignUpPage = () => {
                 )}
               </div>
 
-              {/* Password Strength Indicator */}
               {password && (
                 <div className="flex items-center gap-2">
                   <div
@@ -209,15 +205,12 @@ const SignUpPage = () => {
                     }`}
                   >
                     {
-                      ["Weak", "Medium", "Medium", "Strong"][
-                        passwordStrength - 1
-                      ] || ""
+                      t(`auth.passwordStrength.${["weak", "medium", "medium", "strong"][passwordStrength - 1] || ""}`)
                     }
                   </p>
                 </div>
               )}
 
-              {/* Confirm Password Field */}
               <div className="grid gap-1">
                 <div className="relative">
                   <input
@@ -235,7 +228,7 @@ const SignUpPage = () => {
                     htmlFor="confirmPassword"
                     className="absolute top-3 -z-10 origin-[0] -translate-y-6 scale-75 transform text-base text-gray-500 duration-300 peer-placeholder-shown:translate-y-0 peer-placeholder-shown:scale-100 peer-focus:start-0 peer-focus:-translate-y-6 peer-focus:scale-75 peer-focus:text-red-600 dark:text-gray-400"
                   >
-                    Confirm Password
+                    {t("auth.confirmPassword")}
                   </label>
                   <button
                     type="button"
@@ -259,7 +252,7 @@ const SignUpPage = () => {
                 className="w-full bg-red-500 py-6 text-base font-medium text-white hover:bg-red-600"
                 disabled={isLoading}
               >
-                {isLoading ? "Creating Account..." : "Create Account"}
+                {isLoading ? t("auth.creatingAccount") : t("auth.createAccount")}
               </Button>
               <Button
                 variant="outline"
@@ -270,17 +263,17 @@ const SignUpPage = () => {
                   alt="Google icon"
                   className="mr-4 h-6 w-6"
                 />
-                Sign up with Google
+                {t("auth.signupWithGoogle")}
               </Button>
             </div>
 
             <div className="text-center text-base">
-              Already have an account?{" "}
+              {t("auth.haveAccount")}{" "}
               <Link
                 to="/login"
                 className="font-medium text-red-500 underline hover:text-red-600"
               >
-                Log in
+                {t("auth.login")}
               </Link>
             </div>
           </div>
