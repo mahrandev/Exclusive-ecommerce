@@ -1,37 +1,39 @@
 import { NavLink, useNavigate } from "react-router-dom";
-import { Heart, ShoppingCart, Menu, X, User } from "lucide-react";
+import { Heart, ShoppingCart, Menu, X } from "lucide-react";
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import useAuthStore from "@/store/authStore";
-import SearchComponent from "@/components/shared/SearchComponent"; // Import the new component
+import SearchComponent from "@/components/shared/SearchComponent";
 import UserMenu from "@/components/shared/UserMenu";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { isAuthenticated, user, logout } = useAuthStore();
+  const { isAuthenticated } = useAuthStore();
   const navigate = useNavigate();
+  const { t, i18n } = useTranslation();
 
-  const handleLogout = () => {
-    logout();
-    navigate("/");
-    setIsMobileMenuOpen(false); // Close mobile menu on logout
+  const changeLanguage = () => {
+    const newLang = i18n.language === 'en' ? 'ar' : 'en';
+    i18n.changeLanguage(newLang);
   };
-
-  const userName = user?.user_metadata?.full_name || user?.email;
 
   return (
     <header className="bg-white border-b border-gray-200">
       {/* 1. Top bar - Full width */}
       <div className="bg-primary-black text-primary-white py-1">
-        <div className="container mx-auto px-4 text-center py-2 text-xs md:text-sm">
-          <p>
-            Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!{" "}
+        <div className="container mx-auto px-4 flex justify-center items-center py-2 text-xs md:text-sm">
+          <p className="flex-grow text-center">
+            {t('header.topBar')}{" "}
             <a
               href="#"
               className="font-bold underline hover:text-primary-red transition-colors"
             >
-              ShopNow
+              {t('header.shopNow')}
             </a>
           </p>
+          <button onClick={changeLanguage} className="text-sm font-medium hover:text-primary-red transition-colors px-4">
+            {i18n.language === 'en' ? 'العربية' : 'English'}
+          </button>
         </div>
       </div>
 
@@ -44,7 +46,7 @@ const Header = () => {
               to="/"
               className="text-primary-red transition-colors uppercase"
             >
-              Exclusive
+              {t('exclusive')}
             </NavLink>
           </div>
 
@@ -58,7 +60,7 @@ const Header = () => {
                 }`
               }
             >
-              Home
+              {t('header.home')}
             </NavLink>
             <NavLink
               to="/contact"
@@ -68,7 +70,7 @@ const Header = () => {
                 }`
               }
             >
-              Contact
+              {t('header.contact')}
             </NavLink>
             <NavLink
               to="/about"
@@ -78,7 +80,7 @@ const Header = () => {
                 }`
               }
             >
-              About
+              {t('header.about')}
             </NavLink>
             {!isAuthenticated && (
               <NavLink
@@ -91,7 +93,7 @@ const Header = () => {
                   }`
                 }
               >
-                Sign Up
+                {t('header.signUp')}
               </NavLink>
             )}
           </nav>
@@ -102,8 +104,6 @@ const Header = () => {
             <div className="hidden md:block">
               <SearchComponent onResultClick={() => setIsMobileMenuOpen(false)} />
             </div>
-
-            {/* Mobile Search Toggle - This is now handled inside SearchComponent */}
 
             {/* Wishlist */}
             <NavLink
@@ -129,7 +129,7 @@ const Header = () => {
                 to="/login"
                 className="hidden md:inline-block bg-blue-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-600 transition-colors"
               >
-                Login
+                {t('header.login')}
               </NavLink>
             )}
 
@@ -161,7 +161,7 @@ const Header = () => {
                 }
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Home
+                {t('header.home')}
               </NavLink>
               <NavLink
                 to="/contact"
@@ -172,7 +172,7 @@ const Header = () => {
                 }
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                Contact
+                {t('header.contact')}
               </NavLink>
               <NavLink
                 to="/about"
@@ -183,7 +183,7 @@ const Header = () => {
                 }
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                About
+                {t('header.about')}
               </NavLink>
               {!isAuthenticated && (
                 <>
@@ -192,14 +192,14 @@ const Header = () => {
                     className="py-2 px-4 rounded-md hover:bg-gray-100 transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    Login
+                    {t('header.login')}
                   </NavLink>
                   <NavLink
                     to="/signup"
                     className="py-2 px-4 rounded-md hover:bg-gray-100 transition-colors"
                     onClick={() => setIsMobileMenuOpen(false)}
                   >
-                    Sign Up
+                    {t('header.signUp')}
                   </NavLink>
                 </>
               )}

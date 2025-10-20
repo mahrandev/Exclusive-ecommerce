@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Pagination } from 'swiper/modules';
 import 'swiper/css';
@@ -14,30 +15,32 @@ import img4 from '@/assets/img/employee-4.png';
 import img5 from '@/assets/img/employee-5.png';
 
 const TeamSection = () => {
+  const { t } = useTranslation();
+
   const teamMembers = [
     {
       name: 'Emma Watson',
-      title: 'Managing Director',
+      title: t('teamRoles.managingDirector'),
       imgSrc: img3,
     },
     {
       name: 'Will Smith',
-      title: 'Product Designer',
+      title: t('teamRoles.productDesigner'),
       imgSrc: img2,
     },
     {
       name: 'John Doe',
-      title: 'Lead Developer',
+      title: t('teamRoles.leadDeveloper'),
       imgSrc: img4,
     },
     {
       name: 'Jane Smith',
-      title: 'Marketing Head',
+      title: t('teamRoles.marketingHead'),
       imgSrc: img5,
     },
     {
       name: 'Tom Cruise',
-      title: 'Founder & Chairman',
+      title: t('teamRoles.founderChairman'),
       imgSrc: img1,
     },
   ];
@@ -76,4 +79,3 @@ const TeamSection = () => {
 };
 
 export default TeamSection;
-

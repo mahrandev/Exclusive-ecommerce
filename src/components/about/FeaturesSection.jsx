@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import { Truck, Headset, ShieldCheck } from 'lucide-react';
 
 const FeatureCard = ({ icon, title, description }) => {
@@ -16,21 +17,23 @@ const FeatureCard = ({ icon, title, description }) => {
 };
 
 const FeaturesSection = () => {
+  const { t } = useTranslation();
+
   const features = [
     {
       icon: <Truck size={40} />,
-      title: 'FREE AND FAST DELIVERY',
-      description: 'Free delivery for all orders over $140',
+      title: t('homePage.freeDelivery'),
+      description: t('homePage.freeDeliveryText'),
     },
     {
       icon: <Headset size={40} />,
-      title: '24/7 CUSTOMER SERVICE',
-      description: 'Friendly 24/7 customer support',
+      title: t('homePage.customerService'),
+      description: t('homePage.customerServiceText'),
     },
     {
       icon: <ShieldCheck size={40} />,
-      title: 'MONEY BACK GUARANTEE',
-      description: 'We reurn money within 30 days',
+      title: t('homePage.moneyBack'),
+      description: t('homePage.moneyBackText'),
     },
   ];
 

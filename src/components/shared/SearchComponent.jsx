@@ -1,13 +1,13 @@
-
-// src/components/shared/SearchComponent.jsx
 import { useState, useEffect, useCallback, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
-import { Search, Star, Loader2, Clock } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
+import { Search, Star, Loader2 } from 'lucide-react';
 import { searchProductsByName } from '@/api/productsApi';
 import { getRecentlyViewed } from '@/utils/recentlyViewed';
 import { debounce } from 'lodash';
 
 const SearchComponent = ({ onResultClick }) => {
+  const { t } = useTranslation();
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
   const [recentlyViewedItems, setRecentlyViewedItems] = useState(getRecentlyViewed());
@@ -45,7 +45,6 @@ const SearchComponent = ({ onResultClick }) => {
     setQuery('');
     setResults([]);
     setIsFocused(false);
-    // Refresh recently viewed items when a search is completed by clicking a result
     setRecentlyViewedItems(getRecentlyViewed()); 
     if (onResultClick) {
       onResultClick();
@@ -66,7 +65,6 @@ const SearchComponent = ({ onResultClick }) => {
 
   const handleFocus = () => {
     setIsFocused(true);
-    // Refresh the list on focus
     setRecentlyViewedItems(getRecentlyViewed());
   }
 
@@ -78,7 +76,7 @@ const SearchComponent = ({ onResultClick }) => {
       <div className="relative">
         <input
           type="text"
-          placeholder="What are you looking for?"
+          placeholder={t('search.placeholder')}
           className="bg-secondary-gray px-4 py-2 rounded-md text-sm w-full md:w-48 lg:w-60 focus:outline-none focus:ring-2 focus:ring-primary-red transition-all"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
@@ -94,7 +92,7 @@ const SearchComponent = ({ onResultClick }) => {
           {showRecent && (
              <div className="p-2">
               <div className="flex justify-between items-center px-2 py-1">
-                <h4 className="text-sm font-semibold text-gray-600">Recently Viewed</h4>
+                <h4 className="text-sm font-semibold text-gray-600">{t('search.recentlyViewed')}</h4>
               </div>
               <ul>
                 {recentlyViewedItems.map((product) => (
@@ -102,7 +100,7 @@ const SearchComponent = ({ onResultClick }) => {
                      <NavLink
                         to={`/product/${product.id}`}
                         className="flex items-start gap-4 p-3 hover:bg-gray-100 transition-colors"
-                        onClick={handleResultClick} // This will close the dropdown and refresh the list
+                        onClick={handleResultClick}
                       >
                         <img src={product.img} alt={product.title} className="w-16 h-16 object-cover rounded-md" />
                         <div className="flex-1">
@@ -131,10 +129,10 @@ const SearchComponent = ({ onResultClick }) => {
           {showResults && (
             <>
               {isLoading && results.length === 0 && (
-                <div className="p-4 text-center text-gray-500">Searching...</div>
+                <div className="p-4 text-center text-gray-500">{t('search.searching')}</div>
               )}
               {!isLoading && results.length === 0 && query.length > 1 && (
-                <div className="p-4 text-center text-gray-500">No products found.</div>
+                <div className="p-4 text-center text-gray-500">{t('search.noProductsFound')}</div>
               )}
               {results.length > 0 && (
                 <ul>
