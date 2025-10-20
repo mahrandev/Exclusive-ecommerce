@@ -1,5 +1,4 @@
 import CartPage from "@/pages/CartPage";
-import HomePage from "@/pages/HomePage";
 import LoginPage from "@/pages/LoginPage";
 import NotFoundPage from "@/pages/NotFoundPage";
 import { Route, Routes } from "react-router-dom";
@@ -14,6 +13,7 @@ import AboutPage from "@/pages/AboutPage";
 import ContactPage from "@/pages/ContactPage";
 import CategoryPage from "@/pages/CategoryPage";
 import AllProductsPage from "@/pages/AllProductsPage";
+import HomePage from "@/pages/HomePage";
 
 const AppRoutes = () => {
   return (

@@ -1,11 +1,12 @@
-// src/pages/NotFoundPage.jsx
 import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import notfound from "@/assets/img/notfound.svg";
-
 import Breadcrumbs from "@/components/shared/Breadcrumbs";
+import { useTranslation } from "react-i18next";
 
 const NotFoundPage = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="container mx-auto max-w-7xl px-4 py-8 md:px-6 md:py-12">
       <Breadcrumbs />
@@ -23,7 +24,7 @@ const NotFoundPage = () => {
 
         {/* Error Message */}
         <h1 className="mb-4 max-w-xl text-2xl font-medium text-gray-900 md:mb-6 md:text-3xl">
-          Your visited page not found. You may go home page.
+          {t("notFound.message")}
         </h1>
 
         {/* Back Button */}
@@ -31,7 +32,7 @@ const NotFoundPage = () => {
           asChild
           className="mt-4 rounded-md bg-red-500 px-12 py-6 text-base font-medium text-white transition-colors hover:bg-red-600"
         >
-          <Link to="/">Back to home page</Link>
+          <Link to="/">{t("notFound.backToHome")}</Link>
         </Button>
       </div>
     </div>

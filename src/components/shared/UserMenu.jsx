@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { User, Package, XCircle, Star, LogOut } from "lucide-react";
 import useAuthStore from "@/store/authStore";
@@ -12,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 
 const UserMenu = () => {
+  const { t } = useTranslation();
   const { user, logout } = useAuthStore();
   const userName = user?.user_metadata?.full_name || user?.email;
 
@@ -40,25 +42,25 @@ const UserMenu = () => {
             className="flex items-center gap-3"
           >
             <User size={18} />
-            <span>Manage My Account</span>
+            <span>{t('userMenu.manageAccount')}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild className="cursor-pointer">
           <Link to="/orders" className="flex items-center gap-3">
             <Package size={18} />
-            <span>My Order</span>
+            <span>{t('userMenu.myOrder')}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild className="cursor-pointer">
           <Link to="/cancellations" className="flex items-center gap-3">
             <XCircle size={18} />
-            <span>My Cancellations</span>
+            <span>{t('userMenu.myCancellations')}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuItem asChild className="cursor-pointer">
           <Link to="/reviews" className="flex items-center gap-3">
             <Star size={18} />
-            <span>My Reviews</span>
+            <span>{t('userMenu.myReviews')}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator className="bg-gray-500/50" />
@@ -67,7 +69,7 @@ const UserMenu = () => {
           className="text-red-400 focus:text-red-400 focus:bg-red-500/20 cursor-pointer flex items-center gap-3"
         >
           <LogOut size={18} />
-          <span>Logout</span>
+          <span>{t('userMenu.logout')}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

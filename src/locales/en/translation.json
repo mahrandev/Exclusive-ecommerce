@@ -36,7 +36,7 @@
   },
   "homePage": {
     "heroTitle": "Up to 10% off Voucher",
-    "heroSubtitle": "iPhone 14 Series",
+    "heroSubtitle": "iPhone 13 Pro",
     "shopNow": "Shop Now",
     "todays": "Today's",
     "flashSales": "Flash Sales",
@@ -111,6 +111,26 @@
     "computers": "Laptops & Computers",
     "groceriesPets": "Groceries & Pets",
     "healthBeauty": "Health & Beauty"
+  },
+  "breadcrumbs": {
+    "home": "Home",
+    "allProducts": "All Products",
+    "contact": "Contact",
+    "about": "About",
+    "cart": "Cart",
+    "checkout": "Checkout",
+    "wishlist": "Wishlist",
+    "account": "My Account",
+    "signup": "Sign Up",
+    "login": "Login"
+  },
+  "notFound": {
+    "title": "404 Not Found",
+    "message": "Your visited page not found. You may go home page.",
+    "backToHome": "Back to home page"
+  },
+  "categoryPage": {
+    "noProductsFound": "No products found in this category."
   },
   "exclusive": "Exclusive"
 }

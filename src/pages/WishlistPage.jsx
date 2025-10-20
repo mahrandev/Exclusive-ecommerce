@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import useWishlistStore from "@/store/wishlistStore";
 import useAuthStore from "@/store/authStore";
 import ProductCard from "@/components/shared/ProductCard";
@@ -8,6 +9,7 @@ import Breadcrumbs from "@/components/shared/Breadcrumbs";
 import EmptyWishlistImage from "@/assets/img/empty.svg"; // Import the image
 
 const WishlistPage = () => {
+  const { t } = useTranslation();
   const { user, isAuthenticated } = useAuthStore();
   const { wishlist, isLoading, fetchWishlist } = useWishlistStore();
 
@@ -22,7 +24,7 @@ const WishlistPage = () => {
     <div className="container mx-auto max-w-7xl px-4 py-8 font-poppins">
       <Breadcrumbs />
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-medium">My Wishlist ({wishlist.length})</h1>
+        <h1 className="text-2xl font-medium">{t('wishlist.pageTitle', { count: wishlist.length })}</h1>
       </div>
 
       {isLoading ? (
@@ -38,12 +40,12 @@ const WishlistPage = () => {
             alt="Empty Wishlist"
             className="w-64 h-64 mb-8"
           />
-          <p className="text-xl text-gray-500 mb-4">Your wishlist is empty.</p>
+          <p className="text-xl text-gray-500 mb-4">{t('wishlist.empty')}</p>
           <Link
             to="/"
             className="bg-primary-red text-white px-6 py-3 rounded-md hover:bg-red-600 transition-colors"
           >
-            Discover Products
+            {t('wishlist.discoverProducts')}
           </Link>
         </div>
       ) : (

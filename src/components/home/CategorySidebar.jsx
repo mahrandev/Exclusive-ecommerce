@@ -48,6 +48,7 @@ const CategorySidebar = ({ selectedCategory, onSelectCategory }) => {
                     ? 'bg-red-500 text-white'
                     : 'hover:bg-gray-100'
                 }`}
+                dir="auto"
               >
                 {getTranslatedCategory(category)}
               </a>
