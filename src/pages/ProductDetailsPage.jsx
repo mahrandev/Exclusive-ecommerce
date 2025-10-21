@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 import { Button } from "@/components/ui/button";
 import {
   Star,
@@ -17,6 +18,7 @@ import { addRecentlyViewed } from "@/utils/recentlyViewed";
 import Breadcrumbs from "@/components/shared/Breadcrumbs";
 
 const ProductDetailsPage = () => {
+  const { t } = useTranslation();
   const {
     product,
     isLoading,
@@ -55,11 +57,11 @@ const ProductDetailsPage = () => {
       <div className="container flex min-h-[60vh] flex-col items-center justify-center py-20">
         <div className="text-center">
           <h2 className="mb-2 text-2xl font-bold text-gray-800">
-            Oops! Something went wrong
+            {t("notFound.title")}
           </h2>
           <p className="mb-6 text-gray-600">{error.message}</p>
           <Button asChild>
-            <Link to="/">Go Back Home</Link>
+            <Link to="/">{t("notFound.backToHome")}</Link>
           </Button>
         </div>
       </div>
@@ -69,7 +71,6 @@ const ProductDetailsPage = () => {
   if (!product || !productData) return null;
 
   const mainImage = selectedImage || productData.images[0];
-
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-6 md:py-8">
@@ -135,12 +136,12 @@ const ProductDetailsPage = () => {
             <div
               className="flex gap-1"
               role="img"
-              aria-label={`Rating: ${product.rating} out of 5 stars`}
+              aria-label={`${t("productDetails.reviews")}: ${product.rating} out of 5 stars`}
             >
               {stars}
             </div>
             <span className="text-gray-800">
-              ({product.reviewsCount} Reviews)
+              ({product.reviewsCount} {t("productDetails.reviews")})
             </span>
             <span className="text-gray-800" aria-hidden="true">
               |
@@ -151,14 +152,16 @@ const ProductDetailsPage = () => {
                 product.inStock ? "text-green-600" : "text-red-600",
               )}
             >
-              {product.inStock ? "In Stock" : "Out of Stock"}
+              {product.inStock
+                ? t("productDetails.inStock")
+                : t("productDetails.outOfStock")}
             </span>
           </div>
 
           {/* Price */}
           <p
             className="mb-4 text-2xl font-bold md:text-3xl"
-            aria-label={`Price: ${product.price} dollars`}
+            aria-label={`${t("cart.price")}: ${product.price} dollars`}
           >
             ${product.price.toFixed(2)}
           </p>
@@ -170,12 +173,12 @@ const ProductDetailsPage = () => {
 
           {/* Colors - Enhanced Accessibility & Design */}
           {productData.colors.length > 0 && (
-            <div className="flex items-center border-b py-4 md:py-6">
+            <div className="flex items-center border-b py-4 gap-4 md:py-6">
               <h3
                 id="color-label"
                 className="text-md mr-4 font-medium md:text-base"
               >
-                Colours:{" "}
+                {t("productDetails.colours")}{" "}
               </h3>
               <div
                 role="radiogroup"
@@ -187,7 +190,7 @@ const ProductDetailsPage = () => {
                     key={color.name}
                     role="radio"
                     aria-checked={selectedColor === color.name}
-                    aria-label={`Color: ${color.name}`}
+                    aria-label={`${t("productDetails.color")} ${color.name}`}
                     onClick={() => setSelectedColor(color.name)}
                     onKeyDown={(e) =>
                       handleKeyDown(e, () => setSelectedColor(color.name))
@@ -209,12 +212,12 @@ const ProductDetailsPage = () => {
 
           {/* Sizes - FULLY REDESIGNED with Better States */}
           {productData.sizes.length > 0 && (
-            <div className="flex items-center border-b py-4 md:py-6">
+            <div className="flex items-center border-b py-4 gap-4 md:py-6">
               <h3
                 id="size-label"
                 className="text-md mr-4 font-medium md:text-base"
               >
-                Size:{" "}
+                {t("productDetails.size")}{" "}
               </h3>
               <div
                 role="radiogroup"
@@ -226,7 +229,7 @@ const ProductDetailsPage = () => {
                     key={size.name}
                     role="radio"
                     aria-checked={selectedSize === size.name}
-                    aria-label={`Size: ${size.name}${!size.available ? " (unavailable)" : ""}`}
+                    aria-label={`${t("productDetails.size")} ${size.name}${!size.available ? ` (${t("productDetails.unavailable")})` : ""}`}
                     onClick={() => size.available && setSelectedSize(size.name)}
                     onKeyDown={(e) =>
                       size.available &&
@@ -263,7 +266,7 @@ const ProductDetailsPage = () => {
                     ? "cursor-not-allowed text-gray-300"
                     : "text-gray-700 hover:bg-gray-100 active:bg-gray-200",
                 )}
-                aria-label="Decrease quantity"
+                aria-label={t("productDetails.decrease")}
                 type="button"
               >
                 <Minus size={18} strokeWidth={2.5} />
@@ -281,7 +284,7 @@ const ProductDetailsPage = () => {
                 className="w-16 [appearance:textfield] border-none bg-white text-center font-semibold text-gray-900 focus:ring-0 focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 min="1"
                 max={product.stock}
-                aria-label={`Quantity: ${quantity}`}
+                aria-label={`${t("productDetails.quantity")}: ${quantity}`}
               />
 
               <button
@@ -293,7 +296,7 @@ const ProductDetailsPage = () => {
                     ? "cursor-not-allowed text-gray-300"
                     : "text-gray-700 hover:bg-gray-100 active:bg-gray-200",
                 )}
-                aria-label="Increase quantity"
+                aria-label={t("productDetails.increase")}
                 type="button"
               >
                 <Plus size={18} strokeWidth={2.5} />
@@ -314,7 +317,7 @@ const ProductDetailsPage = () => {
                 !product.inStock || !selectedSize || !selectedColor
               }
             >
-              Buy Now
+              {t("productDetails.buyNow")}
             </button>
 
             {/* Wishlist Button */}
@@ -327,7 +330,9 @@ const ProductDetailsPage = () => {
                   : "hover:border-primary-red hover:text-primary-red border-gray-300 bg-white text-gray-700 hover:bg-red-50",
               )}
               aria-label={
-                isWishlisted ? "Remove from wishlist" : "Add to wishlist"
+                isWishlisted
+                  ? t("productDetails.removeFromWishlist")
+                  : t("productDetails.addToWishlist")
               }
               aria-pressed={isWishlisted}
             >
@@ -354,7 +359,7 @@ const ProductDetailsPage = () => {
             aria-disabled={!product.inStock || !selectedSize || !selectedColor}
           >
             <ShoppingCart size={20} />
-            Add to Cart
+            {t("productDetails.addToCart")}
           </button>
 
           {/* Delivery Info - Enhanced Design */}
@@ -364,9 +369,11 @@ const ProductDetailsPage = () => {
                 <Truck className="flex-shrink-0 text-gray-700" size={20} />
               </div>
               <div className="flex-1">
-                <h4 className="font-semibold text-gray-900">Free Delivery</h4>
+                <h4 className="font-semibold text-gray-900">
+                  {t("productDetails.freeDelivery")}
+                </h4>
                 <p className="mt-1 text-xs text-gray-600 md:text-sm">
-                  Enter your postal code for Delivery Availability
+                  {t("productDetails.deliveryAvailability")}
                 </p>
               </div>
             </div>
@@ -375,11 +382,13 @@ const ProductDetailsPage = () => {
                 <RefreshCw className="flex-shrink-0 text-gray-700" size={20} />
               </div>
               <div className="flex-1">
-                <h4 className="font-semibold text-gray-900">Return Delivery</h4>
+                <h4 className="font-semibold text-gray-900">
+                  {t("productDetails.returnDelivery")}
+                </h4>
                 <p className="mt-1 text-xs text-gray-600 md:text-sm">
-                  Free 30 Days Delivery Returns.{" "}
+                  {t("productDetails.returnDeliveryDesc")}{" "}
                   <button className="hover:text-primary-red focus:ring-primary-red underline transition-colors focus:rounded focus:ring-2 focus:outline-none">
-                    Details
+                    {t("productDetails.details")}
                   </button>
                 </p>
               </div>

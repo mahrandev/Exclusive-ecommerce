@@ -121,6 +121,7 @@
     "outOfStock": "غير متوفر",
     "reviews": "تقييم",
     "colours": "الألوان:",
+    "color": "اللون:",
     "size": "المقاس:",
     "addToCart": "أضف إلى السلة",
     "buyNow": "اشترِ الآن",
@@ -133,7 +134,9 @@
     "increase": "زيادة الكمية",
     "quantity": "الكمية",
     "removeFromWishlist": "إزالة من المفضلة",
-    "addToWishlist": "أضف إلى المفضلة"
+    "addToWishlist": "أضف إلى المفضلة",
+    "unavailable": "غير متوفر",
+    "deliveryAvailability": "أدخل الرمز البريدي لمعرفة إمكانية التوصيل"
   },
   "cart": {
     "title": "عربة التسوق",
@@ -209,6 +212,7 @@
     "lastName": "اسم العائلة",
     "email": "البريد الإلكتروني",
     "address": "العنوان",
+    "addressPlaceholder": "عنوانك",
     "currentPassword": "كلمة المرور الحالية",
     "newPassword": "كلمة المرور الجديدة",
     "confirmPassword": "تأكيد كلمة المرور الجديدة",

@@ -33,7 +33,7 @@ const useAccountPageLogic = () => {
     .object({
       currentPassword: z
         .string()
-        .min(1, { message: "Current password is required" }),
+        .min(1, { message: t("account.currentPasswordRequired") }),
       newPassword: z
         .string()
         .min(8, { message: t("auth.passwordMinLength", { length: 8 }) })
@@ -121,12 +121,12 @@ const useAccountPageLogic = () => {
       // Update local store
       login({ user: data.user });
 
-      toast.success("Profile updated successfully!", {
-        description: "Your profile information has been saved.",
+      toast.success(t("account.profileUpdated"), {
+        description: t("account.profileUpdateDescription"),
       });
     } catch (error) {
       console.error("Profile update error:", error);
-      toast.error("Failed to update profile", {
+      toast.error(t("account.failedToUpdateProfile"), {
         description: error.message,
       });
     } finally {
@@ -145,7 +145,7 @@ const useAccountPageLogic = () => {
       });
 
       if (signInError) {
-        throw new Error("Current password is incorrect");
+        throw new Error(t("account.currentPasswordIncorrect"));
       }
 
       // Update password
@@ -155,15 +155,15 @@ const useAccountPageLogic = () => {
 
       if (updateError) throw updateError;
 
-      toast.success("Password changed successfully!", {
-        description: "Your password has been updated.",
+      toast.success(t("account.passwordChanged"), {
+        description: t("account.passwordChangedDescription"),
       });
 
       // Reset password form
       resetPassword();
     } catch (error) {
       console.error("Password update error:", error);
-      toast.error("Failed to change password", {
+      toast.error(t("account.failedToChangePassword"), {
         description: error.message,
       });
     } finally {

@@ -1,10 +1,11 @@
 
 import { useState, useMemo, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { getProductById } from "@/api/productsApi";
 import { toast } from "sonner";
 import { Star } from "lucide-react";
+import useCartStore from "@/store/cartStore";
 
 // Helper function لمعالجة JSON بشكل آمن
 const safeJsonParse = (data, fallback = []) => {
@@ -19,6 +20,8 @@ const safeJsonParse = (data, fallback = []) => {
 
 export const useProductDetails = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+  const { addToCart } = useCartStore();
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -130,18 +133,20 @@ export const useProductDetails = () => {
       return;
     }
 
-    console.log("Adding to cart:", {
-      productId: product.id,
-      quantity,
-      color: selectedColor,
+    const productToAdd = {
+      ...product,
       size: selectedSize,
-    });
+      color: selectedColor,
+      quantity: quantity,
+    };
+
+    addToCart(productToAdd);
 
     toast.success("Added to cart!", {
       description: `${quantity} × ${product.title}`,
       action: {
         label: "View Cart",
-        onClick: () => console.log("Navigate to cart"),
+        onClick: () => navigate("/cart"),
       },
     });
   };
@@ -169,13 +174,15 @@ export const useProductDetails = () => {
       return;
     }
 
-    toast.loading("Redirecting to checkout...");
-    console.log("Buy now:", {
-      productId: product.id,
-      quantity,
-      selectedColor,
-      selectedSize,
-    });
+    const productToAdd = {
+      ...product,
+      size: selectedSize,
+      color: selectedColor,
+      quantity: quantity,
+    };
+
+    addToCart(productToAdd);
+    navigate("/cart");
   };
 
   // Handle keyboard navigation for custom controls

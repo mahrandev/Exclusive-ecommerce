@@ -16,14 +16,14 @@ const ProfileForm = ({
     <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm md:p-8">
       <h2 className="mb-6 flex items-center gap-2 text-xl font-bold text-red-500">
         <User size={24} />
-        {t("editProfile")}
+        {t("account.editProfile")}
       </h2>
       <form onSubmit={handleSubmitProfile(onSubmitProfile)}>
         <div className="mb-6 grid grid-cols-1 gap-6 md:grid-cols-2">
           <div>
             <Label htmlFor="firstName" className="mb-2 flex items-center gap-2">
               <User size={16} />
-              {t("firstName")}{" "}
+              {t("account.firstName")}{" "}
               <span className="text-red-500">*</span>
             </Label>
             <Input
@@ -42,7 +42,7 @@ const ProfileForm = ({
           <div>
             <Label htmlFor="lastName" className="mb-2 flex items-center gap-2">
               <User size={16} />
-              {t("lastName")}{" "}
+              {t("account.lastName")}{" "}
               <span className="text-red-500">*</span>
             </Label>
             <Input
@@ -61,7 +61,7 @@ const ProfileForm = ({
           <div>
             <Label htmlFor="email" className="mb-2 flex items-center gap-2">
               <Mail size={16} />
-              {t("email")}{" "}
+              {t("account.email")}{" "}
               <span className="text-red-500">*</span>
             </Label>
             <Input
@@ -81,12 +81,12 @@ const ProfileForm = ({
           <div>
             <Label htmlFor="address" className="mb-2 flex items-center gap-2">
               <MapPin size={16} />
-              {t("address")}
+              {t("account.address")}
             </Label>
             <Input
               id="address"
               {...registerProfile("address")}
-              placeholder="Your address"
+              placeholder={t("account.addressPlaceholder")}
               className="h-12"
             />
           </div>
@@ -99,7 +99,7 @@ const ProfileForm = ({
             className="px-8 py-3"
             onClick={() => resetProfile()}
           >
-            {t("cancel")}
+            {t("account.cancel")}
           </Button>
           <Button
             type="submit"
@@ -109,10 +109,10 @@ const ProfileForm = ({
             {isLoadingProfile ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Saving...
+                {t("account.saving")}
               </>
             ) : (
-              t("saveChanges")
+              t("account.saveChanges")
             )}
           </Button>
         </div>

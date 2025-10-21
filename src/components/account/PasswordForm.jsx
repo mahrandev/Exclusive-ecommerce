@@ -21,13 +21,13 @@ const PasswordForm = ({
   return (
     <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm md:p-8">
       <h2 className="mb-6 text-xl font-bold text-gray-900">
-        Password Changes
+        {t("account.passwordChanges")}
       </h2>
       <form onSubmit={handleSubmitPassword(onSubmitPassword)}>
         <div className="space-y-4">
           <div>
             <Label htmlFor="currentPassword" className="mb-2">
-              {t("currentPassword")}{" "}
+              {t("account.currentPassword")}{" "}
               <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
@@ -59,7 +59,7 @@ const PasswordForm = ({
 
           <div>
             <Label htmlFor="newPassword" className="mb-2">
-              {t("newPassword")}{" "}
+              {t("account.newPassword")}{" "}
               <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
@@ -91,7 +91,7 @@ const PasswordForm = ({
 
           <div>
             <Label htmlFor="confirmNewPassword" className="mb-2">
-              {t("confirmPassword")}{" "}
+              {t("account.confirmPassword")}{" "}
               <span className="text-red-500">*</span>
             </Label>
             <div className="relative">
@@ -131,7 +131,7 @@ const PasswordForm = ({
             className="px-8 py-3"
             onClick={() => resetPassword()}
           >
-            Cancel
+            {t("account.cancel")}
           </Button>
           <Button
             type="submit"
@@ -141,10 +141,10 @@ const PasswordForm = ({
             {isLoadingPassword ? (
               <>
                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                Changing...
+                {t("account.changing")}
               </>
             ) : (
-              "Change Password"
+              t("account.changePassword")
             )}
           </Button>
         </div>

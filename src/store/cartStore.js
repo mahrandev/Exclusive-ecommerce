@@ -19,20 +19,28 @@ const useCartStore = create(
       totalPrice: 0,
 
       // Action to add a product to the cart
-      addToCart: (product) =>
+      addToCart: (productToAdd) =>
         set((state) => {
-          const existingItem = state.items.find((item) => item.id === product.id);
+          const existingItem = state.items.find(
+            (item) =>
+              item.id === productToAdd.id &&
+              item.size === productToAdd.size &&
+              item.color === productToAdd.color,
+          );
+
           let newItems;
           if (existingItem) {
-            // If item exists, update its quantity
+            // If item with same id, size, and color exists, update its quantity
             newItems = state.items.map((item) =>
-              item.id === product.id
-                ? { ...item, quantity: item.quantity + 1 }
+              item.id === productToAdd.id &&
+              item.size === productToAdd.size &&
+              item.color === productToAdd.color
+                ? { ...item, quantity: item.quantity + productToAdd.quantity }
                 : item,
             );
           } else {
-            // If item is new, add it to the cart with quantity 1
-            newItems = [...state.items, { ...product, quantity: 1 }];
+            // If item is new, add it to the cart
+            newItems = [...state.items, { ...productToAdd }];
           }
           const { totalItems, totalPrice } = calculateTotals(newItems);
           return { items: newItems, totalItems, totalPrice };
