@@ -20,7 +20,7 @@
     "myAccount": "حسابي",
     "loginRegister": "تسجيل الدخول / إنشاء حساب",
     "cart": "عربة التسوق",
-    "wishlist": "قائمة الرغبات",
+    "wishlist": "قائمة رغباتي",
     "shop": "المتجر",
     "quickLink": "روابط سريعة",
     "privacyPolicy": "سياسة الخصوصية",
@@ -185,16 +185,7 @@
     "emailConfirmation": "ستتلقى رسالة تأكيد عبر البريد الإلكتروني قريبًا",
     "continueShopping": "متابعة التسوق"
   },
-  "wishlist": {
-    "title": "قائمة رغباتي",
-    "empty": "قائمة رغباتك فارغة",
-    "emptyMessage": "لم تضف أي منتجات إلى قائمة رغباتك بعد",
-    "discoverProducts": "اكتشف المنتجات",
-    "moveAllToBag": "نقل الكل إلى السلة",
-    "addedToWishlist": "تمت الإضافة إلى المفضلة",
-    "removedFromWishlist": "تمت الإزالة من المفضلة",
-    "pageTitle": "قائمة رغباتي ({{count}})"
-  },
+  "wishlist": "قائمة رغباتي",
   "account": {
     "title": "حسابي",
     "welcome": "مرحباً!",
@@ -292,5 +283,6 @@
   "categoryPage": {
     "noProductsFound": "لا توجد منتجات في هذه الفئة."
   },
-  "exclusive": "إكسكلوسيف"
+  "exclusive": "إكسكلوسيف",
+  "managePreferences": "إدارة إعدادات وتفضيلات حسابك"
 }

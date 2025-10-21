@@ -169,5 +169,24 @@
   "categoryPage": {
     "noProductsFound": "No products found in this category."
   },
-  "exclusive": "Exclusive"
+  "exclusive": "Exclusive",
+  "welcome": "Welcome",
+  "manageAccount": "Manage My Account",
+  "myProfile": "My Profile",
+  "addressBook": "Address Book",
+  "paymentOptions": "Payment Options",
+  "myOrders": "My Orders",
+  "myReturns": "My Returns",
+  "myCancellations": "My Cancellations",
+  "editProfile": "Edit Your Profile",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "email": "Email",
+  "address": "Address",
+  "cancel": "Cancel",
+  "saveChanges": "Save Changes",
+  "currentPassword": "Current Password",
+  "newPassword": "New Password",
+  "confirmPassword": "Confirm New Password",
+  "managePreferences": "Manage your account settings and preferences"
 }
