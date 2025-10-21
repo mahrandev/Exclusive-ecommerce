@@ -117,7 +117,7 @@
     "healthBeauty": "الصحة والجمال"
   },
   "productDetails": {
-    "inStock": "متوفر في المخزن",
+    "inStock": "متوفر في المخزون",
     "outOfStock": "غير متوفر",
     "reviews": "تقييم",
     "colours": "الألوان:",
@@ -185,8 +185,16 @@
     "emailConfirmation": "ستتلقى رسالة تأكيد عبر البريد الإلكتروني قريبًا",
     "continueShopping": "متابعة التسوق"
   },
-  "wishlist": "قائمة رغباتي",
-"account": {
+  "wishlist": {
+    "title": "قائمة رغباتي",
+    "pageTitle": "قائمة رغباتي ({{count}})",
+    "empty": "قائمة رغباتك فارغة",
+    "discoverProducts": "اكتشف المنتجات",
+    "moveAllToBag": "نقل الكل إلى السلة",
+    "justForYou": "فقط من أجلك",
+    "seeAll": "عرض الكل"
+  },
+  "account": {
     "title": "حسابي",
     "welcome": "مرحباً",
     "manageAccount": "إدارة حسابي",
@@ -240,13 +248,13 @@
     "signupSuccess": "تم إنشاء الحساب بنجاح!",
     "checkEmail": "يرجى التحقق من بريدك الإلكتروني للتحقق من حسابك",
     "invalidEmail": "عنوان بريد إلكتروني غير صالح",
-    "passwordMinLength": "يجب أن تحتوي كلمة المرور على 8 أحرف على الأقل",
+    "passwordMinLength": "يجب أن تحتوي كلمة المرور على {{length}} أحرف على الأقل",
     "passwordLowercase": "يجب أن تحتوي كلمة المرور على حرف صغير",
     "passwordUppercase": "يجب أن تحتوي كلمة المرور على حرف كبير",
     "passwordNumber": "يجب أن تحتوي كلمة المرور على رقم",
     "passwordSpecial": "يجب أن تحتوي كلمة المرور على حرف خاص",
     "passwordsNotMatch": "كلمات المرور غير متطابقة",
-    "nameMinLength": "يجب أن يحتوي الاسم على 3 أحرف على الأقل",
+    "nameMinLength": "يجب أن يحتوي الاسم على {{length}} أحرف على الأقل",
     "passwordStrength": {
       "weak": "ضعيفة",
       "medium": "متوسطة",

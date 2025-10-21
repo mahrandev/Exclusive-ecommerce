@@ -32,6 +32,8 @@ const AccountPage = () => {
     getFullName,
   } = useAccountPageLogic();
 
+  const isRtl = i18n.language === "ar";
+
   const NavItem = ({ to, children }) => (
     <li>
       <NavLink
@@ -57,9 +59,9 @@ const AccountPage = () => {
           <div className="flex h-16 w-16 items-center justify-center rounded-full bg-white/20 backdrop-blur-sm">
             <User size={32} />
           </div>
-          <div>
+          <div className={isRtl ? "text-right" : "text-left"}>
             <h2 className="text-2xl font-bold md:text-3xl">
-              {t("welcome")} {getFullName()}!
+              {t("account.welcome")} {getFullName()}!
             </h2>
             <p className="mt-1 text-red-100">{t("managePreferences")}</p>
           </div>
@@ -74,24 +76,23 @@ const AccountPage = () => {
         <aside className="w-full md:w-1/4">
           <nav className="flex flex-col gap-6">
             <div>
-              <ul
-                className={`space-y-2 ${i18n.language === "ar" ? "pr-4" : "pl-4"}`}
-              >
-                <NavItem to="/account">{t("myProfile")}</NavItem>
-                <NavItem to="#">{t("addressBook")}</NavItem>
-                <NavItem to="#">{t("paymentOptions")}</NavItem>
+              <h3 className="mb-3 text-lg font-semibold text-gray-900">
+                {t("account.manageAccount")}
+              </h3>
+              <ul className={`space-y-2 ${isRtl ? "pr-4" : "pl-4"}`}>
+                <NavItem to="/account">{t("account.myProfile")}</NavItem>
+                <NavItem to="#">{t("account.addressBook")}</NavItem>
+                <NavItem to="#">{t("account.paymentOptions")}</NavItem>
               </ul>
             </div>
             <div>
               <h3 className="mb-3 text-lg font-semibold text-gray-900">
-                {t("myOrders")}
+                {t("account.myOrders")}
               </h3>
-              <ul
-                className={`space-y-2 ${i18n.language === "ar" ? "pr-4" : "pl-4"}`}
-              >
-                <NavItem to="/cart">{t("myOrders")}</NavItem>
-                <NavItem to="#">{t("myReturns")}</NavItem>
-                <NavItem to="#">{t("myCancellations")}</NavItem>
+              <ul className={`space-y-2 ${isRtl ? "pr-4" : "pl-4"}`}>
+                <NavItem to="/cart">{t("account.myOrders")}</NavItem>
+                <NavItem to="#">{t("account.myReturns")}</NavItem>
+                <NavItem to="#">{t("account.myCancellations")}</NavItem>
               </ul>
             </div>
             <div>
@@ -99,7 +100,7 @@ const AccountPage = () => {
                 to="/wishlist"
                 className="text-lg font-semibold text-gray-900 hover:text-red-500"
               >
-                {t("wishlist")}
+                {t("wishlist.title")}
               </NavLink>
             </div>
           </nav>

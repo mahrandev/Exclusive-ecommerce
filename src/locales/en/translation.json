@@ -257,5 +257,12 @@
     "currentPasswordRequired": "Current password is required",
     "failedToUpdateProfile": "Failed to update profile",
     "failedToChangePassword": "Failed to change password"
+  },
+  "userMenu": {
+    "manageAccount": "Manage My Account",
+    "myOrder": "My Order",
+    "myCancellations": "My Cancellations",
+    "myReviews": "My Reviews",
+    "logout": "Logout"
   }
 }
