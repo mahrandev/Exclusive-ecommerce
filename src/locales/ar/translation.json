@@ -186,9 +186,9 @@
     "continueShopping": "متابعة التسوق"
   },
   "wishlist": "قائمة رغباتي",
-  "account": {
+"account": {
     "title": "حسابي",
-    "welcome": "مرحباً!",
+    "welcome": "مرحباً",
     "manageAccount": "إدارة حسابي",
     "myProfile": "ملفي الشخصي",
     "addressBook": "دفتر العناوين",
@@ -205,7 +205,19 @@
     "newPassword": "كلمة المرور الجديدة",
     "confirmPassword": "تأكيد كلمة المرور الجديدة",
     "cancel": "إلغاء",
-    "saveChanges": "حفظ التغييرات"
+    "saveChanges": "حفظ التغييرات",
+    "changePassword": "تغيير كلمة المرور",
+    "passwordChanges": "تغيير كلمة المرور",
+    "saving": "جارٍ الحفظ...",
+    "changing": "جارٍ التغيير...",
+    "profileUpdated": "تم تحديث الملف الشخصي بنجاح!",
+    "profileUpdateDescription": "تم حفظ معلومات ملفك الشخصي.",
+    "passwordChanged": "تم تغيير كلمة المرور بنجاح!",
+    "passwordChangedDescription": "تم تحديث كلمة المرور الخاصة بك.",
+    "currentPasswordIncorrect": "كلمة المرور الحالية غير صحيحة",
+    "currentPasswordRequired": "كلمة المرور الحالية مطلوبة",
+    "failedToUpdateProfile": "فشل تحديث الملف الشخصي",
+    "failedToChangePassword": "فشل تغيير كلمة المرور"
   },
   "auth": {
     "login": "تسجيل الدخول",
