@@ -17,6 +17,7 @@ import {
 import jbi from "@/assets/img/jbl-outdoor-speaker.avif";
 import iphone from "@/assets/img/iphone.avif";
 import { useCountdown } from "@/hooks/useCountdown";
+import Category from "@/components/home/Category";
 
 const categoryTranslationKeys = {
   "Woman's Fashion": "categories.womansFashion",
@@ -264,7 +265,7 @@ const HomePage = () => {
           </div>
         </div>
 
-        <div className="grid grid-cols-6 gap-6">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 sm:gap-6">
           {mainCategories
             .slice(categorySlider.currentIndex, categorySlider.currentIndex + 6)
             .map((category, index) => {
@@ -274,22 +275,14 @@ const HomePage = () => {
                 JSON.stringify(categoryMapping[category]);
 
               return (
-                <Link
+                <Category
                   key={index}
-                  to={`/products/${encodeURIComponent(category)}`}
-                  className={`flex flex-col items-center justify-center rounded border-2 p-6 transition-all hover:border-red-500 hover:bg-red-500 hover:text-white ${
-                    isSelected
-                      ? "border-red-500 bg-red-500 text-white"
-                      : "border-gray-300 bg-white text-gray-900"
-                  }`}
-                >
-                  <div className="mb-3">
-                    {Icon && <Icon size={56} strokeWidth={1.5} />}
-                  </div>
-                  <span className="text-base font-normal" dir="auto">
-                    {getTranslatedCategory(category)}
-                  </span>
-                </Link>
+                  category={category}
+                  isSelected={isSelected}
+                  onSelectCategory={handleCategorySelect}
+                  getTranslatedCategory={getTranslatedCategory}
+                  Icon={Icon}
+                />
               );
             })}
         </div>
