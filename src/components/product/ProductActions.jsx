@@ -16,6 +16,38 @@ const ProductActions = ({
 }) => {
   const { t } = useTranslation();
 
+  // Handle input change with better validation
+  const handleInputChange = (e) => {
+    const value = e.target.value;
+
+    // Allow empty string temporarily for user input
+    if (value === "") {
+      setQuantity("");
+      return;
+    }
+
+    // Remove any non-digit characters
+    const numericValue = value.replace(/\D/g, "");
+
+    // Parse to integer
+    const parsedValue = parseInt(numericValue, 10);
+
+    // Validate and set the value
+    if (!isNaN(parsedValue) && parsedValue >= 1) {
+      const finalValue = Math.min(parsedValue, product.stock);
+      setQuantity(finalValue);
+    }
+  };
+
+  // Handle input blur to ensure valid value
+  const handleInputBlur = () => {
+    if (quantity === "" || isNaN(quantity) || quantity < 1) {
+      setQuantity(1);
+    } else if (quantity > product.stock) {
+      setQuantity(product.stock);
+    }
+  };
+
   return (
     <>
       <div className="flex flex-col gap-3 py-4 md:flex-row md:gap-4 md:py-6">
@@ -39,15 +71,10 @@ const ProductActions = ({
           <input
             type="text"
             inputMode="numeric"
-            pattern="[0-9]*"
             value={quantity}
-            onChange={(e) => {
-              const val = parseInt(e.target.value.replace(/\D/g, "")) || 1;
-              setQuantity(Math.max(1, Math.min(val, product.stock)));
-            }}
-            className="w-16 [appearance:textfield] border-none bg-white text-center font-semibold text-gray-900 focus:ring-0 focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-            min="1"
-            max={product.stock}
+            onChange={handleInputChange}
+            onBlur={handleInputBlur}
+            className="w-16 border-none bg-white text-center font-semibold text-gray-900 focus:ring-0 focus:outline-none"
             aria-label={`${t("productDetails.quantity")}: ${quantity}`}
           />
 
@@ -77,9 +104,7 @@ const ProductActions = ({
               ? "cursor-not-allowed bg-gray-300 text-gray-500"
               : "bg-primary-red text-white shadow-sm hover:bg-red-600 hover:shadow-md active:bg-red-700",
           )}
-          aria-disabled={
-            !product.inStock || !selectedSize || !selectedColor
-          }
+          aria-disabled={!product.inStock || !selectedSize || !selectedColor}
         >
           {t("productDetails.buyNow")}
         </button>
