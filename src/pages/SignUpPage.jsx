@@ -30,7 +30,9 @@ const SignUpPage = () => {
 
   const signUpSchema = z
     .object({
-      name: z.string().min(3, { message: t("auth.nameMinLength", { length: 3 }) }),
+      name: z
+        .string()
+        .min(3, { message: t("auth.nameMinLength", { length: 3 }) }),
       email: z.string().email({ message: t("auth.invalidEmail") }),
       password: z
         .string()
@@ -64,13 +66,21 @@ const SignUpPage = () => {
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
-      await signUp({ name: data.name, email: data.email, password: data.password });
+      await signUp({
+        name: data.name,
+        email: data.email,
+        password: data.password,
+      });
       toast.success(t("auth.signupSuccess"), {
         description: t("auth.checkEmail"),
       });
       navigate("/login");
     } catch (error) {
-      toast.error(error.message);
+      if (error.message === "This email is already registered. Please log in.") {
+        toast.error(t("auth.emailAlreadyRegistered"));
+      } else {
+        toast.error(error.message);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -86,11 +96,11 @@ const SignUpPage = () => {
         />
       </div>
 
-      <div className="flex items-center justify-center py-12">
+      <div className="flex items-center justify-center p-6 sm:p-12">
         <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md">
-          <div className="mx-auto grid w-[400px] gap-6">
-            <div className="grid gap-2">
-              <h1 className="font-inter text-4xl font-bold tracking-tight">
+          <div className="mx-auto grid w-full gap-6">
+            <div className="grid gap-2 text-center sm:text-start">
+              <h1 className="font-inter text-3xl font-bold tracking-tight sm:text-4xl">
                 {t("auth.signupTitle")}
               </h1>
               <p className="text-base text-stone-500">
@@ -171,7 +181,7 @@ const SignUpPage = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
+                    className={`absolute inset-y-0 flex items-center text-gray-500 ${t("dir") === "rtl" ? "left-0 pl-3" : "right-0 pr-3"}`}
                   >
                     {showPassword ? <EyeOff /> : <Eye />}
                   </button>
@@ -183,15 +193,15 @@ const SignUpPage = () => {
                 )}
               </div>
 
-              {password && (
+              {password && passwordStrength > 0 && (
                 <div className="flex items-center gap-2">
                   <div
                     className={`h-2 flex-1 rounded-full ${
                       passwordStrength < 2
                         ? "bg-red-500"
                         : passwordStrength < 4
-                        ? "bg-yellow-500"
-                        : "bg-green-500"
+                          ? "bg-yellow-500"
+                          : "bg-green-500"
                     }`}
                     style={{ width: `${(passwordStrength / 4) * 100}%` }}
                   ></div>
@@ -200,13 +210,13 @@ const SignUpPage = () => {
                       passwordStrength < 2
                         ? "text-red-500"
                         : passwordStrength < 4
-                        ? "text-yellow-500"
-                        : "text-green-500"
+                          ? "text-yellow-500"
+                          : "text-green-500"
                     }`}
                   >
-                    {
-                      t(`auth.passwordStrength.${["weak", "medium", "medium", "strong"][passwordStrength - 1] || ""}`)
-                    }
+                    {t(
+                      `auth.passwordStrength.${["weak", "medium", "medium", "strong"][passwordStrength - 1]}`,
+                    )}
                   </p>
                 </div>
               )}
@@ -233,7 +243,7 @@ const SignUpPage = () => {
                   <button
                     type="button"
                     onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500"
+                    className={`absolute inset-y-0 flex items-center text-gray-500 ${t("dir") === "rtl" ? "left-0 pl-3" : "right-0 pr-3"}`}
                   >
                     {showConfirmPassword ? <EyeOff /> : <Eye />}
                   </button>
@@ -252,7 +262,9 @@ const SignUpPage = () => {
                 className="w-full bg-red-500 py-6 text-base font-medium text-white hover:bg-red-600"
                 disabled={isLoading}
               >
-                {isLoading ? t("auth.creatingAccount") : t("auth.createAccount")}
+                {isLoading
+                  ? t("auth.creatingAccount")
+                  : t("auth.createAccount")}
               </Button>
               <Button
                 variant="outline"
@@ -284,4 +296,3 @@ const SignUpPage = () => {
 };
 
 export default SignUpPage;
-

@@ -1,4 +1,5 @@
 {
+  "dir": "ltr",
   "header": {
     "topBar": "Summer Sale For All Swim Suits And Free Express Delivery - OFF 50%!",
     "shopNow": "ShopNow",
@@ -148,7 +149,9 @@
       "strong": "Strong"
     },
     "showPassword": "Show password",
-    "hidePassword": "Hide password"
+    "hidePassword": "Hide password",
+    "invalidCredentials": "Invalid login credentials",
+    "emailAlreadyRegistered": "This email is already registered. Please log in."
   },
   "breadcrumbs": {
     "home": "Home",

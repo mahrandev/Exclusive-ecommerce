@@ -47,7 +47,11 @@ const LoginPage = () => {
       toast.success(t("auth.loginSuccess"));
       navigate("/account");
     } catch (error) {
-      toast.error(error.message);
+      if (error.message === "Invalid login credentials") {
+        toast.error(t("auth.invalidCredentials"));
+      } else {
+        toast.error(error.message);
+      }
     } finally {
       setIsLoading(false);
     }
@@ -63,11 +67,11 @@ const LoginPage = () => {
         />
       </div>
 
-      <div className="flex items-center justify-center py-12">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="mx-auto grid w-[400px] gap-8">
-            <div className="grid gap-2">
-              <h1 className="font-inter text-4xl font-bold tracking-tight">
+      <div className="flex items-center justify-center p-6 sm:p-12">
+        <form onSubmit={handleSubmit(onSubmit)} className="w-full max-w-md">
+          <div className="mx-auto grid gap-8">
+            <div className="grid gap-2 text-center sm:text-start">
+              <h1 className="font-inter text-3xl font-bold tracking-tight sm:text-4xl">
                 {t("auth.loginTitle")}
               </h1>
               <p className="text-muted-foreground">{t("auth.enterDetails")}</p>
@@ -133,7 +137,7 @@ const LoginPage = () => {
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
-                    className="absolute inset-y-0 right-0 flex items-center pr-3 text-gray-500 hover:text-gray-700"
+                    className={`absolute inset-y-0 flex items-center text-gray-500 hover:text-gray-700 ${t("dir") === "rtl" ? "left-0 pl-3" : "right-0 pr-3"}`}
                     aria-label={
                       showPassword
                         ? t("auth.hidePassword")

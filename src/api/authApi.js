@@ -33,7 +33,7 @@ export const signUp = async ({ name, email, password }) => {
     console.error("Error signing up:", error.message);
     // ✨ التحقق من خطأ المستخدم المسجل مسبقًا
     if (error.message.includes("User already registered")) {
-      throw new Error("هذا البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول.");
+      throw new Error("This email is already registered. Please log in.");
     }
     // رمي الأخطاء الأخرى كما هي
     throw new Error(error.message);
