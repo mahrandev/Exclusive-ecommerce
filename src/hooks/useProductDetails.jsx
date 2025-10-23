@@ -1,22 +1,30 @@
 
 import { useState, useMemo, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation } from "@tanstack/react-query";
 import { getProductById } from "@/api/productsApi";
+import { addToWishlist, removeFromWishlist } from "@/api/wishlistApi";
 import { toast } from "sonner";
 import { Star } from "lucide-react";
 import useCartStore from "@/store/cartStore";
+import useAuthStore from "@/store/authStore";
+import useWishlistStore from "@/store/wishlistStore";
 
 export const useProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCartStore();
+  const { user, isAuthenticated } = useAuthStore();
+  const {
+    wishlist,
+    addToWishlistState,
+    removeFromWishlistState,
+  } = useWishlistStore();
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [selectedSize, setSelectedSize] = useState(null);
   const [selectedColor, setSelectedColor] = useState(null);
-  const [isWishlisted, setIsWishlisted] = useState(false);
 
   const {
     isLoading,
@@ -27,6 +35,56 @@ export const useProductDetails = () => {
     queryKey: ["product", id],
     queryFn: () => getProductById(id),
   });
+
+  const isWishlisted = useMemo(
+    () => wishlist.some((item) => item.id === product?.id),
+    [wishlist, product],
+  );
+
+  const { mutate: handleAddToWishlistMutation, isPending: isAdding } =
+    useMutation({
+      mutationFn: () =>
+        addToWishlist({ userId: user?.id, productId: product.id }),
+      onSuccess: () => {
+        addToWishlistState(product);
+        toast.success(`${product.title} has been added to your wishlist.`);
+      },
+      onError: (error) => {
+        toast.error(`Failed to add: ${error.message}`);
+      },
+    });
+
+  const { mutate: handleRemoveFromWishlistMutation, isPending: isRemoving } =
+    useMutation({
+      mutationFn: () =>
+        removeFromWishlist({ userId: user?.id, productId: product.id }),
+      onSuccess: () => {
+        removeFromWishlistState(product.id);
+        toast.success(`${product.title} has been removed from your wishlist.`);
+      },
+      onError: (error) => {
+        toast.error(`Failed to remove: ${error.message}`);
+      },
+    });
+
+  const handleAddToWishlist = () => {
+    if (!isAuthenticated) {
+      toast.error("Please log in to add items to your wishlist.");
+      navigate("/login");
+      return;
+    }
+
+    if (!user?.id) {
+      toast.error("Could not verify user. Please log in again.");
+      return;
+    }
+
+    if (isWishlisted) {
+      handleRemoveFromWishlistMutation();
+    } else {
+      handleAddToWishlistMutation();
+    }
+  };
 
   // Mock data for sizes and colors as they are not in the new API
   const MOCK_SIZES = [
@@ -161,21 +219,6 @@ export const useProductDetails = () => {
     });
   };
 
-  const handleAddToWishlist = () => {
-    setIsWishlisted(!isWishlisted);
-
-    if (!isWishlisted) {
-      toast.success("Added to wishlist", {
-        description: product.title,
-        icon: "❤️",
-      });
-    } else {
-      toast.info("Removed from wishlist", {
-        description: product.title,
-      });
-    }
-  };
-
   const handleBuyNow = () => {
     if (!selectedSize || !selectedColor) {
       toast.error("Missing selection", {
@@ -224,5 +267,7 @@ export const useProductDetails = () => {
     handleBuyNow,
     handleKeyDown,
     stars,
+    isAddingToWishlist: isAdding,
+    isRemovingFromWishlist: isRemoving,
   };
 };

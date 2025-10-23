@@ -13,6 +13,7 @@ import ProductActions from "@/components/product/ProductActions";
 import DeliveryDetails from "@/components/product/DeliveryDetails";
 import ProductReviews from "@/components/product/ProductReviews";
 import ProductSpecifications from "@/components/product/ProductSpecifications";
+import RelatedProducts from "@/components/product/RelatedProducts";
 
 const ProductDetailsPage = () => {
   const { t } = useTranslation();
@@ -37,6 +38,8 @@ const ProductDetailsPage = () => {
     handleBuyNow,
     handleKeyDown,
     stars,
+    isAddingToWishlist,
+    isRemovingFromWishlist,
   } = useProductDetails();
 
   useEffect(() => {
@@ -101,6 +104,8 @@ const ProductDetailsPage = () => {
             handleAddToCart={handleAddToCart}
             handleAddToWishlist={handleAddToWishlist}
             handleBuyNow={handleBuyNow}
+            isAddingToWishlist={isAddingToWishlist}
+            isRemovingFromWishlist={isRemovingFromWishlist}
           />
           <DeliveryDetails />
         </div>
@@ -111,6 +116,8 @@ const ProductDetailsPage = () => {
         <ProductReviews reviews={product.reviews} />
         <ProductSpecifications product={product} />
       </div>
+
+      <RelatedProducts category={product.category} productId={product.id} />
     </div>
   );
 };

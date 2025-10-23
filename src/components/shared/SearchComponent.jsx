@@ -102,7 +102,7 @@ const SearchComponent = ({ onResultClick }) => {
                         className="flex items-start gap-4 p-3 hover:bg-gray-100 transition-colors"
                         onClick={handleResultClick}
                       >
-                        <img src={product.img} alt={product.title} className="w-16 h-16 object-cover rounded-md" />
+                        <img src={product.thumbnail} alt={product.title} className="w-16 h-16 object-cover rounded-md" />
                         <div className="flex-1">
                           <p className="font-medium text-sm text-primary-black mb-1">{product.title}</p>
                           <div className="flex items-center mb-1">
@@ -143,7 +143,7 @@ const SearchComponent = ({ onResultClick }) => {
                         className="flex items-start gap-4 p-3 hover:bg-gray-100 transition-colors"
                         onClick={handleResultClick}
                       >
-                        <img src={product.img} alt={product.title} className="w-16 h-16 object-cover rounded-md" />
+                        <img src={product.thumbnail} alt={product.title} className="w-16 h-16 object-cover rounded-md" />
                         <div className="flex-1">
                           <p className="font-medium text-sm text-primary-black mb-1">{product.title}</p>
                           <div className="flex items-center mb-1">

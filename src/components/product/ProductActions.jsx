@@ -13,6 +13,8 @@ const ProductActions = ({
   handleAddToCart,
   handleAddToWishlist,
   handleBuyNow,
+  isAddingToWishlist,
+  isRemovingFromWishlist,
 }) => {
   const { t } = useTranslation();
 
@@ -112,6 +114,7 @@ const ProductActions = ({
         {/* Wishlist Button */}
         <button
           onClick={handleAddToWishlist}
+          disabled={isAddingToWishlist || isRemovingFromWishlist}
           className={cn(
             "flex h-11 w-11 items-center justify-center rounded-md border-2 transition-all focus:outline-none",
             isWishlisted
