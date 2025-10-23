@@ -1,56 +1,61 @@
-import { supabase } from "@/lib/supabaseClient";
+// Base URL for the dummyJSON API
+const API_BASE_URL = "https://dummyjson.com/products";
 
+/**
+ * Fetches products, optionally filtering by category.
+ * @param {{ category?: string }} options - Filtering options.
+ * @returns {Promise<Array>} A promise that resolves to an array of products.
+ */
 export const getProducts = async ({ category } = {}) => {
-  let query = supabase.from("products").select();
+  const url = category && category !== "All"
+    ? `${API_BASE_URL}/category/${category}`
+    : `${API_BASE_URL}?limit=0`; // Fetch all products by default
 
-  if (category && category !== "All") {
-    if (Array.isArray(category)) {
-      query = query.in("category", category);
-    } else {
-      query = query.eq("category", category);
-    }
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error("Failed to fetch products");
   }
-
-  const { data, error } = await query;
-
-  if (error) {
-    throw new Error(error.message);
-  }
-  return data;
+  const data = await response.json();
+  return data.products;
 };
 
+/**
+ * Fetches all available product categories.
+ * @returns {Promise<Array>} A promise that resolves to an array of category names.
+ */
 export const getCategories = async () => {
-  const { data, error } = await supabase.from("products").select("category");
-
-  if (error) {
-    throw new Error(error.message);
+  const response = await fetch(`${API_BASE_URL}/categories`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch categories");
   }
-
-  const categories = [...new Set(data.map((product) => product.category))];
-  return categories;
+  const data = await response.json();
+  return data;
 };
 
+/**
+ * Fetches a single product by its ID.
+ * @param {string | number} id - The ID of the product to fetch.
+ * @returns {Promise<Object>} A promise that resolves to the product object.
+ */
 export const getProductById = async (id) => {
-  const { data, error } = await supabase
-    .from("products")
-    .select()
-    .eq("id", id)
-    .single();
-
-  if (error) {
-    throw new Error(error.message);
+  const response = await fetch(`${API_BASE_URL}/${id}`);
+  if (!response.ok) {
+    throw new Error("Failed to fetch product");
   }
+  const data = await response.json();
   return data;
 };
 
+/**
+ * Searches for products by a search query.
+ * @param {string} name - The search query.
+ * @returns {Promise<Array>} A promise that resolves to an array of matching products.
+ */
 export const searchProductsByName = async (name) => {
-  const { data, error } = await supabase
-    .from('products')
-    .select('*')
-    .ilike('title', `%${name}%`);
-
-  if (error) {
-    throw new Error(error.message);
+  const response = await fetch(`${API_BASE_URL}/search?q=${name}`);
+  if (!response.ok) {
+    throw new Error("Failed to search products");
   }
-  return data;
+  const data = await response.json();
+  return data.products;
 };

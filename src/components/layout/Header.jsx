@@ -18,7 +18,7 @@ const Header = () => {
   };
 
   return (
-    <header className="bg-white border-b border-gray-200">
+    <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
       {/* 1. Top bar - Full width */}
       <div className="bg-primary-black text-primary-white py-1">
         <div className="container mx-auto px-4 flex justify-center items-center py-2 text-xs md:text-sm">
@@ -51,12 +51,12 @@ const Header = () => {
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-4 lg:space-x-8">
+          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
             <NavLink
               to="/"
               className={({ isActive }) =>
-                `hover:text-primary-red transition-colors ${
-                  isActive ? "border-b-2 border-primary-black font-medium" : ""
+                `px-3 py-2 rounded-md transition-colors hover:bg-gray-100 ${
+                  isActive ? "bg-red-100 text-primary-red font-medium" : ""
                 }`
               }
             >
@@ -65,8 +65,8 @@ const Header = () => {
             <NavLink
               to="/contact"
               className={({ isActive }) =>
-                `hover:text-primary-red transition-colors ${
-                  isActive ? "border-b-2 border-primary-black font-medium" : ""
+                `px-3 py-2 rounded-md transition-colors hover:bg-gray-100 ${
+                  isActive ? "bg-red-100 text-primary-red font-medium" : ""
                 }`
               }
             >
@@ -75,8 +75,8 @@ const Header = () => {
             <NavLink
               to="/about"
               className={({ isActive }) =>
-                `hover:text-primary-red transition-colors ${
-                  isActive ? "border-b-2 border-primary-black font-medium" : ""
+                `px-3 py-2 rounded-md transition-colors hover:bg-gray-100 ${
+                  isActive ? "bg-red-100 text-primary-red font-medium" : ""
                 }`
               }
             >
@@ -86,9 +86,9 @@ const Header = () => {
               <NavLink
                 to="/signup"
                 className={({ isActive }) =>
-                  `hover:text-primary-red transition-colors ${
+                  `px-3 py-2 rounded-md transition-colors hover:bg-gray-100 ${
                     isActive
-                      ? "border-b-2 border-primary-black font-medium"
+                      ? "bg-red-100 text-primary-red font-medium"
                       : ""
                   }`
                 }
