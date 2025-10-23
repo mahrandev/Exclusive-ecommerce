@@ -1,19 +1,16 @@
 
+
+
 import { useState } from "react";
 import { useProducts } from "@/hooks/useProducts";
-import { categoryMapping } from "@/data/categoryMapping.js";
-import { useSlider } from "@/hooks/useSlider"; // Import the generic slider hook
+import { useSlider } from "@/hooks/useSlider";
 import {
-  Shirt,
-  User,
-  Smartphone,
-  Home,
-  Glasses,
-  Bike,
-  Laptop,
-  ShoppingBasket,
   Heart,
-  Gamepad2,
+  Sparkles,
+  Sofa,
+  ShoppingBasket,
+  Home,
+  CookingPot,
 } from "lucide-react";
 
 export const useHomePageLogic = () => {
@@ -25,37 +22,48 @@ export const useHomePageLogic = () => {
     error: productsError,
   } = useProducts(selectedCategory);
 
-  const mainCategories = Object.keys(categoryMapping);
+  const sidebarCategories = [
+    { name: "Woman's Fashion", slug: "womens-dresses" },
+    { name: "Men's Fashion", slug: "mens-shirts" },
+    { name: "Mobiles", slug: "smartphones" },
+    { name: "Home & Lifestyle", slug: "home-decoration" },
+    { name: "Glasses", slug: "sunglasses" },
+    { name: "Sports & Outdoor", slug: "sports-accessories" },
+    { name: "Laptops & Computers", slug: "laptops" },
+    { name: "Groceries & Pets", slug: "groceries" },
+    { name: "Health & Beauty", slug: "beauty" },
+  ];
 
-  // Reusable slider logic for all sections
-  const categorySlider = useSlider({ totalItems: mainCategories.length, visibleItems: 6 });
-  const flashSalesSlider = useSlider({ totalItems: products?.length || 0, visibleItems: 4 });
-  const exploreProductsSlider = useSlider({ totalItems: products?.length || 0, visibleItems: 4 });
+  const mainCategories = [
+    { name: "Beauty", slug: "beauty" },
+    { name: "Fragrances", slug: "fragrances" },
+    { name: "Furniture", slug: "furniture" },
+    { name: "Groceries", slug: "groceries" },
+    { name: "Home Decoration", slug: "home-decoration" },
+    { name: "Kitchen Accessories", slug: "kitchen-accessories" },
+  ];
 
   const iconMapping = {
-    "Woman's Fashion": Shirt,
-    "Men's Fashion": User,
-    Mobiles: Smartphone,
-    "Home & Lifestyle": Home,
-    Glasses: Glasses,
-    "Sports & Outdoor": Bike,
-    "Laptops & Computers": Laptop,
-    "Groceries & Pets": ShoppingBasket,
-    "Health & Beauty": Heart,
-    Gaming: Gamepad2,
+    beauty: Heart,
+    fragrances: Sparkles,
+    furniture: Sofa,
+    groceries: ShoppingBasket,
+    "home-decoration": Home,
+    "kitchen-accessories": CookingPot,
   };
 
-  const sidebarCategories = [
-    "Woman's Fashion",
-    "Men's Fashion",
-    "Mobiles",
-    "Home & Lifestyle",
-    "Glasses",
-    "Sports & Outdoor",
-    "Laptops & Computers",
-    "Groceries & Pets",
-    "Health & Beauty",
-  ];
+  const categorySlider = useSlider({
+    totalItems: mainCategories.length,
+    visibleItems: 6,
+  });
+  const flashSalesSlider = useSlider({
+    totalItems: products?.length || 0,
+    visibleItems: 4,
+  });
+  const exploreProductsSlider = useSlider({
+    totalItems: products?.length || 0,
+    visibleItems: 4,
+  });
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
@@ -70,9 +78,10 @@ export const useHomePageLogic = () => {
     sidebarCategories,
     mainCategories,
     handleCategorySelect,
-    categoryMapping,
     categorySlider,
     flashSalesSlider,
     exploreProductsSlider,
+    isLoadingCategories: false, // Since we are not fetching categories anymore
   };
 };
+

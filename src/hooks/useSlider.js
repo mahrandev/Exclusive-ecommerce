@@ -1,5 +1,5 @@
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 /**
  * A custom hook for managing slider/carousel logic.
@@ -8,6 +8,10 @@ import { useState } from "react";
  */
 export const useSlider = ({ totalItems, visibleItems }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    setCurrentIndex(0);
+  }, [totalItems]);
 
   const hasPrev = currentIndex > 0;
   const hasNext = currentIndex < totalItems - visibleItems;

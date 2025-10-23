@@ -19,17 +19,7 @@ import iphone from "@/assets/img/iphone.avif";
 import { useCountdown } from "@/hooks/useCountdown";
 import Category from "@/components/home/Category";
 
-const categoryTranslationKeys = {
-  "Woman's Fashion": "categories.womansFashion",
-  "Men's Fashion": "categories.mensFashion",
-  Mobiles: "categories.mobiles",
-  "Home & Lifestyle": "categories.homeLifestyle",
-  Glasses: "categories.glasses",
-  "Sports & Outdoor": "categories.sportsOutdoor",
-  "Laptops & Computers": "categories.computers",
-  "Groceries & Pets": "categories.groceriesPets",
-  "Health & Beauty": "categories.healthBeauty",
-};
+
 
 const Countdown = ({ targetDate }) => {
   const { t } = useTranslation();
@@ -90,16 +80,12 @@ const HomePage = () => {
     sidebarCategories,
     mainCategories,
     handleCategorySelect,
-    categoryMapping,
     categorySlider,
     flashSalesSlider,
     exploreProductsSlider,
   } = useHomePageLogic();
 
-  const getTranslatedCategory = (category) => {
-    const key = categoryTranslationKeys[category];
-    return key ? t(key) : category;
-  };
+  
 
   const THREE_DAYS_IN_MS = 3 * 24 * 60 * 60 * 1000;
   const NOW_IN_MS = new Date().getTime();
@@ -115,18 +101,18 @@ const HomePage = () => {
             <aside className="hidden w-56 border-r pr-8 md:block">
               <nav className="space-y-3">
                 {sidebarCategories.map((category) => {
-                  const Icon = iconMapping[category];
+                  const Icon = iconMapping[category.slug];
                   const hasSubmenu =
-                    category === "Woman's Fashion" ||
-                    category === "Men's Fashion";
+                    category.name === "Woman's Fashion" ||
+                    category.name === "Men's Fashion";
 
                   return (
                     <Link
-                      key={category}
-                      to={`/products/${encodeURIComponent(category)}`}
+                      key={category.slug}
+                      to={`/products/${category.slug}`}
                       className="group flex w-full items-center justify-between text-right text-base text-gray-800 transition-colors hover:text-black"
                     >
-                      <span>{getTranslatedCategory(category)}</span>
+                      <span>{category.name}</span>
                       {hasSubmenu && (
                         <>
                           {isRtl ? (
@@ -162,7 +148,7 @@ const HomePage = () => {
                   ></h2>
 
                   <Link
-                    to="/product/116"
+                    to="/product/123"
                     className="flex w-fit items-center gap-2 border-b border-white pb-1 text-base font-medium transition-all hover:gap-3"
                   >
                     {t("homePage.shopNow")}
@@ -268,19 +254,16 @@ const HomePage = () => {
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 sm:gap-6">
           {mainCategories
             .slice(categorySlider.currentIndex, categorySlider.currentIndex + 6)
-            .map((category, index) => {
-              const Icon = iconMapping[category];
-              const isSelected =
-                JSON.stringify(selectedCategory) ===
-                JSON.stringify(categoryMapping[category]);
+            .map((category) => {
+              const Icon = iconMapping[category.slug];
+              const isSelected = selectedCategory === category.slug;
 
               return (
                 <Category
-                  key={index}
+                  key={category.slug}
                   category={category}
                   isSelected={isSelected}
                   onSelectCategory={handleCategorySelect}
-                  getTranslatedCategory={getTranslatedCategory}
                   Icon={Icon}
                 />
               );

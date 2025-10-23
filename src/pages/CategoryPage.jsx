@@ -1,46 +1,38 @@
-import { useParams } from "react-router-dom";
+
+import { Link, useParams } from "react-router-dom";
 import { useProducts } from "@/hooks/useProducts";
-import { categoryMapping } from "@/data/categoryMapping";
 import ProductCard from "@/components/shared/ProductCard";
 import ProductCardSkeleton from "@/components/shared/ProductCardSkeleton";
 import { useTranslation } from "react-i18next";
-
-const categoryTranslationKeys = {
-  "Woman's Fashion": "categories.womansFashion",
-  "Men's Fashion": "categories.mensFashion",
-  Mobiles: "categories.mobiles",
-  "Home & Lifestyle": "categories.homeLifestyle",
-  Glasses: "categories.glasses",
-  "Sports & Outdoor": "categories.sportsOutdoor",
-  "Laptops & Computers": "categories.computers",
-  "Groceries & Pets": "categories.groceriesPets",
-  "Health & Beauty": "categories.healthBeauty",
-};
 
 const CategoryPage = () => {
   const { categoryName } = useParams();
   const { t } = useTranslation();
 
+  // The categoryName from the URL is the slug we need to fetch products.
   const decodedCategoryName = decodeURIComponent(categoryName);
-
-  const subCategories = categoryMapping[decodedCategoryName] || [];
 
   const {
     products,
     isLoading: isLoadingProducts,
     error: productsError,
-  } = useProducts(subCategories);
+  } = useProducts(decodedCategoryName);
 
-  const getTranslatedCategory = (category) => {
-    const key = categoryTranslationKeys[category];
-    return key ? t(key) : category;
-  };
+  // Capitalize the first letter for a cleaner title
+  const pageTitle = decodedCategoryName.charAt(0).toUpperCase() + decodedCategoryName.slice(1);
 
   return (
     <>
       <main className="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
+        <div className="mb-4 text-sm text-gray-600">
+          <Link to="/" className="transition-colors hover:text-gray-900">
+            {t("breadcrumbs.home")}
+          </Link>
+          <span className="mx-2">/</span>
+          <span className="text-gray-900">{pageTitle}</span>
+        </div>
         <h1 className="mb-8 text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">
-          {getTranslatedCategory(decodedCategoryName)}
+          {pageTitle}
         </h1>
 
         {isLoadingProducts ? (
@@ -68,3 +60,4 @@ const CategoryPage = () => {
 };
 
 export default CategoryPage;
+
