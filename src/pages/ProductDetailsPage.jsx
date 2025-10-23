@@ -11,6 +11,8 @@ import ProductInfo from "@/components/product/ProductInfo";
 import ProductOptions from "@/components/product/ProductOptions";
 import ProductActions from "@/components/product/ProductActions";
 import DeliveryDetails from "@/components/product/DeliveryDetails";
+import ProductReviews from "@/components/product/ProductReviews";
+import ProductSpecifications from "@/components/product/ProductSpecifications";
 
 const ProductDetailsPage = () => {
   const { t } = useTranslation();
@@ -69,7 +71,8 @@ const ProductDetailsPage = () => {
     <div className="container mx-auto max-w-7xl px-4 py-6 md:py-8">
       <Breadcrumbs product={product} />
 
-      <div className="grid grid-cols-1 items-start gap-6 md:gap-8 lg:grid-cols-5">
+      {/* Main Product Section */}
+      <div className="mb-12 grid grid-cols-1 items-start gap-6 md:gap-8 lg:grid-cols-5">
         <ImageGallery
           product={product}
           productData={productData}
@@ -101,6 +104,12 @@ const ProductDetailsPage = () => {
           />
           <DeliveryDetails />
         </div>
+      </div>
+
+      {/* Reviews & Specifications Sections */}
+      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
+        <ProductReviews reviews={product.reviews} />
+        <ProductSpecifications product={product} />
       </div>
     </div>
   );
