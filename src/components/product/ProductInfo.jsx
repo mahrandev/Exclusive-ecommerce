@@ -20,7 +20,7 @@ const ProductInfo = ({ product, stars }) => {
           {stars}
         </div>
         <span className="text-gray-800">
-          ({product.reviewsCount} {t("productDetails.reviews")})
+          ({product.reviews.length} {t("productDetails.reviews")})
         </span>
         <span className="text-gray-800" aria-hidden="true">
           |
@@ -28,10 +28,10 @@ const ProductInfo = ({ product, stars }) => {
         <span
           className={cn(
             "font-medium",
-            product.inStock ? "text-green-600" : "text-red-600",
+            product.stock > 0 ? "text-green-600" : "text-red-600",
           )}
         >
-          {product.inStock
+          {product.stock > 0
             ? t("productDetails.inStock")
             : t("productDetails.outOfStock")}
         </span>

@@ -74,7 +74,7 @@ const CartPage = () => {
               {/* Product Info */}
               <div className="flex items-center gap-4">
                 <img
-                  src={item.img}
+                  src={item.thumbnail}
                   alt={item.title}
                   className="h-14 w-14 object-contain"
                 />
@@ -147,7 +147,7 @@ const CartPage = () => {
             {/* Product Info */}
             <div className="mb-4 flex gap-4">
               <img
-                src={item.img}
+                src={item.thumbnail}
                 alt={item.title}
                 className="h-20 w-20 flex-shrink-0 object-contain"
               />

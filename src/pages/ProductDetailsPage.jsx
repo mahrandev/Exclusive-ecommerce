@@ -67,7 +67,7 @@ const ProductDetailsPage = () => {
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-6 md:py-8">
-      <Breadcrumbs />
+      <Breadcrumbs product={product} />
 
       <div className="grid grid-cols-1 items-start gap-6 md:gap-8 lg:grid-cols-5">
         <ImageGallery

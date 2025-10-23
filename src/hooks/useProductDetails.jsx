@@ -7,17 +7,6 @@ import { toast } from "sonner";
 import { Star } from "lucide-react";
 import useCartStore from "@/store/cartStore";
 
-// Helper function لمعالجة JSON بشكل آمن
-const safeJsonParse = (data, fallback = []) => {
-  if (Array.isArray(data)) return data;
-  try {
-    return JSON.parse(data || JSON.stringify(fallback));
-  } catch (error) {
-    console.error("JSON Parse Error:", error);
-    return fallback;
-  }
-};
-
 export const useProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -39,31 +28,52 @@ export const useProductDetails = () => {
     queryFn: () => getProductById(id),
   });
 
-  // معالجة البيانات بشكل آمن
+  // Mock data for sizes and colors as they are not in the new API
+  const MOCK_SIZES = [
+    { name: "S", available: true },
+    { name: "M", available: true },
+    { name: "L", available: false },
+    { name: "XL", available: true },
+  ];
+
+  const MOCK_COLORS = [
+    { name: "Red", value: "#FF0000" },
+    { name: "Blue", value: "#0000FF" },
+  ];
+
+  // Process data and include mock data
   const productData = useMemo(() => {
     if (!product) return null;
 
     return {
-      images: safeJsonParse(product.images),
-      sizes: safeJsonParse(product.sizes),
-      colors: safeJsonParse(product.colors),
+      images: product.images || [],
+      sizes: MOCK_SIZES,
+      colors: MOCK_COLORS,
     };
   }, [product]);
 
-  // تعيين القيم الافتراضية عند تحميل المنتج
+  // Set default values when product loads
   useEffect(() => {
     if (productData) {
-      if (!selectedImage && productData.images[0]) {
+      // Set default image if not already set
+      if (!selectedImage && productData.images && productData.images.length > 0) {
         setSelectedImage(productData.images[0]);
       }
-      if (!selectedColor && productData.colors[0]) {
+      
+      // Set default color if not already set
+      if (!selectedColor && productData.colors && productData.colors.length > 0) {
         setSelectedColor(productData.colors[0].name);
       }
-      if (!selectedSize && productData.sizes[0]?.available) {
-        setSelectedSize(productData.sizes[0].name);
+
+      // Set default size to the first available one if not already set
+      if (!selectedSize && productData.sizes && productData.sizes.length > 0) {
+        const firstAvailableSize = productData.sizes.find(size => size.available);
+        if (firstAvailableSize) {
+          setSelectedSize(firstAvailableSize.name);
+        }
       }
     }
-  }, [productData, selectedImage, selectedColor, selectedSize]);
+  }, [productData]);
 
   // Memoize stars rendering
   const stars = useMemo(() => {

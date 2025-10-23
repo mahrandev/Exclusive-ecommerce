@@ -97,14 +97,14 @@ const ProductActions = ({
         {/* Buy Now Button */}
         <button
           onClick={handleBuyNow}
-          disabled={!product.inStock || !selectedSize || !selectedColor}
+          disabled={product.stock <= 0 || !selectedSize || !selectedColor}
           className={cn(
             "focus:ring-primary-red h-11 flex-1 rounded-md text-base font-medium transition-all focus:ring-2 focus:ring-offset-2 focus:outline-none md:text-lg",
-            !product.inStock || !selectedSize || !selectedColor
+            product.stock <= 0 || !selectedSize || !selectedColor
               ? "cursor-not-allowed bg-gray-300 text-gray-500"
               : "bg-primary-red text-white shadow-sm hover:bg-red-600 hover:shadow-md active:bg-red-700",
           )}
-          aria-disabled={!product.inStock || !selectedSize || !selectedColor}
+          aria-disabled={product.stock <= 0 || !selectedSize || !selectedColor}
         >
           {t("productDetails.buyNow")}
         </button>
@@ -138,14 +138,14 @@ const ProductActions = ({
       {/* Add to Cart Button */}
       <button
         onClick={handleAddToCart}
-        disabled={!product.inStock || !selectedSize || !selectedColor}
+        disabled={product.stock <= 0 || !selectedSize || !selectedColor}
         className={cn(
           "mb-4 flex h-11 w-full items-center justify-center gap-2 rounded-md border-2 font-medium transition-all focus:outline-none",
-          !product.inStock || !selectedSize || !selectedColor
+          product.stock <= 0 || !selectedSize || !selectedColor
             ? "cursor-not-allowed border-gray-300 bg-gray-100 text-gray-400"
             : "border-primary-red text-primary-red bg-white shadow-sm hover:bg-red-50 hover:shadow active:bg-red-100",
         )}
-        aria-disabled={!product.inStock || !selectedSize || !selectedColor}
+        aria-disabled={product.stock <= 0 || !selectedSize || !selectedColor}
       >
         <ShoppingCart size={20} />
         {t("productDetails.addToCart")}

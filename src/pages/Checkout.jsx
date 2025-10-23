@@ -255,7 +255,7 @@ const CheckoutPage = () => {
               <div key={item.id} className="flex items-center justify-between">
                 <div className="flex items-center gap-4">
                   <img
-                    src={item.img}
+                    src={item.thumbnail}
                     alt={item.title}
                     className="h-14 w-14 object-contain"
                   />

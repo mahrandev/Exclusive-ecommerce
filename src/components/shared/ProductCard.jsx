@@ -72,19 +72,24 @@ const ProductCard = ({ product }) => {
     toast.success(`${product.title} has been added to your cart.`);
   };
 
+  // Calculate old price if discount is available
+  const oldPrice = product.discountPercentage > 0 
+    ? (product.price / (1 - product.discountPercentage / 100))
+    : null;
+
   return (
     <Link to={`/product/${product.id}`} className="block">
       <div className="group font-poppins w-full max-w-sm overflow-hidden rounded-lg">
         <div className="bg-secondary-gray relative h-60 w-full overflow-hidden p-4">
           <img
             className="h-full w-full object-contain transition-transform duration-500 ease-in-out group-hover:scale-110"
-            src={product.img}
+            src={product.thumbnail} // Changed from product.img
             alt={product.title}
           />
 
-          {product.discount && (
+          {product.discountPercentage > 0 && (
             <span className="absolute top-3 left-3 rounded-md bg-red-500 px-2 py-1 text-xs font-semibold text-white">
-              {product.discount}
+              -{Math.round(product.discountPercentage)}%
             </span>
           )}
 
@@ -132,9 +137,9 @@ const ProductCard = ({ product }) => {
             <p className="text-md font-bold text-red-500">
               ${product.price.toFixed(2)}
             </p>
-            {product.oldPrice && (
+            {oldPrice && (
               <p className="text-sm font-medium text-gray-600 line-through">
-                ${product.oldPrice.toFixed(2)}
+                ${oldPrice.toFixed(2)}
               </p>
             )}
           </div>
@@ -152,7 +157,7 @@ const ProductCard = ({ product }) => {
               ))}
             </div>
             <span className="ml-2 text-xs font-semibold text-gray-600">
-              ({product.reviewsCount})
+              ({product.reviews.length})
             </span>
           </div>
         </div>

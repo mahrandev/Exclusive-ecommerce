@@ -1,7 +1,10 @@
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
-const Breadcrumbs = ({ containerClassName = "mb-12 text-sm text-gray-600 md:mb-16" }) => {
+const Breadcrumbs = ({
+  product,
+  containerClassName = "mb-12 text-sm text-gray-600 md:mb-16",
+}) => {
   const { t } = useTranslation();
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
@@ -27,24 +30,45 @@ const Breadcrumbs = ({ containerClassName = "mb-12 text-sm text-gray-600 md:mb-1
       <Link to="/" className="transition-colors hover:text-gray-900">
         {t("breadcrumbs.home")}
       </Link>
-      {pathnames.map((name, index) => {
-        const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
-        const isLast = index === pathnames.length - 1;
-        const displayName = breadcrumbNameMap[name] || name.replace(/-/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+      {product ? (
+        <>
+          <span className="mx-2">/</span>
+          <Link
+            to={`/category/${product.category}`}
+            className="capitalize transition-colors hover:text-gray-900"
+          >
+            {product.category}
+          </Link>
+          <span className="mx-2">/</span>
+          <span className="text-gray-900">{product.title}</span>
+        </>
+      ) : (
+        pathnames.map((name, index) => {
+          const routeTo = `/${pathnames.slice(0, index + 1).join("/")}`;
+          const isLast = index === pathnames.length - 1;
+          const displayName =
+            breadcrumbNameMap[name] ||
+            name
+              .replace(/-/g, " ")
+              .replace(/\b\w/g, (l) => l.toUpperCase());
 
-        return (
-          <span key={name}>
-            <span className="mx-2">/</span>
-            {isLast ? (
-              <span className="text-gray-900">{displayName}</span>
-            ) : (
-              <Link to={routeTo} className="transition-colors hover:text-gray-900">
-                {displayName}
-              </Link>
-            )}
-          </span>
-        );
-      })}
+          return (
+            <span key={name}>
+              <span className="mx-2">/</span>
+              {isLast ? (
+                <span className="text-gray-900">{displayName}</span>
+              ) : (
+                <Link
+                  to={routeTo}
+                  className="transition-colors hover:text-gray-900"
+                >
+                  {displayName}
+                </Link>
+              )}
+            </span>
+          );
+        })
+      )}
     </div>
   );
 };
