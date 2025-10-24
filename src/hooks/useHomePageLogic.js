@@ -2,6 +2,7 @@
 
 
 import { useState } from "react";
+import { useTranslation } from "react-i18next";
 import { useProducts } from "@/hooks/useProducts";
 import { useSlider } from "@/hooks/useSlider";
 import {
@@ -11,9 +12,16 @@ import {
   ShoppingBasket,
   Home,
   CookingPot,
+  Shirt,
+  Smartphone,
+  Glasses,
+  Dumbbell,
+  Laptop,
 } from "lucide-react";
 
 export const useHomePageLogic = () => {
+  const { t } = useTranslation();
+
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const {
@@ -23,32 +31,38 @@ export const useHomePageLogic = () => {
   } = useProducts(selectedCategory);
 
   const sidebarCategories = [
-    { name: "Woman's Fashion", slug: "womens-dresses" },
-    { name: "Men's Fashion", slug: "mens-shirts" },
-    { name: "Mobiles", slug: "smartphones" },
-    { name: "Home & Lifestyle", slug: "home-decoration" },
-    { name: "Glasses", slug: "sunglasses" },
-    { name: "Sports & Outdoor", slug: "sports-accessories" },
-    { name: "Laptops & Computers", slug: "laptops" },
-    { name: "Groceries & Pets", slug: "groceries" },
-    { name: "Health & Beauty", slug: "beauty" },
+    { name: "category.womens-dresses", slug: "womens-dresses" },
+    { name: "category.mens-shirts", slug: "mens-shirts" },
+    { name: "category.smartphones", slug: "smartphones" },
+    { name: "category.home-decoration", slug: "home-decoration" },
+    { name: "category.sunglasses", slug: "sunglasses" },
+    { name: "category.sports-accessories", slug: "sports-accessories" },
+    { name: "category.laptops", slug: "laptops" },
+    { name: "category.groceries", slug: "groceries" },
+    { name: "category.beauty", slug: "beauty" },
   ];
 
   const mainCategories = [
-    { name: "Beauty", slug: "beauty" },
-    { name: "Fragrances", slug: "fragrances" },
-    { name: "Furniture", slug: "furniture" },
-    { name: "Groceries", slug: "groceries" },
-    { name: "Home Decoration", slug: "home-decoration" },
-    { name: "Kitchen Accessories", slug: "kitchen-accessories" },
+    { name: "category.beauty", slug: "beauty" },
+    { name: "category.fragrances", slug: "fragrances" },
+    { name: "category.furniture", slug: "furniture" },
+    { name: "category.groceries", slug: "groceries" },
+    { name: "category.home-decoration", slug: "home-decoration" },
+    { name: "category.kitchen-accessories", slug: "kitchen-accessories" },
   ];
 
   const iconMapping = {
+    "womens-dresses": Shirt,
+    "mens-shirts": Shirt,
+    smartphones: Smartphone,
+    "home-decoration": Home,
+    sunglasses: Glasses,
+    "sports-accessories": Dumbbell,
+    laptops: Laptop,
+    groceries: ShoppingBasket,
     beauty: Heart,
     fragrances: Sparkles,
     furniture: Sofa,
-    groceries: ShoppingBasket,
-    "home-decoration": Home,
     "kitchen-accessories": CookingPot,
   };
 

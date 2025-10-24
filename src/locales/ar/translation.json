@@ -61,7 +61,15 @@
     "customerService": "خدمة عملاء 24/7",
     "customerServiceText": "دعم عملاء ودود على مدار الساعة",
     "moneyBack": "ضمان استعادة الأموال",
-    "moneyBackText": "نعيد الأموال خلال 30 يومًا"
+    "moneyBackText": "نعيد الأموال خلال 30 يومًا",
+    "iphone14AltText": "آيفون 14",
+    "jblSpeakerAltText": "مكبر صوت JBL",
+    "previousFlashSales": "منتجات التخفيضات السابقة",
+    "nextFlashSales": "منتجات التخفيضات التالية",
+    "previousCategories": "الفئات السابقة",
+    "nextCategories": "الفئات التالية",
+    "previousProducts": "المنتجات السابقة",
+    "nextProducts": "المنتجات التالية"
   },
   "categorySidebar": {
     "categories": "الفئات",
@@ -106,16 +114,19 @@
     "marketingHead": "رئيس قسم التسويق",
     "founderChairman": "المؤسس ورئيس مجلس الإدارة"
   },
-  "categories": {
-    "womansFashion": "أزياء نسائية",
-    "mensFashion": "أزياء رجالية",
-    "mobiles": "هواتف محمولة",
-    "homeLifestyle": "المنزل ونمط الحياة",
-    "glasses": "نظارات",
-    "sportsOutdoor": "رياضة وأنشطة خارجية",
-    "computers": "أجهزة كمبيوتر محمولة وحواسيب",
-    "groceriesPets": "بقالة ومستلزمات الحيوانات الأليفة",
-    "healthBeauty": "الصحة والجمال"
+  "category": {
+    "womens-dresses": "أزياء نسائية",
+    "mens-shirts": "أزياء رجالية",
+    "smartphones": "هواتف محمولة",
+    "home-decoration": "المنزل والديكور",
+    "sunglasses": "نظارات شمسية",
+    "sports-accessories": "مستلزمات رياضية",
+    "laptops": "أجهزة كمبيوتر محمولة",
+    "groceries": "بقالة",
+    "beauty": "الجمال",
+    "fragrances": "عطور",
+    "furniture": "أثاث",
+    "kitchen-accessories": "أدوات المطبخ"
   },
   "productDetails": {
     "inStock": "متوفر في المخزون",
@@ -261,9 +272,31 @@
     "enterDetails": "أدخل تفاصيلك أدناه",
     "name": "الاسم",
     "email": "البريد الإلكتروني",
+    "emailPlaceholder": "أدخل عنوان بريدك الإلكتروني",
     "password": "كلمة المرور",
     "confirmPassword": "تأكيد كلمة المرور",
     "forgotPassword": "نسيت كلمة المرور؟",
+    "forgotPasswordTitle": "هل نسيت كلمة المرور؟",
+    "forgotPasswordDesc": "أدخل عنوان بريدك الإلكتروني وسنرسل لك رابطًا لإعادة تعيين كلمة المرور.",
+    "sendResetLink": "إرسال رابط إعادة التعيين",
+    "sendingResetLink": "جارٍ الإرسال...",
+    "resetEmailSent": "تم إرسال بريد إعادة التعيين!",
+    "checkEmailForReset": "يرجى التحقق من بريدك الإلكتروني للحصول على رابط إعادة تعيين كلمة المرور.",
+    "resetEmailFailed": "فشل إرسال بريد إعادة التعيين",
+    "checkYourEmail": "تحقق من بريدك الإلكتروني",
+    "resetEmailSentTo": "لقد أرسلنا رابط إعادة تعيين كلمة المرور إلى:",
+    "didntReceiveEmail": "لم تستلم البريد الإلكتروني؟",
+    "resendEmail": "إعادة الإرسال",
+    "backToLogin": "العودة إلى تسجيل الدخول",
+    "resetPasswordTitle": "إعادة تعيين كلمة المرور",
+    "resetPasswordDesc": "أدخل كلمة المرور الجديدة أدناه.",
+    "newPassword": "كلمة المرور الجديدة",
+    "confirmNewPassword": "تأكيد كلمة المرور الجديدة",
+    "resetPassword": "إعادة تعيين كلمة المرور",
+    "resettingPassword": "جارٍ إعادة التعيين...",
+    "passwordResetSuccess": "تمت إعادة تعيين كلمة المرور بنجاح!",
+    "passwordResetFailed": "فشل في إعادة تعيين كلمة المرور",
+    "invalidResetLink": "رابط إعادة تعيين غير صالح أو منتهي الصلاحية",
     "noAccount": "ليس لديك حساب؟",
     "haveAccount": "لديك حساب بالفعل؟",
     "signupWithGoogle": "التسجيل باستخدام Google",
@@ -274,6 +307,7 @@
     "signupSuccess": "تم إنشاء الحساب بنجاح!",
     "checkEmail": "يرجى التحقق من بريدك الإلكتروني للتحقق من حسابك",
     "invalidEmail": "عنوان بريد إلكتروني غير صالح",
+    "emailRequired": "البريد الإلكتروني مطلوب",
     "passwordMinLength": "يجب أن تحتوي كلمة المرور على {{length}} أحرف على الأقل",
     "passwordLowercase": "يجب أن تحتوي كلمة المرور على حرف صغير",
     "passwordUppercase": "يجب أن تحتوي كلمة المرور على حرف كبير",
@@ -330,6 +364,10 @@
   },
   "categoryPage": {
     "noProductsFound": "لا توجد منتجات في هذه الفئة."
+  },
+  "allCategoriesPage": {
+    "title": "جميع الفئات",
+    "error": "حدث خطأ أثناء تحميل الفئات."
   },
   "exclusive": "إكسكلوسيف",
   "managePreferences": "إدارة إعدادات وتفضيلات حسابك"

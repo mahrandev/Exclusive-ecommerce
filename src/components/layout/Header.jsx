@@ -13,87 +13,88 @@ const Header = () => {
   const { t, i18n } = useTranslation();
 
   const changeLanguage = () => {
-    const newLang = i18n.language === 'en' ? 'ar' : 'en';
+    const newLang = i18n.language === "en" ? "ar" : "en";
     i18n.changeLanguage(newLang);
   };
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-50 shadow-sm">
+    <header className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm">
       {/* 1. Top bar - Full width */}
       <div className="bg-primary-black text-primary-white py-1">
-        <div className="container mx-auto px-4 flex justify-center items-center py-2 text-xs md:text-sm">
+        <div className="container mx-auto flex items-center justify-center px-4 py-2 text-xs md:text-sm">
           <p className="flex-grow text-center">
-            {t('header.topBar')}{" "}
+            {t("header.topBar")}{" "}
             <a
               href="#"
-              className="font-bold underline hover:text-primary-red transition-colors"
+              className="hover:text-primary-red font-bold underline transition-colors"
             >
-              {t('header.shopNow')}
+              {t("header.shopNow")}
             </a>
           </p>
-          <button onClick={changeLanguage} className="text-sm font-medium hover:text-primary-red transition-colors px-4">
-            {i18n.language === 'en' ? 'العربية' : 'English'}
+          <button
+            onClick={changeLanguage}
+            className="hover:text-primary-red px-4 text-sm font-medium transition-colors"
+          >
+            {i18n.language === "en" ? "العربية" : "English"}
           </button>
         </div>
       </div>
 
       {/* 2. Main navigation */}
-      <div className="container max-w-7xl mx-auto px-4">
-        <div className="flex items-center justify-between h-16 md:h-20">
+      <div className="container mx-auto max-w-7xl px-4">
+        <div className="flex h-16 items-center justify-between md:h-20">
           {/* Logo */}
-          <div className="text-xl md:text-2xl font-bold">
+          <div className="text-xl font-bold md:text-2xl">
             <NavLink
               to="/"
-              className="text-primary-red transition-colors uppercase"
+              className="text-primary-red uppercase transition-colors"
             >
-              {t('exclusive')}
+              {t("exclusive")}
             </NavLink>
           </div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-1 lg:space-x-2">
+          <nav className="hidden items-center space-x-1 md:flex lg:space-x-2">
             <NavLink
               to="/"
               className={({ isActive }) =>
-                `px-3 py-2 rounded-md transition-colors hover:bg-gray-100 ${
-                  isActive ? "bg-red-100 text-primary-red font-medium" : ""
+                `rounded-md px-3 py-2 transition-colors hover:bg-gray-100 ${
+                  isActive ? "text-primary-red bg-red-100 font-medium" : ""
                 }`
               }
             >
-              {t('header.home')}
+              {t("header.home")}
             </NavLink>
             <NavLink
               to="/contact"
               className={({ isActive }) =>
-                `px-3 py-2 rounded-md transition-colors hover:bg-gray-100 ${
-                  isActive ? "bg-red-100 text-primary-red font-medium" : ""
+                `rounded-md px-3 py-2 transition-colors hover:bg-gray-100 ${
+                  isActive ? "text-primary-red bg-red-100 font-medium" : ""
                 }`
               }
             >
-              {t('header.contact')}
+              {t("header.contact")}
             </NavLink>
             <NavLink
               to="/about"
               className={({ isActive }) =>
-                `px-3 py-2 rounded-md transition-colors hover:bg-gray-100 ${
-                  isActive ? "bg-red-100 text-primary-red font-medium" : ""
+                `rounded-md px-3 py-2 transition-colors hover:bg-gray-100 ${
+                  isActive ? "text-primary-red bg-red-100 font-medium" : ""
                 }`
               }
             >
-              {t('header.about')}
+              {t("header.about")}
             </NavLink>
             {!isAuthenticated && (
               <NavLink
                 to="/signup"
                 className={({ isActive }) =>
-                  `px-3 py-2 rounded-md transition-colors hover:bg-gray-100 ${
-                    isActive
-                      ? "bg-red-100 text-primary-red font-medium"
-                      : ""
+                  `rounded-md px-3 py-2 transition-colors hover:bg-gray-100 ${
+                    isActive ? "text-primary-red bg-red-100 font-medium" : ""
                   }`
                 }
               >
-                {t('header.signUp')}
+                {t("header.signUp")}
               </NavLink>
             )}
           </nav>
@@ -102,23 +103,25 @@ const Header = () => {
           <div className="flex items-center gap-3 md:gap-4">
             {/* Desktop Search */}
             <div className="hidden md:block">
-              <SearchComponent onResultClick={() => setIsMobileMenuOpen(false)} />
+              <SearchComponent
+                onResultClick={() => setIsMobileMenuOpen(false)}
+              />
             </div>
 
             {/* Wishlist */}
             <NavLink
               to="/wishlist"
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              className="rounded-full p-2 transition-colors hover:bg-gray-100"
             >
-              <Heart size={20} className="md:w-6 md:h-6" />
+              <Heart size={20} className="md:h-6 md:w-6" />
             </NavLink>
 
             {/* Cart */}
             <NavLink
               to="/cart"
-              className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+              className="rounded-full p-2 transition-colors hover:bg-gray-100"
             >
-              <ShoppingCart size={20} className="md:w-6 md:h-6" />
+              <ShoppingCart size={20} className="md:h-6 md:w-6" />
             </NavLink>
 
             {/* User Actions */}
@@ -127,15 +130,15 @@ const Header = () => {
             ) : (
               <NavLink
                 to="/login"
-                className="hidden md:inline-block bg-blue-500 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-blue-600 transition-colors"
+                className="hidden rounded-md bg-blue-500 px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-blue-600 md:inline-block"
               >
-                {t('header.login')}
+                {t("header.login")}
               </NavLink>
             )}
 
             {/* Mobile Menu Toggle */}
             <button
-              className="md:hidden p-2 hover:bg-gray-100 rounded-full transition-colors"
+              className="rounded-full p-2 transition-colors hover:bg-gray-100 md:hidden"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             >
               {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -144,65 +147,69 @@ const Header = () => {
         </div>
 
         {/* Mobile Search Bar */}
-        <div className="md:hidden pb-4">
+        <div className="pb-4 md:hidden">
           <SearchComponent onResultClick={() => setIsMobileMenuOpen(false)} />
         </div>
 
         {/* Mobile Navigation Menu */}
+        {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
-          <div className="md:hidden pb-4 animate-in slide-in-from-top">
-            <nav className="flex flex-col space-y-3">
+          <div className="animate-in slide-in-from-top mt-2 border-t border-gray-200 pb-4 md:hidden">
+            <nav className="flex flex-col space-y-2 pt-4">
+              {/* Login & SignUp at the top for non-authenticated users */}
+              {!isAuthenticated && (
+                <div className="mb-3 space-y-2 border-b border-gray-200 pb-3">
+                  <NavLink
+                    to="/login"
+                    className="block rounded-md bg-blue-500 px-4 py-3 text-center font-medium text-white transition-colors hover:bg-blue-600"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {t("header.login")}
+                  </NavLink>
+                  <NavLink
+                    to="/signup"
+                    className="bg-primary-red block rounded-md px-4 py-3 text-center font-medium text-white transition-colors hover:bg-red-600"
+                    onClick={() => setIsMobileMenuOpen(false)}
+                  >
+                    {t("header.signUp")}
+                  </NavLink>
+                </div>
+              )}
+
+              {/* Regular navigation links */}
               <NavLink
                 to="/"
                 className={({ isActive }) =>
-                  `py-2 px-4 rounded-md hover:bg-gray-100 transition-colors ${
-                    isActive ? "bg-primary-red text-white font-medium" : ""
+                  `rounded-md px-4 py-2 transition-colors hover:bg-gray-100 ${
+                    isActive ? "text-primary-red bg-gray-100 font-medium" : ""
                   }`
                 }
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                {t('header.home')}
+                {t("header.home")}
               </NavLink>
               <NavLink
                 to="/contact"
                 className={({ isActive }) =>
-                  `py-2 px-4 rounded-md hover:bg-gray-100 transition-colors ${
-                    isActive ? "bg-primary-red text-white font-medium" : ""
+                  `rounded-md px-4 py-2 transition-colors hover:bg-gray-100 ${
+                    isActive ? "text-primary-red bg-gray-100 font-medium" : ""
                   }`
                 }
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                {t('header.contact')}
+                {t("header.contact")}
               </NavLink>
               <NavLink
                 to="/about"
                 className={({ isActive }) =>
-                  `py-2 px-4 rounded-md hover:bg-gray-100 transition-colors ${
-                    isActive ? "bg-primary-red text-white font-medium" : ""
+                  `rounded-md px-4 py-2 transition-colors hover:bg-gray-100 ${
+                    isActive ? "text-primary-red bg-gray-100 font-medium" : ""
                   }`
                 }
                 onClick={() => setIsMobileMenuOpen(false)}
               >
-                {t('header.about')}
+                {t("header.about")}
               </NavLink>
-              {!isAuthenticated && (
-                <>
-                  <NavLink
-                    to="/login"
-                    className="py-2 px-4 rounded-md hover:bg-gray-100 transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {t('header.login')}
-                  </NavLink>
-                  <NavLink
-                    to="/signup"
-                    className="py-2 px-4 rounded-md hover:bg-gray-100 transition-colors"
-                    onClick={() => setIsMobileMenuOpen(false)}
-                  >
-                    {t('header.signUp')}
-                  </NavLink>
-                </>
-              )}
             </nav>
           </div>
         )}
