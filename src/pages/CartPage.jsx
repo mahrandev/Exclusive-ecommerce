@@ -14,11 +14,26 @@ const CartPage = () => {
   );
 
   const handleQuantityChange = (productId, newQuantity) => {
-    if (newQuantity > 0) {
-      updateQuantity(productId, newQuantity);
-    } else {
+    const quantity = parseInt(newQuantity, 10);
+
+    // Case 1: Decrementing from 1 to 0 via button
+    if (newQuantity === 0) {
       removeFromCart(productId);
       toast.warning(t("cart.itemRemoved"));
+      return;
+    }
+
+    // Case 2: A valid, positive quantity
+    if (!isNaN(quantity) && quantity > 0) {
+      updateQuantity(productId, quantity);
+      return;
+    }
+
+    // Case 3: Invalid input (text, empty string, negative number)
+    // Reset to 1, but only if the quantity is not already 1 to avoid loops.
+    const currentItem = items.find((item) => item.id === productId);
+    if (currentItem && currentItem.quantity !== 1) {
+      updateQuantity(productId, 1);
     }
   };
 
@@ -89,10 +104,7 @@ const CartPage = () => {
                 <input
                   type="number"
                   value={item.quantity}
-                  onChange={(e) => {
-                    const val = parseInt(e.target.value) || 1;
-                    handleQuantityChange(item.id, val);
-                  }}
+                  onChange={(e) => handleQuantityChange(item.id, e.target.value)}
                   min="1"
                   className="w-full [appearance:textfield] border-none bg-transparent text-center focus:ring-0 focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                 />
@@ -110,6 +122,7 @@ const CartPage = () => {
                       handleQuantityChange(item.id, item.quantity - 1)
                     }
                     className="border-t-2 border-gray-400 px-2 py-0 text-xs leading-none transition-colors hover:bg-gray-100"
+                    disabled={item.quantity <= 1}
                   >
                     ▼
                   </button>
@@ -180,10 +193,7 @@ const CartPage = () => {
                   <input
                     type="number"
                     value={item.quantity}
-                    onChange={(e) => {
-                      const val = parseInt(e.target.value) || 1;
-                      handleQuantityChange(item.id, val);
-                    }}
+                    onChange={(e) => handleQuantityChange(item.id, e.target.value)}
                     min="1"
                     className="w-12 [appearance:textfield] border-none bg-transparent text-center focus:ring-0 focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
                   />
@@ -220,13 +230,6 @@ const CartPage = () => {
         >
           <Link to="/">{t("cart.returnToShop")}</Link>
         </Button>
-        <Button
-          variant="outline"
-          className="order-1 h-12 border-gray-400 px-8 text-gray-900 hover:bg-gray-50 sm:order-2"
-          onClick={() => toast.info(t("cart.cartUpdated"))}
-        >
-          {t("cart.updateCart")}
-        </Button>
       </div>
 
       {/* Bottom Section */}
@@ -251,7 +254,7 @@ const CartPage = () => {
           <div className="space-y-4">
             <div className="flex justify-between border-b pb-4 text-sm sm:text-base">
               <span>{t("cart.subtotalLabel")}</span>
-              <span>${totalPrice.toFixed(2)}</span>
+              <span>${(totalPrice || 0).toFixed(2)}</span>
             </div>
             <div className="flex justify-between border-b pb-4 text-sm sm:text-base">
               <span>{t("cart.shipping")}</span>
@@ -259,7 +262,7 @@ const CartPage = () => {
             </div>
             <div className="flex justify-between text-base font-medium sm:text-lg">
               <span>{t("cart.total")}</span>
-              <span>${totalPrice.toFixed(2)}</span>
+              <span>${(totalPrice || 0).toFixed(2)}</span>
             </div>
           </div>
           <Button

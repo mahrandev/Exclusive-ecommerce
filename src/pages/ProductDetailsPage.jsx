@@ -76,14 +76,19 @@ const ProductDetailsPage = () => {
 
       {/* Main Product Section */}
       <div className="mb-12 grid grid-cols-1 items-start gap-6 md:gap-8 lg:grid-cols-5">
-        <ImageGallery
-          product={product}
-          productData={productData}
-          selectedImage={selectedImage}
-          setSelectedImage={setSelectedImage}
-        />
+        {/* Left Column: Images + Specifications */}
+        <div className="space-y-8 lg:col-span-3">
+          <ImageGallery
+            product={product}
+            productData={productData}
+            selectedImage={selectedImage}
+            setSelectedImage={setSelectedImage}
+          />
+          <ProductSpecifications product={product} />
+        </div>
 
-        <div className="lg:col-span-2">
+        {/* Right Column: Product Info + Reviews */}
+        <div className="space-y-6 lg:col-span-2">
           <ProductInfo product={product} stars={stars} />
           <ProductOptions
             productData={productData}
@@ -108,15 +113,11 @@ const ProductDetailsPage = () => {
             isRemovingFromWishlist={isRemovingFromWishlist}
           />
           <DeliveryDetails />
+          <ProductReviews reviews={product.reviews} />
         </div>
       </div>
 
-      {/* Reviews & Specifications Sections */}
-      <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
-        <ProductReviews reviews={product.reviews} />
-        <ProductSpecifications product={product} />
-      </div>
-
+      {/* Related Products */}
       <RelatedProducts category={product.category} productId={product.id} />
     </div>
   );

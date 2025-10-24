@@ -64,8 +64,8 @@ const ProductSpecifications = ({ product }) => {
 
   if (validSpecs.length === 0) {
     return (
-      <div className="rounded-lg border-2 border-gray-200 bg-white p-6 shadow-sm">
-        <h2 className="mb-4 text-2xl font-bold text-gray-900">
+      <div className="rounded-lg border border-gray-200 bg-white p-6 shadow-sm">
+        <h2 className="mb-4 text-xl font-bold text-gray-900">
           {t("productDetails.specifications")}
         </h2>
         <p className="text-gray-600">{t("productDetails.noSpecifications")}</p>
@@ -74,21 +74,21 @@ const ProductSpecifications = ({ product }) => {
   }
 
   return (
-    <div className="rounded-lg border-2 border-gray-200 bg-white p-4 shadow-sm sm:p-6 md:p-8">
-      <h2 className="mb-6 text-xl font-bold text-gray-900 sm:text-2xl">
+    <div className="rounded-lg border border-gray-200 bg-white p-4 shadow-sm sm:p-6">
+      <h2 className="mb-6 text-xl font-bold text-gray-900">
         {t("productDetails.specifications")}
       </h2>
 
-      <div className="space-y-4">
+      <div className="space-y-3">
         {validSpecs.map((spec, index) => (
           <div
             key={index}
-            className="flex flex-col justify-between border-b border-gray-200 pb-2 sm:flex-row"
+            className="flex items-center justify-between gap-4 border-b border-gray-200 pb-3 last:border-b-0"
           >
-            <dt className="text-sm font-medium text-gray-600 sm:text-base">
+            <dt className="text-sm font-medium text-gray-600">
               {spec.label}
             </dt>
-            <dd className="text-sm font-semibold text-gray-900 sm:text-base">
+            <dd className="text-sm font-semibold text-gray-900 text-right">
               {spec.value}
             </dd>
           </div>
@@ -98,29 +98,29 @@ const ProductSpecifications = ({ product }) => {
       {/* Additional Meta Information */}
       {product.meta && (
         <div className="mt-6 space-y-3 border-t border-gray-200 pt-6">
-          <h3 className="text-lg font-semibold text-gray-900">
+          <h3 className="text-base font-semibold text-gray-900">
             {t("productDetails.additionalInfo")}
           </h3>
           <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
             {product.meta.barcode && (
               <div className="flex items-center justify-between rounded-lg bg-gray-50 p-3">
-                <span className="text-sm text-gray-600">
+                <span className="text-xs text-gray-600">
                   {t("productDetails.barcode")}:
                 </span>
-                <span className="font-mono text-sm font-medium text-gray-900">
+                <span className="font-mono text-xs font-medium text-gray-900">
                   {product.meta.barcode}
                 </span>
               </div>
             )}
             {product.meta.qrCode && (
               <div className="flex items-center justify-between rounded-lg bg-gray-50 p-3">
-                <span className="text-sm text-gray-600">
+                <span className="text-xs text-gray-600">
                   {t("productDetails.qrCode")}:
                 </span>
                 <img
                   src={product.meta.qrCode}
                   alt="QR Code"
-                  className="h-12 w-12"
+                  className="h-10 w-10"
                 />
               </div>
             )}
@@ -131,14 +131,14 @@ const ProductSpecifications = ({ product }) => {
       {/* Tags */}
       {product.tags && product.tags.length > 0 && (
         <div className="mt-6 border-t border-gray-200 pt-6">
-          <h3 className="mb-3 text-lg font-semibold text-gray-900">
+          <h3 className="mb-3 text-base font-semibold text-gray-900">
             {t("productDetails.tags")}
           </h3>
           <div className="flex flex-wrap gap-2">
             {product.tags.map((tag, index) => (
               <span
                 key={index}
-                className="rounded-full bg-red-100 px-3 py-1 text-sm font-medium text-red-700"
+                className="rounded-full bg-red-100 px-3 py-1 text-xs font-medium text-red-700"
               >
                 {tag}
               </span>

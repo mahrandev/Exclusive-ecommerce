@@ -9,17 +9,16 @@ import { Star } from "lucide-react";
 import useCartStore from "@/store/cartStore";
 import useAuthStore from "@/store/authStore";
 import useWishlistStore from "@/store/wishlistStore";
+import { useTranslation } from "react-i18next";
 
 export const useProductDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCartStore();
   const { user, isAuthenticated } = useAuthStore();
-  const {
-    wishlist,
-    addToWishlistState,
-    removeFromWishlistState,
-  } = useWishlistStore();
+  const { wishlist, addToWishlistState, removeFromWishlistState } =
+    useWishlistStore();
+  const { i18n } = useTranslation();
 
   const [selectedImage, setSelectedImage] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -117,7 +116,7 @@ export const useProductDetails = () => {
       if (!selectedImage && productData.images && productData.images.length > 0) {
         setSelectedImage(productData.images[0]);
       }
-      
+
       // Set default color if not already set
       if (!selectedColor && productData.colors && productData.colors.length > 0) {
         setSelectedColor(productData.colors[0].name);
@@ -125,13 +124,15 @@ export const useProductDetails = () => {
 
       // Set default size to the first available one if not already set
       if (!selectedSize && productData.sizes && productData.sizes.length > 0) {
-        const firstAvailableSize = productData.sizes.find(size => size.available);
+        const firstAvailableSize = productData.sizes.find(
+          (size) => size.available,
+        );
         if (firstAvailableSize) {
           setSelectedSize(firstAvailableSize.name);
         }
       }
     }
-  }, [productData]);
+  }, [productData, selectedImage, selectedColor, selectedSize]);
 
   // Memoize stars rendering
   const stars = useMemo(() => {
@@ -141,6 +142,7 @@ export const useProductDetails = () => {
     const fullStars = Math.floor(rating);
     const hasHalfStar = rating % 1 >= 0.5;
     const elements = [];
+    const isRtl = i18n.language === "ar";
 
     for (let i = 0; i < fullStars; i++) {
       elements.push(
@@ -157,9 +159,11 @@ export const useProductDetails = () => {
         <div key="half" className="relative">
           <Star className="text-gray-300" size={20} />
           <Star
-            className="absolute top-0 left-0 fill-yellow-500 text-yellow-500"
+            className="absolute left-0 top-0 fill-yellow-500 text-yellow-500"
             size={20}
-            style={{ clipPath: "inset(0 50% 0 0)" }}
+            style={{
+              clipPath: isRtl ? "inset(0 0 0 50%)" : "inset(0 50% 0 0)",
+            }}
           />
         </div>,
       );
@@ -173,7 +177,7 @@ export const useProductDetails = () => {
     }
 
     return elements;
-  }, [product?.rating]);
+  }, [product?.rating, i18n.language]);
 
   const handleQuantityChange = (amount) => {
     setQuantity((prev) => {

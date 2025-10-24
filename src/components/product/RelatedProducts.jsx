@@ -10,7 +10,7 @@ import { Navigation } from "swiper/modules";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 const RelatedProducts = ({ category, productId }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const {
     data: products,
     isLoading,
@@ -21,7 +21,8 @@ const RelatedProducts = ({ category, productId }) => {
     enabled: !!category,
   });
 
-  const relatedProducts = products?.filter((p) => p.id !== productId).slice(0, 8) || [];
+  const relatedProducts =
+    products?.filter((p) => p.id !== productId).slice(0, 8) || [];
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -31,16 +32,19 @@ const RelatedProducts = ({ category, productId }) => {
     return null;
   }
 
+  const isRtl = i18n.dir() === "rtl";
+
   return (
     <div className="py-8 md:py-12">
-      <div className="flex items-center gap-4 mb-6">
-        <div className="w-5 h-10 bg-primary-red rounded"></div>
-        <h2 className="text-2xl md:text-3xl font-bold text-primary-black">
+      <div className="mb-6 flex items-center gap-4">
+        <div className="h-10 w-5 rounded bg-primary-red"></div>
+        <h2 className="text-2xl font-bold text-primary-black md:text-3xl">
           {t("productDetails.relatedItems")}
         </h2>
       </div>
       <div className="relative">
         <Swiper
+          dir={i18n.dir()}
           modules={[Navigation]}
           spaceBetween={30}
           slidesPerView={1}
@@ -61,11 +65,19 @@ const RelatedProducts = ({ category, productId }) => {
             </SwiperSlide>
           ))}
         </Swiper>
-        <div className="swiper-button-prev-related absolute top-1/2 -translate-y-1/2 left-0 z-10 cursor-pointer bg-gray-200 rounded-full p-2 hover:bg-gray-300 transition-colors">
-          <ChevronLeft className="text-gray-600" />
+        <div className="swiper-button-prev-related absolute left-0 top-1/2 z-10 hidden -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-gray-200 p-2 transition-colors hover:bg-gray-300 md:flex">
+          {isRtl ? (
+            <ChevronRight className="text-gray-600" />
+          ) : (
+            <ChevronLeft className="text-gray-600" />
+          )}
         </div>
-        <div className="swiper-button-next-related absolute top-1/2 -translate-y-1/2 right-0 z-10 cursor-pointer bg-gray-200 rounded-full p-2 hover:bg-gray-300 transition-colors">
-          <ChevronRight className="text-gray-600" />
+        <div className="swiper-button-next-related absolute right-0 top-1/2 z-10 hidden -translate-y-1/2 cursor-pointer items-center justify-center rounded-full bg-gray-200 p-2 transition-colors hover:bg-gray-300 md:flex">
+          {isRtl ? (
+            <ChevronLeft className="text-gray-600" />
+          ) : (
+            <ChevronRight className="text-gray-600" />
+          )}
         </div>
       </div>
     </div>

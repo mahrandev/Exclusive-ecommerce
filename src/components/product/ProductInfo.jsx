@@ -1,8 +1,9 @@
+
 import { useTranslation } from "react-i18next";
 import { cn } from "@/lib/utils";
 
 const ProductInfo = ({ product, stars }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
 
   return (
     <>
@@ -16,6 +17,7 @@ const ProductInfo = ({ product, stars }) => {
           className="flex gap-1"
           role="img"
           aria-label={`${t("productDetails.reviews")}: ${product.rating} out of 5 stars`}
+          dir={i18n.dir()}
         >
           {stars}
         </div>
@@ -54,3 +56,4 @@ const ProductInfo = ({ product, stars }) => {
 };
 
 export default ProductInfo;
+

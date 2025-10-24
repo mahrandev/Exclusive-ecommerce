@@ -1,3 +1,5 @@
+
+
 import { Link, useLocation } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 
@@ -37,7 +39,7 @@ const Breadcrumbs = ({
             to={`/category/${product.category}`}
             className="capitalize transition-colors hover:text-gray-900"
           >
-            {product.category}
+            {t(`category.${product.category}`)}
           </Link>
           <span className="mx-2">/</span>
           <span className="text-gray-900">{product.title}</span>
@@ -48,6 +50,7 @@ const Breadcrumbs = ({
           const isLast = index === pathnames.length - 1;
           const displayName =
             breadcrumbNameMap[name] ||
+            t(`category.${name}`) ||
             name
               .replace(/-/g, " ")
               .replace(/\b\w/g, (l) => l.toUpperCase());
