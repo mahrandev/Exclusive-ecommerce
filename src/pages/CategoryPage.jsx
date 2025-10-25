@@ -1,4 +1,3 @@
-
 import { Link, useParams } from "react-router-dom";
 import { useProducts } from "@/hooks/useProducts";
 import ProductCard from "@/components/shared/ProductCard";
@@ -18,8 +17,7 @@ const CategoryPage = () => {
     error: productsError,
   } = useProducts(decodedCategoryName);
 
-  // Capitalize the first letter for a cleaner title
-  const pageTitle = decodedCategoryName.charAt(0).toUpperCase() + decodedCategoryName.slice(1);
+  const pageTitle = t(`category.${decodedCategoryName}`);
 
   return (
     <>
@@ -60,4 +58,3 @@ const CategoryPage = () => {
 };
 
 export default CategoryPage;
-

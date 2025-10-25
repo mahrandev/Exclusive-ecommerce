@@ -7,7 +7,7 @@ const Breadcrumbs = ({
   product,
   containerClassName = "mb-12 text-sm text-gray-600 md:mb-16",
 }) => {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
   const location = useLocation();
   const pathnames = location.pathname.split("/").filter((x) => x);
 
@@ -36,7 +36,7 @@ const Breadcrumbs = ({
         <>
           <span className="mx-2">/</span>
           <Link
-            to={`/category/${product.category}`}
+            to={`/products/${product.category}`}
             className="capitalize transition-colors hover:text-gray-900"
           >
             {t(`category.${product.category}`)}
@@ -50,10 +50,11 @@ const Breadcrumbs = ({
           const isLast = index === pathnames.length - 1;
           const displayName =
             breadcrumbNameMap[name] ||
-            t(`category.${name}`) ||
-            name
-              .replace(/-/g, " ")
-              .replace(/\b\w/g, (l) => l.toUpperCase());
+            (i18n.exists(`category.${name}`)
+              ? t(`category.${name}`)
+              : name
+                  .replace(/-/g, " ")
+                  .replace(/\b\w/g, (l) => l.toUpperCase()));
 
           return (
             <span key={name}>

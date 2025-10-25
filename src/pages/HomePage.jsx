@@ -10,6 +10,7 @@ import BrowseByCategorySection from "@/components/home/BrowseByCategorySection";
 import BestSellingSection from "@/components/home/BestSellingSection";
 import FeaturedProductSection from "@/components/home/FeaturedProductSection";
 import ExploreProductsSection from "@/components/home/ExploreProductsSection";
+import NewArrivalSection from "@/components/home/NewArrivalSection";
 import ServicesSection from "@/components/home/ServicesSection";
 
 const HomePage = () => {
@@ -78,6 +79,8 @@ const HomePage = () => {
         exploreProductsSlider={exploreProductsSlider}
         isRtl={isRtl}
       />
+
+      <NewArrivalSection />
 
       <ServicesSection />
     </div>

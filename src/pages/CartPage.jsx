@@ -13,28 +13,34 @@ const CartPage = () => {
     (state) => state,
   );
 
-  const handleQuantityChange = (productId, newQuantity) => {
-    const quantity = parseInt(newQuantity, 10);
+  // ✅ دالة محسّنة لحساب Subtotal لكل منتج
+  const calculateItemSubtotal = (item) => {
+    const price = parseFloat(item.price) || 0;
+    const quantity = parseInt(item.quantity) || 0;
+    return price * quantity;
+  };
 
-    // Case 1: Decrementing from 1 to 0 via button
-    if (newQuantity === 0) {
+  // ✅ دالة محسّنة لتحديث الكمية مع validation
+  const handleQuantityChange = (productId, newQuantity) => {
+    // تحويل القيمة لرقم صحيح
+    let quantity = parseInt(newQuantity, 10);
+
+    // Case 1: إذا كانت القيمة 0 أو أقل، احذف المنتج
+    if (quantity <= 0 || isNaN(quantity)) {
       removeFromCart(productId);
       toast.warning(t("cart.itemRemoved"));
       return;
     }
 
-    // Case 2: A valid, positive quantity
-    if (!isNaN(quantity) && quantity > 0) {
-      updateQuantity(productId, quantity);
-      return;
-    }
+    // Case 2: تحديث الكمية بقيمة صحيحة
+    updateQuantity(productId, quantity);
+  };
 
-    // Case 3: Invalid input (text, empty string, negative number)
-    // Reset to 1, but only if the quantity is not already 1 to avoid loops.
-    const currentItem = items.find((item) => item.id === productId);
-    if (currentItem && currentItem.quantity !== 1) {
-      updateQuantity(productId, 1);
-    }
+  // ✅ حساب المجموع الكلي بشكل آمن
+  const calculateTotal = () => {
+    return items.reduce((total, item) => {
+      return total + calculateItemSubtotal(item);
+    }, 0);
   };
 
   if (items.length === 0) {
@@ -67,12 +73,103 @@ const CartPage = () => {
 
         {/* Cart Items */}
         <div className="space-y-10">
-          {items.map((item) => (
+          {items.map((item) => {
+            // ✅ تأكد من وجود البيانات الضرورية
+            const itemPrice = parseFloat(item.price) || 0;
+            const itemQuantity = parseInt(item.quantity) || 1;
+            const itemSubtotal = itemPrice * itemQuantity;
+
+            return (
+              <div
+                key={item.id}
+                className="relative grid grid-cols-4 items-center gap-4 rounded-sm px-10 py-6 shadow-sm"
+              >
+                {/* Cancel Button */}
+                <button
+                  onClick={() => {
+                    removeFromCart(item.id);
+                    toast.error(
+                      t("toast.removedFromCart", { title: item.title }),
+                    );
+                  }}
+                  className="bg-primary-red absolute -top-2 -left-2 z-10 flex h-5 w-5 items-center justify-center rounded-full text-xs text-white transition-colors hover:bg-red-600"
+                  aria-label={t("cart.removeItem")}
+                >
+                  ×
+                </button>
+
+                {/* Product Info */}
+                <div className="flex items-center gap-4">
+                  <img
+                    src={item.thumbnail}
+                    alt={item.title}
+                    className="h-14 w-14 object-contain"
+                  />
+                  <p className="truncate text-gray-900">{item.title}</p>
+                </div>
+
+                {/* Price - ✅ محسّن */}
+                <div className="text-gray-900">${itemPrice.toFixed(2)}</div>
+
+                {/* Quantity Controls - ✅ محسّن */}
+                <div className="flex h-11 w-20 items-center rounded border-2 border-gray-400">
+                  <input
+                    type="number"
+                    value={itemQuantity}
+                    onChange={(e) =>
+                      handleQuantityChange(item.id, e.target.value)
+                    }
+                    onBlur={(e) => {
+                      // إذا كان الحقل فاضي، اجعل القيمة 1
+                      if (!e.target.value) {
+                        handleQuantityChange(item.id, 1);
+                      }
+                    }}
+                    min="1"
+                    className="w-full [appearance:textfield] border-none bg-transparent text-center focus:ring-0 focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                  />
+                  <div className="flex flex-col border-l-2 border-gray-400">
+                    <button
+                      onClick={() =>
+                        handleQuantityChange(item.id, itemQuantity + 1)
+                      }
+                      className="px-2 py-0 text-xs leading-none transition-colors hover:bg-gray-100"
+                    >
+                      ▲
+                    </button>
+                    <button
+                      onClick={() =>
+                        handleQuantityChange(item.id, itemQuantity - 1)
+                      }
+                      className="border-t-2 border-gray-400 px-2 py-0 text-xs leading-none transition-colors hover:bg-gray-100"
+                      disabled={itemQuantity <= 1}
+                    >
+                      ▼
+                    </button>
+                  </div>
+                </div>
+
+                {/* Subtotal - ✅ محسّن */}
+                <div className="text-gray-900">${itemSubtotal.toFixed(2)}</div>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      {/* Mobile Card View */}
+      <div className="mb-6 space-y-4 md:hidden">
+        {items.map((item) => {
+          const itemPrice = parseFloat(item.price) || 0;
+          const itemQuantity = parseInt(item.quantity) || 1;
+          const itemSubtotal = itemPrice * itemQuantity;
+
+          return (
             <div
               key={item.id}
-              className="relative grid grid-cols-4 items-center gap-4 rounded-sm px-10 py-6 shadow-sm"
+              className="relative rounded-lg bg-white p-4 shadow-sm"
             >
-              {/* Cancel Button */}
+              {/* Remove Button */}
               <button
                 onClick={() => {
                   removeFromCart(item.id);
@@ -80,145 +177,82 @@ const CartPage = () => {
                     t("toast.removedFromCart", { title: item.title }),
                   );
                 }}
-                className="bg-primary-red absolute -top-2 -left-2 z-10 flex h-5 w-5 items-center justify-center rounded-full text-xs text-white transition-colors hover:bg-red-600"
+                className="bg-primary-red absolute top-2 right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full text-white transition-colors hover:bg-red-600"
                 aria-label={t("cart.removeItem")}
               >
-                ×
+                <X size={14} />
               </button>
 
               {/* Product Info */}
-              <div className="flex items-center gap-4">
+              <div className="mb-4 flex gap-4">
                 <img
                   src={item.thumbnail}
                   alt={item.title}
-                  className="h-14 w-14 object-contain"
+                  className="h-20 w-20 flex-shrink-0 object-contain"
                 />
-                <p className="truncate text-gray-900">{item.title}</p>
-              </div>
-
-              {/* Price */}
-              <div className="text-gray-900">${item.price.toFixed(2)}</div>
-
-              {/* Quantity Controls */}
-              <div className="flex h-11 w-20 items-center rounded border-2 border-gray-400">
-                <input
-                  type="number"
-                  value={item.quantity}
-                  onChange={(e) => handleQuantityChange(item.id, e.target.value)}
-                  min="1"
-                  className="w-full [appearance:textfield] border-none bg-transparent text-center focus:ring-0 focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                />
-                <div className="flex flex-col border-l-2 border-gray-400">
-                  <button
-                    onClick={() =>
-                      handleQuantityChange(item.id, item.quantity + 1)
-                    }
-                    className="px-2 py-0 text-xs leading-none transition-colors hover:bg-gray-100"
-                  >
-                    ▲
-                  </button>
-                  <button
-                    onClick={() =>
-                      handleQuantityChange(item.id, item.quantity - 1)
-                    }
-                    className="border-t-2 border-gray-400 px-2 py-0 text-xs leading-none transition-colors hover:bg-gray-100"
-                    disabled={item.quantity <= 1}
-                  >
-                    ▼
-                  </button>
+                <div className="min-w-0 flex-1">
+                  <h3 className="mb-2 line-clamp-2 pr-6 font-medium text-gray-900">
+                    {item.title}
+                  </h3>
+                  <p className="text-primary-red text-lg font-semibold">
+                    ${itemPrice.toFixed(2)}
+                  </p>
                 </div>
               </div>
 
-              {/* Subtotal */}
-              <div className="text-gray-900">
-                ${(item.price * item.quantity).toFixed(2)}
-              </div>
-            </div>
-          ))}
-        </div>
-      </div>
+              {/* Quantity and Subtotal */}
+              <div className="flex items-center justify-between border-t border-gray-200 pt-3">
+                <div className="flex items-center gap-2">
+                  <span className="text-sm text-gray-600">
+                    {t("cart.quantity")}:
+                  </span>
+                  <div className="flex items-center rounded border-2 border-gray-300">
+                    <button
+                      onClick={() =>
+                        handleQuantityChange(item.id, itemQuantity - 1)
+                      }
+                      className="px-3 py-1 transition-colors hover:bg-gray-100"
+                      disabled={itemQuantity <= 1}
+                    >
+                      -
+                    </button>
+                    <input
+                      type="number"
+                      value={itemQuantity}
+                      onChange={(e) =>
+                        handleQuantityChange(item.id, e.target.value)
+                      }
+                      onBlur={(e) => {
+                        if (!e.target.value) {
+                          handleQuantityChange(item.id, 1);
+                        }
+                      }}
+                      min="1"
+                      className="w-12 [appearance:textfield] border-none bg-transparent text-center focus:ring-0 focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
+                    />
+                    <button
+                      onClick={() =>
+                        handleQuantityChange(item.id, itemQuantity + 1)
+                      }
+                      className="px-3 py-1 transition-colors hover:bg-gray-100"
+                    >
+                      +
+                    </button>
+                  </div>
+                </div>
 
-      {/* Mobile Card View */}
-      <div className="mb-6 space-y-4 md:hidden">
-        {items.map((item) => (
-          <div
-            key={item.id}
-            className="relative rounded-lg bg-white p-4 shadow-sm"
-          >
-            {/* Remove Button */}
-            <button
-              onClick={() => {
-                removeFromCart(item.id);
-                toast.error(t("toast.removedFromCart", { title: item.title }));
-              }}
-              className="bg-primary-red absolute top-2 right-2 z-10 flex h-6 w-6 items-center justify-center rounded-full text-white transition-colors hover:bg-red-600"
-              aria-label={t("cart.removeItem")}
-            >
-              <X size={14} />
-            </button>
-
-            {/* Product Info */}
-            <div className="mb-4 flex gap-4">
-              <img
-                src={item.thumbnail}
-                alt={item.title}
-                className="h-20 w-20 flex-shrink-0 object-contain"
-              />
-              <div className="min-w-0 flex-1">
-                <h3 className="mb-2 line-clamp-2 pr-6 font-medium text-gray-900">
-                  {item.title}
-                </h3>
-                <p className="text-primary-red text-lg font-semibold">
-                  ${item.price.toFixed(2)}
-                </p>
-              </div>
-            </div>
-
-            {/* Quantity and Subtotal */}
-            <div className="flex items-center justify-between border-t border-gray-200 pt-3">
-              <div className="flex items-center gap-2">
-                <span className="text-sm text-gray-600">
-                  {t("cart.quantity")}:
-                </span>
-                <div className="flex items-center rounded border-2 border-gray-300">
-                  <button
-                    onClick={() =>
-                      handleQuantityChange(item.id, item.quantity - 1)
-                    }
-                    className="px-3 py-1 transition-colors hover:bg-gray-100"
-                    disabled={item.quantity <= 1}
-                  >
-                    -
-                  </button>
-                  <input
-                    type="number"
-                    value={item.quantity}
-                    onChange={(e) => handleQuantityChange(item.id, e.target.value)}
-                    min="1"
-                    className="w-12 [appearance:textfield] border-none bg-transparent text-center focus:ring-0 focus:outline-none [&::-webkit-inner-spin-button]:appearance-none [&::-webkit-outer-spin-button]:appearance-none"
-                  />
-                  <button
-                    onClick={() =>
-                      handleQuantityChange(item.id, item.quantity + 1)
-                    }
-                    className="px-3 py-1 transition-colors hover:bg-gray-100"
-                  >
-                    +
-                  </button>
+                <div className="text-right">
+                  <p className="mb-1 text-xs text-gray-600">
+                    {t("cart.subtotal")}
+                  </p>
+                  <p className="font-semibold text-gray-900">
+                    ${itemSubtotal.toFixed(2)}
+                  </p>
                 </div>
               </div>
-
-              <div className="text-right">
-                <p className="mb-1 text-xs text-gray-600">
-                  {t("cart.subtotal")}
-                </p>
-                <p className="font-semibold text-gray-900">
-                  ${(item.price * item.quantity).toFixed(2)}
-                </p>
-              </div>
             </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Action Buttons */}
@@ -246,7 +280,7 @@ const CartPage = () => {
           </Button>
         </div>
 
-        {/* Cart Total Section */}
+        {/* Cart Total Section - ✅ محسّن */}
         <div className="order-1 w-full rounded-md border-2 border-gray-900 p-6 lg:order-2 lg:ml-auto lg:w-[470px] lg:p-8">
           <h2 className="mb-6 text-lg font-medium sm:text-xl">
             {t("cart.cartTotal")}
@@ -254,7 +288,7 @@ const CartPage = () => {
           <div className="space-y-4">
             <div className="flex justify-between border-b pb-4 text-sm sm:text-base">
               <span>{t("cart.subtotalLabel")}</span>
-              <span>${(totalPrice || 0).toFixed(2)}</span>
+              <span>${calculateTotal().toFixed(2)}</span>
             </div>
             <div className="flex justify-between border-b pb-4 text-sm sm:text-base">
               <span>{t("cart.shipping")}</span>
@@ -262,7 +296,7 @@ const CartPage = () => {
             </div>
             <div className="flex justify-between text-base font-medium sm:text-lg">
               <span>{t("cart.total")}</span>
-              <span>${(totalPrice || 0).toFixed(2)}</span>
+              <span>${calculateTotal().toFixed(2)}</span>
             </div>
           </div>
           <Button

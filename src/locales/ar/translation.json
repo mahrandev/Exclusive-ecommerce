@@ -264,6 +264,14 @@
     "failedToUpdateProfile": "فشل تحديث الملف الشخصي",
     "failedToChangePassword": "فشل تغيير كلمة المرور"
   },
+  "Featured": "مميزة",
+  "New Arrival": "وصل حديثاً",
+  "Women's Collections": "مجموعات نسائية",
+  "Featured woman collections that give you another vibe.": "مجموعات نسائية مميزة تمنحك إحساسًا مختلفًا.",
+  "Speakers": "مكبرات صوت",
+  "Amazon wireless speakers": "مكبرات صوت أمازون اللاسلكية",
+  "Perfume": "عطر",
+  "GUCCI INTENSE OUD EDP": "عطر غوتشي إنتنس عود",
   "auth": {
     "login": "تسجيل الدخول",
     "signup": "إنشاء حساب",
