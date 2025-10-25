@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 import { useTranslation } from "react-i18next";
 import { useHomePageLogic } from "@/hooks/useHomePageLogic";
 
@@ -29,6 +29,11 @@ const HomePage = () => {
     flashSalesSlider,
     exploreProductsSlider,
   } = useHomePageLogic();
+
+  const bestSellingProducts = useMemo(() => {
+    if (!products) return [];
+    return [...products].sort((a, b) => b.rating - a.rating);
+  }, [products]);
 
   const THREE_DAYS_IN_MS = 3 * 24 * 60 * 60 * 1000;
   const NOW_IN_MS = new Date().getTime();
@@ -68,14 +73,14 @@ const HomePage = () => {
       />
 
       <BestSellingSection
-        products={products}
+        products={bestSellingProducts}
         isLoadingProducts={isLoadingProducts}
       />
 
       <FeaturedProductSection dateTimeAfterThreeDays={dateTimeAfterThreeDays} />
 
       <ExploreProductsSection
-        products={products}
+        products={products.slice(4, 12)}
         exploreProductsSlider={exploreProductsSlider}
         isRtl={isRtl}
       />

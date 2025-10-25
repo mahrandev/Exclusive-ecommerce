@@ -126,7 +126,9 @@
     "beauty": "الجمال",
     "fragrances": "عطور",
     "furniture": "أثاث",
-    "kitchen-accessories": "أدوات المطبخ"
+    "kitchen-accessories": "أدوات المطبخ",
+    "mobile-accessories": "اكسسوارات الموبايل",
+    "tablets": "اجهزة تابلت"
   },
   "productDetails": {
     "inStock": "متوفر في المخزون",

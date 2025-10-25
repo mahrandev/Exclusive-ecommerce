@@ -5,6 +5,7 @@ import ProductCard from "@/components/shared/ProductCard";
 import ProductCardSkeleton from "@/components/shared/ProductCardSkeleton";
 import { Button } from "@/components/ui/button";
 
+
 const BestSellingSection = ({
   products,
   isLoadingProducts,

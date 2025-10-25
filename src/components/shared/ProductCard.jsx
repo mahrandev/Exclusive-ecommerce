@@ -73,9 +73,10 @@ const ProductCard = ({ product }) => {
   };
 
   // Calculate old price if discount is available
-  const oldPrice = product.discountPercentage > 0 
-    ? (product.price / (1 - product.discountPercentage / 100))
-    : null;
+  const oldPrice =
+    product.discountPercentage > 0
+      ? product.price / (1 - product.discountPercentage / 100)
+      : null;
 
   return (
     <Link to={`/product/${product.id}`} className="block">
@@ -157,7 +158,7 @@ const ProductCard = ({ product }) => {
               ))}
             </div>
             <span className="ml-2 text-xs font-semibold text-gray-600">
-              ({product.reviews.length})
+              ({product.randomReviewCount || product.reviews?.length || 0})
             </span>
           </div>
         </div>
