@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,12 +8,17 @@ import { Eye, EyeOff } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import useAuthStore from "@/store/authStore";
 import { Button } from "@/components/ui/button";
-import { signIn, signInWithGoogle } from "@/api/authApi";
+import { signIn, signInWithGoogle, getCurrentSession } from "@/api/authApi";
 import IconGoogle from "@/assets/img/Icon-Google.svg";
 import signUpImage from "@/assets/img/dl.beatsnoop 1.png";
 
 const LoginPage = () => {
   const { t } = useTranslation();
+  const [isLoading, setIsLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuthStore();
+
   const loginSchema = z.object({
     email: z
       .string()
@@ -24,11 +29,6 @@ const LoginPage = () => {
       .min(6, { message: t("auth.passwordMinLength", { length: 6 }) }),
   });
 
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
-  const login = useAuthStore((state) => state.login);
-
   const {
     register,
     handleSubmit,
@@ -36,6 +36,31 @@ const LoginPage = () => {
   } = useForm({
     resolver: zodResolver(loginSchema),
   });
+
+  // Check if user is already authenticated and redirect
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/account");
+    }
+  }, [isAuthenticated, navigate]);
+
+  // Handle OAuth callback
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const { session } = await getCurrentSession();
+        if (session && session.user) {
+          login({ user: session.user });
+          toast.success(t("auth.loginSuccess"));
+          navigate("/account");
+        }
+      } catch (error) {
+        console.error("Session check error:", error);
+      }
+    };
+
+    checkSession();
+  }, [login, navigate, t]);
 
   const onSubmit = async (formData) => {
     setIsLoading(true);
@@ -62,9 +87,12 @@ const LoginPage = () => {
     setIsLoading(true);
     try {
       await signInWithGoogle();
+      // Don't show success toast here - it will be shown after redirect
+      // The OAuth flow will redirect to Google, then back to our app
     } catch (error) {
-      toast.error(error.message);
-    } finally {
+      toast.error(t("auth.loginFailed"), {
+        description: error.message,
+      });
       setIsLoading(false);
     }
   };

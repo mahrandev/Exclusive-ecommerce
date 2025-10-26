@@ -197,8 +197,12 @@
     "showPassword": "Show password",
     "hidePassword": "Hide password",
     "invalidCredentials": "Invalid login credentials",
-    "emailAlreadyRegistered": "This email is already registered. Please log in."
+    "emailAlreadyRegistered": "This email is already registered. Please log in.",
+    "loginWithGoogle": "Log in with Google",
+    "signupFailed": "Sign up failed",
+    "loginFailed": "Login failed"
   },
+
   "breadcrumbs": {
     "home": "Home",
     "allProducts": "All Products",
@@ -346,7 +350,10 @@
     "myOrder": "My Order",
     "myCancellations": "My Cancellations",
     "myReviews": "My Reviews",
-    "logout": "Logout"
+    "logout": "Logout",
+    "logoutSuccess": "Logged out successfully!",
+    "logoutFailed": "Failed to logout",
+    "loggingOut": "Logging out..."
   },
   "cart": {
     "title": "Shopping Cart",
@@ -409,6 +416,9 @@
     "loginRequired": "Please log in to add items to your wishlist",
     "orderPlaced": "Order placed successfully!",
     "orderFailed": "Failed to place order",
-    "itemRemoved": "Item removed"
+    "itemRemoved": "Item removed",
+    "productAddedToCart": "{{productName}} has been added to your cart.",
+    "productAddedToWishlist": "{{productName}} has been added to your wishlist.",
+    "productRemovedFromWishlist": "{{productName}} has been removed from your wishlist."
   }
 }

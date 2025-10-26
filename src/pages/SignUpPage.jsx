@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -8,7 +8,8 @@ import { Eye, EyeOff } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
-import { signUp, signInWithGoogle } from "@/api/authApi";
+import { signUp, signInWithGoogle, getCurrentSession } from "@/api/authApi";
+import useAuthStore from "@/store/authStore";
 import IconGoogle from "@/assets/img/Icon-Google.svg";
 import signUpImage from "@/assets/img/dl.beatsnoop 1.png";
 
@@ -27,6 +28,7 @@ const SignUpPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const navigate = useNavigate();
+  const { login, isAuthenticated } = useAuthStore();
 
   const signUpSchema = z
     .object({
@@ -63,6 +65,31 @@ const SignUpPage = () => {
   const password = watch("password", "");
   const passwordStrength = getPasswordStrength(password);
 
+  // Check if user is already authenticated and redirect
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/account");
+    }
+  }, [isAuthenticated, navigate]);
+
+  // Handle OAuth callback
+  useEffect(() => {
+    const checkSession = async () => {
+      try {
+        const { session } = await getCurrentSession();
+        if (session && session.user) {
+          login({ user: session.user });
+          toast.success(t("auth.signupSuccess"));
+          navigate("/account");
+        }
+      } catch (error) {
+        console.error("Session check error:", error);
+      }
+    };
+
+    checkSession();
+  }, [login, navigate, t]);
+
   const onSubmit = async (data) => {
     setIsLoading(true);
     try {
@@ -76,7 +103,9 @@ const SignUpPage = () => {
       });
       navigate("/login");
     } catch (error) {
-      if (error.message === "This email is already registered. Please log in.") {
+      if (
+        error.message === "This email is already registered. Please log in."
+      ) {
         toast.error(t("auth.emailAlreadyRegistered"));
       } else {
         toast.error(error.message);
@@ -90,9 +119,12 @@ const SignUpPage = () => {
     setIsLoading(true);
     try {
       await signInWithGoogle();
+      // Don't show success toast here - it will be shown after redirect
+      // The OAuth flow will redirect to Google, then back to our app
     } catch (error) {
-      toast.error(error.message);
-    } finally {
+      toast.error(t("auth.signupFailed"), {
+        description: error.message,
+      });
       setIsLoading(false);
     }
   };

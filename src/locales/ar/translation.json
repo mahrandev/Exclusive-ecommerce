@@ -333,7 +333,10 @@
     "showPassword": "إظهار كلمة المرور",
     "hidePassword": "إخفاء كلمة المرور",
     "invalidCredentials": "بيانات اعتماد تسجيل الدخول غير صالحة",
-    "emailAlreadyRegistered": "هذا البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول."
+    "emailAlreadyRegistered": "هذا البريد الإلكتروني مسجل بالفعل. يرجى تسجيل الدخول.",
+    "loginWithGoogle": "تسجيل الدخول بجوجل",
+    "signupFailed": "فشل إنشاء الحساب",
+    "loginFailed": "فشل تسجيل الدخول"
   },
   "breadcrumbs": {
     "home": "الرئيسية",
@@ -363,14 +366,20 @@
     "loginRequired": "يرجى تسجيل الدخول لإضافة عناصر إلى قائمة المفضلة",
     "orderPlaced": "تم تقديم الطلب بنجاح!",
     "orderFailed": "فشل تقديم الطلب",
-    "itemRemoved": "تمت إزالة العنصر"
+    "itemRemoved": "تمت إزالة العنصر",
+    "productAddedToCart": "تمت إضافة {{productName}} إلى سلتك.",
+    "productAddedToWishlist": "تمت إضافة {{productName}} إلى قائمة رغباتك.",
+    "productRemovedFromWishlist": "تمت إزالة {{productName}} من قائمة رغباتك."
   },
   "userMenu": {
     "manageAccount": "إدارة حسابي",
     "myOrder": "طلباتي",
     "myCancellations": "إلغاءاتي",
     "myReviews": "تقييماتي",
-    "logout": "تسجيل الخروج"
+    "logout": "تسجيل الخروج",
+    "logoutSuccess": "تم تسجيل الخروج بنجاح!",
+    "logoutFailed": "فشل تسجيل الخروج",
+    "loggingOut": "جارٍ تسجيل الخروج..."
   },
   "categoryPage": {
     "noProductsFound": "لا توجد منتجات في هذه الفئة."

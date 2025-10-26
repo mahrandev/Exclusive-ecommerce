@@ -1,14 +1,15 @@
 import { NavLink, useNavigate } from "react-router-dom";
 import { Heart, ShoppingCart, Menu, X } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useTranslation } from "react-i18next";
 import useAuthStore from "@/store/authStore";
 import SearchComponent from "@/components/shared/SearchComponent";
 import UserMenu from "@/components/shared/UserMenu";
+import { getCurrentSession } from "@/api/authApi";
 
 const Header = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  const { isAuthenticated } = useAuthStore();
+  const { isAuthenticated, login, logout } = useAuthStore();
   const navigate = useNavigate();
   const { t, i18n } = useTranslation();
 
@@ -16,6 +17,30 @@ const Header = () => {
     const newLang = i18n.language === "en" ? "ar" : "en";
     i18n.changeLanguage(newLang);
   };
+
+  // التحقق من الجلسة عند تحميل الصفحة
+  useEffect(() => {
+    const checkAuthState = async () => {
+      try {
+        const { session } = await getCurrentSession();
+        if (session && session.user) {
+          // إذا كان هناك session في Supabase لكن لا يوجد في authStore
+          if (!isAuthenticated) {
+            login({ user: session.user });
+          }
+        } else {
+          // إذا لم يكن هناك session في Supabase لكن يوجد في authStore
+          if (isAuthenticated) {
+            await logout();
+          }
+        }
+      } catch (error) {
+        console.error("Auth check error:", error);
+      }
+    };
+
+    checkAuthState();
+  }, [isAuthenticated, login, logout]);
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm">
@@ -151,7 +176,6 @@ const Header = () => {
           <SearchComponent onResultClick={() => setIsMobileMenuOpen(false)} />
         </div>
 
-        {/* Mobile Navigation Menu */}
         {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
           <div className="animate-in slide-in-from-top mt-2 border-t border-gray-200 pb-4 md:hidden">

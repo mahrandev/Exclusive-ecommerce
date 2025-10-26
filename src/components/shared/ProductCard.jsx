@@ -1,3 +1,4 @@
+import { useTranslation } from "react-i18next";
 import { Star, Heart, Eye } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link, useNavigate } from "react-router-dom";
@@ -9,6 +10,7 @@ import { addToWishlist, removeFromWishlist } from "@/api/wishlistApi";
 import { toast } from "sonner";
 
 const ProductCard = ({ product }) => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
 
   const { user, isAuthenticated } = useAuthStore((state) => state);
@@ -23,7 +25,9 @@ const ProductCard = ({ product }) => {
       addToWishlist({ userId: user?.id, productId: product.id }),
     onSuccess: () => {
       addToWishlistState(product);
-      toast.success(`${product.title} has been added to your wishlist.`);
+      toast.success(
+        t("toast.productAddedToWishlist", { productName: product.title })
+      );
     },
     onError: (error) => {
       toast.error(`Failed to add: ${error.message}`);
@@ -36,7 +40,9 @@ const ProductCard = ({ product }) => {
         removeFromWishlist({ userId: user?.id, productId: product.id }),
       onSuccess: () => {
         removeFromWishlistState(product.id);
-        toast.success(`${product.title} has been removed from your wishlist.`);
+        toast.success(
+          t("toast.productRemovedFromWishlist", { productName: product.title })
+        );
       },
       onError: (error) => {
         toast.error(`Failed to remove: ${error.message}`);
@@ -69,7 +75,9 @@ const ProductCard = ({ product }) => {
     e.preventDefault();
     e.stopPropagation();
     addToCart(product);
-    toast.success(`${product.title} has been added to your cart.`);
+    toast.success(
+      t("toast.productAddedToCart", { productName: product.title })
+    );
   };
 
   // Calculate old price if discount is available
