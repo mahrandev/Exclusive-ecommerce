@@ -23,7 +23,7 @@ const ExploreProductsSection = ({
           </h3>
         </div>
 
-        <div className="flex items-center justify-between">
+        <div className="flex flex-col items-center justify-center gap-8 text-center md:flex-row md:justify-between">
           <h2 className="text-3xl font-bold tracking-tight text-gray-900 md:text-4xl">
             {t("homePage.exploreOurProducts")}
           </h2>
@@ -41,25 +41,15 @@ const ExploreProductsSection = ({
         </div>
       </div>
 
-      <div className="relative">
-        <div className="overflow-hidden">
-          <div
-            className="flex transition-transform duration-500 ease-in-out"
-            style={{
-              transform: `translateX(${
-                isRtl
-                  ? exploreProductsSlider.currentIndex * (100 / 4)
-                  : -exploreProductsSlider.currentIndex * (100 / 4)
-              }%)`,
-            }}
-          >
-            {products.map((product) => (
-              <div key={product.id} className="w-1/4 flex-shrink-0 px-2">
-                <ProductCard product={product} />
-              </div>
-            ))}
-          </div>
-        </div>
+      <div className="grid grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-4">
+        {products
+          .slice(
+            exploreProductsSlider.currentIndex,
+            exploreProductsSlider.currentIndex + 4
+          )
+          .map((product) => (
+            <ProductCard key={product.id} product={product} />
+          ))}
       </div>
 
       <div className="mt-12 text-center">
