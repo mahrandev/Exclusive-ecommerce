@@ -8,7 +8,8 @@ import { Eye, EyeOff } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import useAuthStore from "@/store/authStore";
 import { Button } from "@/components/ui/button";
-import { signIn } from "@/api/authApi";
+import { signIn, signInWithGoogle } from "@/api/authApi";
+import IconGoogle from "@/assets/img/Icon-Google.svg";
 import signUpImage from "@/assets/img/dl.beatsnoop 1.png";
 
 const LoginPage = () => {
@@ -52,6 +53,17 @@ const LoginPage = () => {
       } else {
         toast.error(error.message);
       }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleLogin = async () => {
+    setIsLoading(true);
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      toast.error(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -173,6 +185,20 @@ const LoginPage = () => {
                   {t("auth.forgotPassword")}
                 </Link>
               </div>
+              <Button
+                type="button"
+                variant="outline"
+                className="w-full py-6 text-base font-medium"
+                onClick={handleGoogleLogin}
+                disabled={isLoading}
+              >
+                <img
+                  src={IconGoogle}
+                  alt="Google icon"
+                  className="mr-4 h-6 w-6"
+                />
+                {t("auth.loginWithGoogle")}
+              </Button>
             </div>
 
             <div className="text-center text-base">

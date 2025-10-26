@@ -64,3 +64,21 @@ export const signIn = async ({ email, password }) => {
   // في حال النجاح، قم بإرجاع بيانات المستخدم
   return data;
 };
+
+/**
+ * دالة لتسجيل الدخول باستخدام جوجل
+ * @returns {Promise<object>} - بيانات المستخدم والـ session
+ */
+export const signInWithGoogle = async () => {
+  const { data, error } = await supabase.auth.signInWithOAuth({
+    provider: "google",
+  });
+
+  if (error) {
+    console.error("Error signing in with Google:", error.message);
+    throw new Error(error.message);
+  }
+
+  return data;
+};
+

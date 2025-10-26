@@ -8,7 +8,7 @@ import { Eye, EyeOff } from "lucide-react";
 import { useTranslation } from "react-i18next";
 
 import { Button } from "@/components/ui/button";
-import { signUp } from "@/api/authApi";
+import { signUp, signInWithGoogle } from "@/api/authApi";
 import IconGoogle from "@/assets/img/Icon-Google.svg";
 import signUpImage from "@/assets/img/dl.beatsnoop 1.png";
 
@@ -81,6 +81,17 @@ const SignUpPage = () => {
       } else {
         toast.error(error.message);
       }
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleGoogleSignUp = async () => {
+    setIsLoading(true);
+    try {
+      await signInWithGoogle();
+    } catch (error) {
+      toast.error(error.message);
     } finally {
       setIsLoading(false);
     }
@@ -267,8 +278,11 @@ const SignUpPage = () => {
                   : t("auth.createAccount")}
               </Button>
               <Button
+                type="button"
                 variant="outline"
                 className="w-full py-6 text-base font-medium"
+                onClick={handleGoogleSignUp}
+                disabled={isLoading}
               >
                 <img
                   src={IconGoogle}
