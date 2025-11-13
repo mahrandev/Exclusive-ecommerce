@@ -1,48 +1,18 @@
-import { useTranslation } from "react-i18next";
-import useCartStore from "@/store/cartStore";
-import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { toast } from "sonner";
 import { X } from "lucide-react";
-import EmptyCartImage from "@/assets/img/empty.svg";
+
+import { Button } from "@/components/ui/button";
 import Breadcrumbs from "@/components/shared/Breadcrumbs";
+import EmptyCartImage from "@/assets/img/empty.svg";
+import useCartPage from "@/hooks/useCartPage"; // ✅ استيراد الهوك المخصص
 
 const CartPage = () => {
-  const { t } = useTranslation();
-  const { items, totalPrice, removeFromCart, updateQuantity } = useCartStore(
-    (state) => state,
-  );
+  // ✅ استخدام الهوك للحصول على كل المنطق والحالة
+  const { t, items, removeFromCart, handleQuantityChange, calculateTotal } =
+    useCartPage();
 
-  // ✅ دالة محسّنة لحساب Subtotal لكل منتج
-  const calculateItemSubtotal = (item) => {
-    const price = parseFloat(item.price) || 0;
-    const quantity = parseInt(item.quantity) || 0;
-    return price * quantity;
-  };
-
-  // ✅ دالة محسّنة لتحديث الكمية مع validation
-  const handleQuantityChange = (productId, newQuantity) => {
-    // تحويل القيمة لرقم صحيح
-    let quantity = parseInt(newQuantity, 10);
-
-    // Case 1: إذا كانت القيمة 0 أو أقل، احذف المنتج
-    if (quantity <= 0 || isNaN(quantity)) {
-      removeFromCart(productId);
-      toast.warning(t("cart.itemRemoved"));
-      return;
-    }
-
-    // Case 2: تحديث الكمية بقيمة صحيحة
-    updateQuantity(productId, quantity);
-  };
-
-  // ✅ حساب المجموع الكلي بشكل آمن
-  const calculateTotal = () => {
-    return items.reduce((total, item) => {
-      return total + calculateItemSubtotal(item);
-    }, 0);
-  };
-
+  // ✅ عرض واجهة السلة الفارغة
   if (items.length === 0) {
     return (
       <div className="font-poppins container mx-auto flex max-w-7xl flex-col items-center px-4 py-8 text-center">
@@ -57,13 +27,13 @@ const CartPage = () => {
     );
   }
 
+  // ✅ عرض واجهة السلة الممتلئة
   return (
     <div className="font-poppins container mx-auto max-w-7xl px-4 py-6 md:py-8">
       <Breadcrumbs />
 
       {/* Desktop Table View */}
       <div className="mb-6 hidden md:block">
-        {/* Table Header */}
         <div className="mb-10 grid grid-cols-4 gap-4 rounded-sm px-10 py-6 text-base font-normal shadow-sm">
           <div>{t("cart.product")}</div>
           <div>{t("cart.price")}</div>
@@ -71,10 +41,8 @@ const CartPage = () => {
           <div>{t("cart.subtotal")}</div>
         </div>
 
-        {/* Cart Items */}
         <div className="space-y-10">
           {items.map((item) => {
-            // ✅ تأكد من وجود البيانات الضرورية
             const itemPrice = parseFloat(item.price) || 0;
             const itemQuantity = parseInt(item.quantity) || 1;
             const itemSubtotal = itemPrice * itemQuantity;
@@ -84,7 +52,6 @@ const CartPage = () => {
                 key={item.id}
                 className="relative grid grid-cols-4 items-center gap-4 rounded-sm px-10 py-6 shadow-sm"
               >
-                {/* Cancel Button */}
                 <button
                   onClick={() => {
                     removeFromCart(item.id);
@@ -98,7 +65,6 @@ const CartPage = () => {
                   ×
                 </button>
 
-                {/* Product Info */}
                 <div className="flex items-center gap-4">
                   <img
                     src={item.thumbnail}
@@ -108,10 +74,8 @@ const CartPage = () => {
                   <p className="truncate text-gray-900">{item.title}</p>
                 </div>
 
-                {/* Price - ✅ محسّن */}
                 <div className="text-gray-900">${itemPrice.toFixed(2)}</div>
 
-                {/* Quantity Controls - ✅ محسّن */}
                 <div className="flex h-11 w-20 items-center rounded border-2 border-gray-400">
                   <input
                     type="number"
@@ -120,7 +84,6 @@ const CartPage = () => {
                       handleQuantityChange(item.id, e.target.value)
                     }
                     onBlur={(e) => {
-                      // إذا كان الحقل فاضي، اجعل القيمة 1
                       if (!e.target.value) {
                         handleQuantityChange(item.id, 1);
                       }
@@ -149,7 +112,6 @@ const CartPage = () => {
                   </div>
                 </div>
 
-                {/* Subtotal - ✅ محسّن */}
                 <div className="text-gray-900">${itemSubtotal.toFixed(2)}</div>
               </div>
             );
@@ -169,7 +131,6 @@ const CartPage = () => {
               key={item.id}
               className="relative rounded-lg bg-white p-4 shadow-sm"
             >
-              {/* Remove Button */}
               <button
                 onClick={() => {
                   removeFromCart(item.id);
@@ -183,7 +144,6 @@ const CartPage = () => {
                 <X size={14} />
               </button>
 
-              {/* Product Info */}
               <div className="mb-4 flex gap-4">
                 <img
                   src={item.thumbnail}
@@ -200,7 +160,6 @@ const CartPage = () => {
                 </div>
               </div>
 
-              {/* Quantity and Subtotal */}
               <div className="flex items-center justify-between border-t border-gray-200 pt-3">
                 <div className="flex items-center gap-2">
                   <span className="text-sm text-gray-600">
@@ -255,7 +214,7 @@ const CartPage = () => {
         })}
       </div>
 
-      {/* Action Buttons */}
+      {/* Action Buttons & Bottom Section */}
       <div className="mb-10 flex flex-col items-stretch justify-between gap-4 sm:flex-row sm:items-center">
         <Button
           asChild
@@ -266,9 +225,7 @@ const CartPage = () => {
         </Button>
       </div>
 
-      {/* Bottom Section */}
       <div className="grid grid-cols-1 items-start gap-6 lg:grid-cols-2 lg:gap-8">
-        {/* Coupon Code Section */}
         <div className="order-2 flex flex-col gap-4 sm:flex-row lg:order-1">
           <input
             type="text"
@@ -280,7 +237,6 @@ const CartPage = () => {
           </Button>
         </div>
 
-        {/* Cart Total Section - ✅ محسّن */}
         <div className="order-1 w-full rounded-md border-2 border-gray-900 p-6 lg:order-2 lg:ml-auto lg:w-[470px] lg:p-8">
           <h2 className="mb-6 text-lg font-medium sm:text-xl">
             {t("cart.cartTotal")}

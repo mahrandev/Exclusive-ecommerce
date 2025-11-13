@@ -5,7 +5,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import useAuthStore from "@/store/authStore";
 import useWishlistStore from "@/store/wishlistStore";
-import useCartStore from "@/store/cartStore"; // Import cart store
+import useCartStore from "@/store/cartStore";
 import { addToWishlist, removeFromWishlist } from "@/api/wishlistApi";
 import { toast } from "sonner";
 
@@ -16,7 +16,7 @@ const ProductCard = ({ product }) => {
   const { user, isAuthenticated } = useAuthStore((state) => state);
   const { wishlist, addToWishlistState, removeFromWishlistState } =
     useWishlistStore((state) => state);
-  const { addToCart } = useCartStore((state) => state); // Get addToCart action
+  const { addToCart } = useCartStore((state) => state);
 
   const isWishlisted = wishlist.some((item) => item.id === product.id);
 
@@ -80,7 +80,6 @@ const ProductCard = ({ product }) => {
     );
   };
 
-  // Calculate old price if discount is available
   const oldPrice =
     product.discountPercentage > 0
       ? product.price / (1 - product.discountPercentage / 100)
@@ -92,7 +91,7 @@ const ProductCard = ({ product }) => {
         <div className="bg-secondary-gray relative h-60 w-full overflow-hidden p-4">
           <img
             className="h-full w-full object-contain transition-transform duration-500 ease-in-out group-hover:scale-110"
-            src={product.thumbnail} // Changed from product.img
+            src={product.thumbnail}
             alt={product.title}
           />
 

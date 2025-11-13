@@ -1,133 +1,28 @@
-import { useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { toast } from "sonner";
+import { Link } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
-import { useTranslation } from "react-i18next";
 
+import useSignUp from "@/hooks/useSignUp"; // ✅ استيراد الهوك المخصص
 import { Button } from "@/components/ui/button";
-import { signUp, signInWithGoogle, getCurrentSession } from "@/api/authApi";
-import useAuthStore from "@/store/authStore";
 import IconGoogle from "@/assets/img/Icon-Google.svg";
 import signUpImage from "@/assets/img/dl.beatsnoop 1.png";
 
-const getPasswordStrength = (password) => {
-  let score = 0;
-  if (password.length >= 8) score++;
-  if (/[a-z]/.test(password) && /[A-Z]/.test(password)) score++;
-  if (/[0-9]/.test(password)) score++;
-  if (/[^a-zA-Z0-9]/.test(password)) score++;
-  return score;
-};
-
 const SignUpPage = () => {
-  const { t } = useTranslation();
-  const [isLoading, setIsLoading] = useState(false);
-  const [showPassword, setShowPassword] = useState(false);
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const navigate = useNavigate();
-  const { login, isAuthenticated } = useAuthStore();
-
-  const signUpSchema = z
-    .object({
-      name: z
-        .string()
-        .min(3, { message: t("auth.nameMinLength", { length: 3 }) }),
-      email: z.string().email({ message: t("auth.invalidEmail") }),
-      password: z
-        .string()
-        .min(8, { message: t("auth.passwordMinLength", { length: 8 }) })
-        .regex(/[a-z]/, { message: t("auth.passwordLowercase") })
-        .regex(/[A-Z]/, { message: t("auth.passwordUppercase") })
-        .regex(/[0-9]/, { message: t("auth.passwordNumber") })
-        .regex(/[^a-zA-Z0-9]/, {
-          message: t("auth.passwordSpecial"),
-        }),
-      confirmPassword: z.string(),
-    })
-    .refine((data) => data.password === data.confirmPassword, {
-      message: t("auth.passwordsNotMatch"),
-      path: ["confirmPassword"],
-    });
-
+  // ✅ استخدام الهوك للحصول على كل المنطق والحالة
   const {
+    t,
+    isLoading,
+    showPassword,
+    setShowPassword,
+    showConfirmPassword,
+    setShowConfirmPassword,
     register,
     handleSubmit,
-    watch,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(signUpSchema),
-    mode: "onChange",
-  });
-
-  const password = watch("password", "");
-  const passwordStrength = getPasswordStrength(password);
-
-  // Check if user is already authenticated and redirect
-  useEffect(() => {
-    if (isAuthenticated) {
-      navigate("/account");
-    }
-  }, [isAuthenticated, navigate]);
-
-  // Handle OAuth callback
-  useEffect(() => {
-    const checkSession = async () => {
-      try {
-        const { session } = await getCurrentSession();
-        if (session && session.user) {
-          login({ user: session.user });
-          toast.success(t("auth.signupSuccess"));
-          navigate("/account");
-        }
-      } catch (error) {
-        console.error("Session check error:", error);
-      }
-    };
-
-    checkSession();
-  }, [login, navigate, t]);
-
-  const onSubmit = async (data) => {
-    setIsLoading(true);
-    try {
-      await signUp({
-        name: data.name,
-        email: data.email,
-        password: data.password,
-      });
-      toast.success(t("auth.signupSuccess"), {
-        description: t("auth.checkEmail"),
-      });
-      navigate("/login");
-    } catch (error) {
-      if (
-        error.message === "This email is already registered. Please log in."
-      ) {
-        toast.error(t("auth.emailAlreadyRegistered"));
-      } else {
-        toast.error(error.message);
-      }
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleGoogleSignUp = async () => {
-    setIsLoading(true);
-    try {
-      await signInWithGoogle();
-      // Don't show success toast here - it will be shown after redirect
-      // The OAuth flow will redirect to Google, then back to our app
-    } catch (error) {
-      toast.error(t("auth.signupFailed"), {
-        description: error.message,
-      });
-      setIsLoading(false);
-    }
-  };
+    errors,
+    password,
+    passwordStrength,
+    onSubmit,
+    handleGoogleSignUp,
+  } = useSignUp();
 
   return (
     <div className="w-full lg:grid lg:min-h-screen lg:grid-cols-2">
@@ -152,6 +47,7 @@ const SignUpPage = () => {
             </div>
 
             <div className="grid gap-4">
+              {/* Name Input */}
               <div className="grid gap-1">
                 <div className="relative">
                   <input
@@ -177,6 +73,7 @@ const SignUpPage = () => {
                 )}
               </div>
 
+              {/* Email Input */}
               <div className="grid gap-1">
                 <div className="relative">
                   <input
@@ -202,6 +99,7 @@ const SignUpPage = () => {
                 )}
               </div>
 
+              {/* Password Input */}
               <div className="grid gap-1">
                 <div className="relative">
                   <input
@@ -236,17 +134,20 @@ const SignUpPage = () => {
                 )}
               </div>
 
+              {/* Password Strength Indicator */}
               {password && passwordStrength > 0 && (
                 <div className="flex items-center gap-2">
                   <div
-                    className={`h-2 flex-1 rounded-full ${
-                      passwordStrength < 2
-                        ? "bg-red-500"
-                        : passwordStrength < 4
-                          ? "bg-yellow-500"
-                          : "bg-green-500"
-                    }`}
-                    style={{ width: `${(passwordStrength / 4) * 100}%` }}
+                    className="h-2 flex-1 rounded-full"
+                    style={{
+                      width: `${(passwordStrength / 4) * 100}%`,
+                      backgroundColor:
+                        passwordStrength < 2
+                          ? "#ef4444" // red-500
+                          : passwordStrength < 4
+                            ? "#f59e0b" // yellow-500
+                            : "#22c55e", // green-500
+                    }}
                   ></div>
                   <p
                     className={`text-sm ${
@@ -264,6 +165,7 @@ const SignUpPage = () => {
                 </div>
               )}
 
+              {/* Confirm Password Input */}
               <div className="grid gap-1">
                 <div className="relative">
                   <input

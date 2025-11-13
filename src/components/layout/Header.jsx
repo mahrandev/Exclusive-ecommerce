@@ -18,18 +18,15 @@ const Header = () => {
     i18n.changeLanguage(newLang);
   };
 
-  // التحقق من الجلسة عند تحميل الصفحة
   useEffect(() => {
     const checkAuthState = async () => {
       try {
         const { session } = await getCurrentSession();
         if (session && session.user) {
-          // إذا كان هناك session في Supabase لكن لا يوجد في authStore
           if (!isAuthenticated) {
             login({ user: session.user });
           }
         } else {
-          // إذا لم يكن هناك session في Supabase لكن يوجد في authStore
           if (isAuthenticated) {
             await logout();
           }
@@ -44,7 +41,6 @@ const Header = () => {
 
   return (
     <header className="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm">
-      {/* 1. Top bar - Full width */}
       <div className="bg-primary-black text-primary-white py-1">
         <div className="container mx-auto flex items-center justify-center px-4 py-2 text-xs md:text-sm">
           <p className="flex-grow text-center">
@@ -65,10 +61,8 @@ const Header = () => {
         </div>
       </div>
 
-      {/* 2. Main navigation */}
       <div className="container mx-auto max-w-7xl px-4">
         <div className="flex h-16 items-center justify-between md:h-20">
-          {/* Logo */}
           <div className="text-xl font-bold md:text-2xl">
             <NavLink
               to="/"
@@ -78,7 +72,6 @@ const Header = () => {
             </NavLink>
           </div>
 
-          {/* Desktop Navigation */}
           <nav className="hidden items-center space-x-1 md:flex lg:space-x-2">
             <NavLink
               to="/"
@@ -124,16 +117,13 @@ const Header = () => {
             )}
           </nav>
 
-          {/* Right side actions */}
           <div className="flex items-center gap-3 md:gap-4">
-            {/* Desktop Search */}
             <div className="hidden md:block">
               <SearchComponent
                 onResultClick={() => setIsMobileMenuOpen(false)}
               />
             </div>
 
-            {/* Wishlist */}
             <NavLink
               to="/wishlist"
               className="rounded-full p-2 transition-colors hover:bg-gray-100"
@@ -141,7 +131,6 @@ const Header = () => {
               <Heart size={20} className="md:h-6 md:w-6" />
             </NavLink>
 
-            {/* Cart */}
             <NavLink
               to="/cart"
               className="rounded-full p-2 transition-colors hover:bg-gray-100"
@@ -149,7 +138,6 @@ const Header = () => {
               <ShoppingCart size={20} className="md:h-6 md:w-6" />
             </NavLink>
 
-            {/* User Actions */}
             {isAuthenticated ? (
               <UserMenu />
             ) : (
@@ -161,7 +149,6 @@ const Header = () => {
               </NavLink>
             )}
 
-            {/* Mobile Menu Toggle */}
             <button
               className="rounded-full p-2 transition-colors hover:bg-gray-100 md:hidden"
               onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
@@ -171,16 +158,13 @@ const Header = () => {
           </div>
         </div>
 
-        {/* Mobile Search Bar */}
         <div className="pb-4 md:hidden">
           <SearchComponent onResultClick={() => setIsMobileMenuOpen(false)} />
         </div>
 
-        {/* Mobile Navigation Menu */}
         {isMobileMenuOpen && (
           <div className="animate-in slide-in-from-top mt-2 border-t border-gray-200 pb-4 md:hidden">
             <nav className="flex flex-col space-y-2 pt-4">
-              {/* Login & SignUp at the top for non-authenticated users */}
               {!isAuthenticated && (
                 <div className="mb-3 space-y-2 border-b border-gray-200 pb-3">
                   <NavLink
@@ -200,7 +184,6 @@ const Header = () => {
                 </div>
               )}
 
-              {/* Regular navigation links */}
               <NavLink
                 to="/"
                 className={({ isActive }) =>

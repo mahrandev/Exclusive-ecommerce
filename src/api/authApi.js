@@ -54,9 +54,8 @@ export const signIn = async ({ email, password }) => {
   return data;
 };
 
-/**
- * دالة لتسجيل الدخول باستخدام جوجل
- * @param {string} redirectTo - URL للتوجيه بعد النجاح (اختياري)
+/**URL للتوجيه بعد النجاح (اختياري)
+ * @param {string} redirectTo - 
  * @returns {Promise<object>} - بيانات استجابة OAuth
  */
 export const signInWithGoogle = async () => {

@@ -1,5 +1,4 @@
 import { NavLink } from "react-router-dom";
-import { useTranslation } from "react-i18next";
 import { User } from "lucide-react";
 import Breadcrumbs from "@/components/shared/Breadcrumbs";
 import useAccountPageLogic from "@/hooks/useAccountPageLogic";
@@ -10,7 +9,6 @@ const AccountPage = () => {
   const {
     t,
     i18n,
-    user,
     isLoadingProfile,
     isLoadingPassword,
     showCurrentPassword,

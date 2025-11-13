@@ -10,14 +10,22 @@ import { supabase } from "@/lib/supabaseClient";
  * @param {Array<object>} orderData.cartItems - The items in the cart.
  * @returns {object} The newly created order details.
  */
-export const createOrder = async ({ userId, shippingAddress, totalPrice, cartItems }) => {
+export const createOrder = async ({ userId, shippingAddress, cartItems, paymentMethod }) => {
+  // ✅ **Security Improvement**: Calculate total price on the server-side to prevent manipulation.
+  const calculatedTotal = cartItems.reduce((sum, item) => {
+    const price = parseFloat(item.price) || 0;
+    const quantity = parseInt(item.quantity) || 0;
+    return sum + (price * quantity);
+  }, 0);
+
   // Step 1: Insert the main order details into the 'orders' table
   const { data: orderData, error: orderError } = await supabase
     .from('orders')
     .insert({
       user_id: userId,
-      total_price: totalPrice,
+      total_price: calculatedTotal, // Use the securely calculated total
       shipping_address: shippingAddress,
+      payment_method: paymentMethod, // Store the selected payment method
       status: 'pending',
     })
     .select()
@@ -39,7 +47,7 @@ export const createOrder = async ({ userId, shippingAddress, totalPrice, cartIte
     order_id: orderId,
     product_id: item.id,
     quantity: item.quantity,
-    price_at_purchase: item.price, // Assuming item.price is the price for a single unit
+    price_at_purchase: item.price,
   }));
 
   // Step 3: Bulk insert all items into the 'order_items' table

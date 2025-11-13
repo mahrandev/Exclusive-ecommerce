@@ -1,15 +1,5 @@
-// src/pages/Checkout.jsx
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { z } from "zod";
-import { useMutation } from "@tanstack/react-query";
-import { useNavigate, Link } from "react-router-dom";
-import { toast } from "sonner";
-
-import useCartStore from "@/store/cartStore";
-import useAuthStore from "@/store/authStore";
-import { createOrder } from "@/api/ordersApi";
+import { Link } from "react-router-dom";
+import useCheckout from "@/hooks/useCheckout"; // ✅ استيراد الهوك المخصص
 
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
@@ -23,83 +13,19 @@ import visaImg from "@/assets/img/visa.svg";
 import mastercardImg from "@/assets/img/master-card.svg";
 import nagadImg from "@/assets/img/what.svg";
 
-// Zod schema for form validation
-const billingSchema = z.object({
-  firstName: z.string().min(2, { message: "First name is required" }),
-  companyName: z.string().optional(),
-  streetAddress: z.string().min(5, { message: "Street address is required" }),
-  apartment: z.string().optional(),
-  city: z.string().min(2, { message: "City is required" }),
-  phone: z.string().min(10, { message: "Phone number is required" }),
-  email: z.string().email({ message: "Invalid email address" }),
-});
-
 const CheckoutPage = () => {
-  const navigate = useNavigate();
-  const { user } = useAuthStore((state) => state);
-  const {
-    items,
-    totalPrice: total,
-    clearCart,
-  } = useCartStore((state) => state);
-  const [paymentMethod, setPaymentMethod] = useState("bank");
-
+  // ✅ استخدام الهوك للحصول على كل المنطق والحالة
   const {
     register,
     handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: zodResolver(billingSchema),
-    defaultValues: {
-      firstName: user?.user_metadata?.full_name || "",
-      email: user?.email || "",
-      companyName: "",
-      streetAddress: "",
-      apartment: "",
-      city: "",
-      phone: "",
-    },
-  });
-
-  const { mutate: processOrder, isPending } = useMutation({
-    mutationFn: createOrder,
-    onSuccess: (data) => {
-      toast.success("Order placed successfully!");
-      clearCart();
-      navigate("/order-confirmation", {
-        state: { orderId: data.id },
-        replace: true,
-      });
-    },
-    onError: (error) => {
-      toast.error(`Failed to place order: ${error.message}`);
-    },
-  });
-
-  const onSubmit = (formData) => {
-    if (items.length === 0) {
-      toast.error("Your cart is empty. Please add items before checking out.");
-      return;
-    }
-
-    const orderPayload = {
-      userId: user.id,
-      shippingAddress: {
-        name: formData.firstName,
-        company: formData.companyName,
-        street: formData.streetAddress,
-        apartment: formData.apartment,
-        city: formData.city,
-        phone: formData.phone,
-        email: formData.email,
-      },
-      totalPrice: total,
-      cartItems: items,
-      paymentMethod,
-    };
-
-    processOrder(orderPayload);
-  };
+    errors,
+    items,
+    total,
+    paymentMethod,
+    setPaymentMethod,
+    onSubmit,
+    isPending,
+  } = useCheckout();
 
   return (
     <div className="container mx-auto max-w-7xl px-4 py-6 md:py-8">
@@ -234,7 +160,6 @@ const CheckoutPage = () => {
             )}
           </div>
 
-          {/* Save Info Checkbox */}
           <div className="flex items-center gap-3 pt-2">
             <input
               type="checkbox"
@@ -249,7 +174,6 @@ const CheckoutPage = () => {
 
         {/* Right Side: Order Summary */}
         <div className="space-y-8">
-          {/* Product List */}
           <div className="space-y-6">
             {items.map((item) => (
               <div key={item.id} className="flex items-center justify-between">
@@ -268,7 +192,6 @@ const CheckoutPage = () => {
             ))}
           </div>
 
-          {/* Totals */}
           <div className="space-y-4 border-b pb-4">
             <div className="flex justify-between text-gray-900">
               <span>Subtotal:</span>
@@ -284,10 +207,8 @@ const CheckoutPage = () => {
             </div>
           </div>
 
-          {/* Payment Methods */}
           <div className="space-y-6">
             <RadioGroup value={paymentMethod} onValueChange={setPaymentMethod}>
-              {/* Bank Payment */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-3">
                   <RadioGroupItem value="bank" id="bank" />
@@ -306,7 +227,6 @@ const CheckoutPage = () => {
                 </div>
               </div>
 
-              {/* Cash on Delivery */}
               <div className="flex items-center space-x-3">
                 <RadioGroupItem value="cash" id="cash" />
                 <label htmlFor="cash" className="cursor-pointer text-gray-900">
@@ -316,7 +236,6 @@ const CheckoutPage = () => {
             </RadioGroup>
           </div>
 
-          {/* Coupon Code */}
           <div className="flex gap-4">
             <Input
               placeholder="Coupon Code"
@@ -330,7 +249,6 @@ const CheckoutPage = () => {
             </Button>
           </div>
 
-          {/* Place Order Button */}
           <Button
             type="submit"
             className="bg-primary-red h-14 w-full text-base text-white hover:bg-red-600"

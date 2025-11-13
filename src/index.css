@@ -84,47 +84,7 @@
   font-display: swap;
 }
 
-/* Lato - Alternative Latin */
-@font-face {
-  font-family: "Lato";
-  src: url("./assets/fonts/Lato/Lato-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
 
-@font-face {
-  font-family: "Lato";
-  src: url("./assets/fonts/Lato/Lato-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-/* Roboto - Alternative Latin & Cyrillic (Russian) */
-@font-face {
-  font-family: "Roboto";
-  src: url("./assets/fonts/Roboto/Roboto-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Roboto";
-  src: url("./assets/fonts/Roboto/Roboto-Medium.ttf") format("truetype");
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: "Roboto";
-  src: url("./assets/fonts/Roboto/Roboto-Bold.ttf") format("truetype");
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
 
 /* RTL Support */
 html[dir="rtl"] {
@@ -143,8 +103,6 @@ button {
   --font-cairo: "Cairo", sans-serif;
   --font-inter: "Inter", sans-serif;
   --font-poppins: "Poppins", sans-serif;
-  --font-lato: "Lato", sans-serif;
-  --font-roboto: "Roboto", sans-serif;
 
   /* Primary Colors */
   --color-primary-red: #db4444;
